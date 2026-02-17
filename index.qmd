@@ -1,0 +1,15 @@
+---
+title: "R Fundamentals: Best Practices"
+---
+
+## Welcome
+
+Welcome to R Fundamentals! This course covers essential best practices for writing clear, maintainable, and reproducible R code.
+
+## Course Materials
+
+Materials will be added here as we progress through the course.
+
+{{< include outcomes.qmd >}}
+
+{{< include schedule.md >}}

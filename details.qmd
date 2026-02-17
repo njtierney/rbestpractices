@@ -1,0 +1,1 @@
+This course helps cover some fundamental issues and skills gaps that many people using R face. The idea is to give you some key fundamental skills in a supportive environment so you can be empowered to solve your own problems. 

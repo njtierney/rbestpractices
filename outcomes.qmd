@@ -1,0 +1,18 @@
+## Prerequisites
+
+- Basic R programming experience
+- Familiarity with writing R scripts
+- Experience working on data analysis projects
+
+## Learning outcomes
+
+- How to name things effectively
+- Using a style guide
+- How to refactor your code
+- How to review your code and others'
+- How to lay out a project so others know how to run your code
+- How to make a reproducible example (reprex)
+
+## Course website
+
+<https://r-best-practices.njtierney.com>
