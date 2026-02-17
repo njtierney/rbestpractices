@@ -19,3 +19,5 @@ Imports:
   styler,
   tidyverse,
   usethis
+URL: https://github.com/njtierney/rbestpractices
+BugReports: https://github.com/njtierney/rbestpractices/issues
