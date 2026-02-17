@@ -14,37 +14,7 @@
     "href": "index.html#course-materials",
     "title": "R Best Practices",
     "section": "0.2 Course Materials",
-    "text": "0.2 Course Materials\nMaterials will be added here as we progress through the course.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#prerequisites",
-    "href": "index.html#prerequisites",
-    "title": "R Best Practices",
-    "section": "0.3 Prerequisites",
-    "text": "0.3 Prerequisites\n\nBasic R programming experience\nFamiliarity with writing R scripts\nExperience working on data analysis projects",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#learning-outcomes",
-    "href": "index.html#learning-outcomes",
-    "title": "R Best Practices",
-    "section": "0.4 Learning outcomes",
-    "text": "0.4 Learning outcomes\n\nHow to name things effectively\nUsing a style guide\nHow to refactor your code\nHow to review your code and others’\nHow to lay out a project so others know how to run your code\nHow to make a reproducible example (reprex)",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#course-website",
-    "href": "index.html#course-website",
-    "title": "R Best Practices",
-    "section": "0.5 Course website",
-    "text": "0.5 Course website\nhttps://r-best-practices.njtierney.com",
+    "text": "0.2 Course Materials\nMaterials will be added here as we progress through the course.\nhttps://r-best-practices.njtierney.com\nPrerequisites\n\nBasic R programming experience\nFamiliarity with writing R scripts\nExperience working on data analysis projects\n\nLearning outcomes\n\nHow to name things effectively\nUsing a style guide\nHow to refactor your code\nHow to review your code and others’\nHow to lay out a project so others know how to run your code\nHow to make a reproducible example (reprex)",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
     ]
