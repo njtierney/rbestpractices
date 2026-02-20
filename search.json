@@ -4,79 +4,69 @@
     "href": "index.html",
     "title": "R Best Practices",
     "section": "",
-    "text": "0.1 Welcome\nWelcome to R Fundamentals! This course covers essential best practices for writing clear, maintainable, and reproducible R code.",
+    "text": "1 Welcome\nWelcome to R Best Practices! This course covers essential best practices for writing clear, maintainable, and reproducible R code.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#course-materials",
-    "href": "index.html#course-materials",
-    "title": "R Best Practices",
-    "section": "0.2 Course Materials",
-    "text": "0.2 Course Materials\nMaterials will be added here as we progress through the course.\nhttps://r-best-practices.njtierney.com\nPrerequisites\n\nBasic R programming experience\nFamiliarity with writing R scripts\nExperience working on data analysis projects\n\nLearning outcomes\n\nHow to name things effectively\nUsing a style guide\nHow to refactor your code\nHow to review your code and others’\nHow to lay out a project so others know how to run your code\nHow to make a reproducible example (reprex)",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   },
   {
     "objectID": "index.html#project-organisation",
     "href": "index.html#project-organisation",
     "title": "R Best Practices",
-    "section": "1.1 Project Organisation",
-    "text": "1.1 Project Organisation\n\nCommon project structures\nPitfalls of organisation\nUnderstanding file paths\nRStudio and positron set up\n“Good Enough”/Common Sense principles of project organisation\nAlways have a README",
+    "section": "3.1 Project Organisation",
+    "text": "3.1 Project Organisation\n\nCommon project structures\nPitfalls of organisation\nUnderstanding file paths\nRStudio and positron set up\n“Good Enough”/Common Sense principles of project organisation\nAlways have a README",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   },
   {
     "objectID": "index.html#code-style-and-readability",
     "href": "index.html#code-style-and-readability",
     "title": "R Best Practices",
-    "section": "1.2 Code Style and Readability",
-    "text": "1.2 Code Style and Readability\n\nStyle is like grammar\nwhy we care about consistent names, spaces, indentation\nUsing the {air} formatter\nUsing linters",
+    "section": "3.2 Code Style and Readability",
+    "text": "3.2 Code Style and Readability\n\nStyle is like grammar\nwhy we care about consistent names, spaces, indentation\nUsing the {air} formatter\nUsing linters",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   },
   {
     "objectID": "index.html#writing-readable-code",
     "href": "index.html#writing-readable-code",
     "title": "R Best Practices",
-    "section": "1.3 Writing readable code",
-    "text": "1.3 Writing readable code\n\nGood vs bad variable names\nDe-chunking code\nHow to review code\nReview your own code",
+    "section": "3.3 Writing readable code",
+    "text": "3.3 Writing readable code\n\nGood vs bad variable names\nDe-chunking code\nHow to review code\nReview your own code",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   },
   {
     "objectID": "index.html#writing-functions",
     "href": "index.html#writing-functions",
     "title": "R Best Practices",
-    "section": "1.4 Writing Functions",
-    "text": "1.4 Writing Functions\n\nThe problem functions solve\nAnatomy of a function\nGood (simple) function design\nUsing {fnmate} to speed up creating functions\nHow to use a debugger",
+    "section": "3.4 Writing Functions",
+    "text": "3.4 Writing Functions\n\nThe problem functions solve\nAnatomy of a function\nGood (simple) function design\nUsing {fnmate} to speed up creating functions\nHow to use a debugger",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   },
   {
     "objectID": "index.html#writing-a-reprex-getting-unstuck",
     "href": "index.html#writing-a-reprex-getting-unstuck",
     "title": "R Best Practices",
-    "section": "1.5 Writing a reprex / getting unstuck",
-    "text": "1.5 Writing a reprex / getting unstuck\n\nHow to share problems\nUsing {reprex}\nPracticing reprex\nPractical tips on debugging\n\nKeep solving vs cleaning up",
+    "section": "3.5 Writing a reprex / getting unstuck",
+    "text": "3.5 Writing a reprex / getting unstuck\n\nHow to share problems\nUsing {reprex}\nPracticing reprex\nPractical tips on debugging\n\nKeep solving vs cleaning up",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   },
   {
     "objectID": "index.html#putting-it-all-together",
     "href": "index.html#putting-it-all-together",
     "title": "R Best Practices",
-    "section": "1.6 Putting It All Together",
-    "text": "1.6 Putting It All Together\n\nTake an existing project and provide code review\nApply code linting, code styling, functions\nDiscussion and Q & A",
+    "section": "3.6 Putting It All Together",
+    "text": "3.6 Putting It All Together\n\nTake an existing project and provide code review\nApply code linting, code styling, functions\nDiscussion and Q & A",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals: Best Practices</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Best Practices</span>"
     ]
   }
 ]
