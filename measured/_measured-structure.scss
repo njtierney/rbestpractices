@@ -1,4 +1,4 @@
-// STRUCTURE — geometry and shape. No colours, no meanings.
+// STRUCTURE - geometry and shape. No colours, no meanings.
 //
 // Everything here is generic: it would suit any project that wants code
 // blocks whose text lines up with the prose. Colour comes from the
@@ -11,8 +11,8 @@
 $measured-code-cols: 80 !default;
 
 // Selector these rules are scoped to. Quarto's HTML document layout
-// wraps content in <main>. Set this to something else — `.reveal`,
-// `body` — for a layout that does not have one.
+// wraps content in <main>. Set this to something else - `.reveal`,
+// `body` - for a layout that does not have one.
 $measured-scope: main !default;
 
 // Number a code block only once it has at least this many lines. On a
@@ -24,7 +24,7 @@ $measured-number-from: 4 !default;
 
 $code-block-font-size: 15px !default;
 
-// Size of printed output — what R sends back, not what you type.
+// Size of printed output - what R sends back, not what you type.
 // Deliberately a shade under the code size: the code is the thing the
 // reader types, the output is the response to it, and the hierarchy
 // should say so.
@@ -59,13 +59,13 @@ pre { line-height: 1.5; }
 //
 // margin-right is deliberately ZERO. Sizing it with
 // `calc(100% - 80ch - ...)` makes the block a FIXED width, because the
-// `100%` cancels the container — it looked right at 1400px and spilled
+// `100%` cancels the container - it looked right at 1400px and spilled
 // 201px over the table of contents at 1000px.
 
 // The font context and the variables must reach the copy button, which
 // is a SIBLING of the block, not a child. Declared only on the block,
 // `var(--pad-r)` is undefined on the button, the calc() silently
-// becomes invalid, and `right` falls back to `auto` — putting the
+// becomes invalid, and `right` falls back to `auto` - putting the
 // button on the far left.
 #{$measured-scope} .code-copy-outer-scaffold,
 #{$measured-scope} div.sourceCode {
@@ -80,7 +80,7 @@ pre { line-height: 1.5; }
   --copy-gap:  10px;    // block edge to the parked copy button
 
   // Empirical corrections, not derived from the box model. Tuned
-  // against Fira Code at 15px — change the mono face and these want
+  // against Fira Code at 15px - change the mono face and these want
   // re-measuring in a browser rather than trusting.
   --nudge:     4px;     // whole block, so code lines up with the prose
   --num-nudge: 1px;     // extra gap between the numbers and the rule
@@ -112,7 +112,7 @@ pre { line-height: 1.5; }
   // sets BOTH axes and silently truncates, far worse than a scrollbar.
   // The block is the scroll container rather than the <pre>, because
   // the numbers are painted in the gutter made by the pre's own margin,
-  // outside the pre's box — a scrolling <pre> would clip them.
+  // outside the pre's box - a scrolling <pre> would clip them.
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -125,7 +125,7 @@ pre { line-height: 1.5; }
 }
 
 // ── Plain fenced blocks ──────────────────────────────────────
-// A fence with no language — ```` ``` ```` rather than ```` ```r ```` —
+// A fence with no language - ```` ``` ```` rather than ```` ```r ```` -
 // gets NO `div.sourceCode` wrapper, so every rule above misses it and
 // it falls back to the BODY font size. Measured: 16.875px against the
 // code blocks' 15px.
@@ -139,7 +139,7 @@ pre { line-height: 1.5; }
 // alignment that is the entire point. Long ones scroll instead.
 //
 // Watch the specificity. `pre:not(.sourceCode):not(.numberSource)` is
-// (0,2,1) — each `:not()` argument counts as a class — which BEATS a
+// (0,2,1) - each `:not()` argument counts as a class - which BEATS a
 // plain `.cell-output > pre` at (0,1,1). Written that way, this rule
 // silently overrode the output font size and put it back to 15px. The
 // output rules below therefore carry the same `:not()`s to outrank it.
@@ -166,7 +166,7 @@ pre { line-height: 1.5; }
   // The negative margin is what puts the TEXT rather than the BORDER on
   // the prose edge. It also buys back the width the padding costs: with
   // 0.75rem padding and no breakout, a 56-character file path scrolled
-  // at a 1000px viewport — 531px of content in 519px of column.
+  // at a 1000px viewport - 531px of content in 519px of column.
   padding: 0.5rem 1ch 0.5rem 0.25ch;
   margin-left: calc(-1 * (0.25ch + 1px));
 }
@@ -180,12 +180,12 @@ pre { line-height: 1.5; }
 // for a reason. Not wrapping code protects the indentation that shows
 // the shape of a pipeline. Output has no indentation to protect, and a
 // horizontal scrollbar on an error message is worse than a wrapped
-// line — the reader has to drag a box sideways to find out what went
+// line - the reader has to drag a box sideways to find out what went
 // wrong.
 //
 // Measured before writing this: at a 1000px viewport the error output
 // from a failed `read.csv()` was 713px wide in 519px of space, so it
-// scrolled. Its longest line is 70 characters, well under the limit —
+// scrolled. Its longest line is 70 characters, well under the limit -
 // the overflow came from the font size, not the content.
 #{$measured-scope} .cell-output > pre:not(.sourceCode):not(.numberSource) {
   font-family: var(--bs-font-monospace);
@@ -200,8 +200,8 @@ pre { line-height: 1.5; }
   white-space: pre-wrap;
 
   // A safety net, not a normal case. `pre-wrap` breaks at spaces, so a
-  // single unbroken token longer than the limit — a URL, a long file
-  // path — would still overflow. Kept as a scrollbar rather than
+  // single unbroken token longer than the limit - a URL, a long file
+  // path - would still overflow. Kept as a scrollbar rather than
   // `break-word` because breaking a path mid-character makes it
   // impossible to copy correctly.
   overflow-x: auto;
@@ -226,8 +226,8 @@ pre { line-height: 1.5; }
 }
 
 // The number must stay IN FLOW as an inline-block. Position it
-// absolutely and a blank line — whose span then has no in-flow content
-// — collapses, leaving a gap mid-block.
+// absolutely and a blank line - whose span then has no in-flow content
+// - collapses, leaving a gap mid-block.
 //
 // But an inline-block ADDS its width to the line's layout width, making
 // a line of exactly N characters overflow by the gutter width.
@@ -321,7 +321,7 @@ pre { line-height: 1.5; }
   margin-left: -8px;
 }
 // When a scaffold is present it carries the offset, so the block inside
-// must not apply it a second time — otherwise the two compound and the
+// must not apply it a second time - otherwise the two compound and the
 // code lands 8px the other side of the prose.
 #{$measured-scope} .code-copy-outer-scaffold > div.sourceCode:not(:has(pre code > span:nth-of-type(#{$measured-number-from}))) {
   margin-left: 0;

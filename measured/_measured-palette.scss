@@ -1,4 +1,4 @@
-// PALETTE — colour only. No geometry, no semantics.
+// PALETTE - colour only. No geometry, no semantics.
 //
 // Two things live here: the Dark2 role colours, and the code block
 // colours. Both are exposed as CSS custom properties so the structure
@@ -7,7 +7,7 @@
 /*-- scss:defaults --*/
 
 // ── RColorBrewer Dark2 ───────────────────────────────────────
-// `RColorBrewer::brewer.pal(8, "Dark2")` — qualitative, and
+// `RColorBrewer::brewer.pal(8, "Dark2")` - qualitative, and
 // `brewer.pal.info` records it as colourblind safe. That is the reason
 // to use it: the design asks readers to navigate by colour, so the
 // colour has to work for readers with colour vision deficiency.

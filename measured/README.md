@@ -1,7 +1,7 @@
 # measured (copy)
 
 These are copies. The canonical source is the `measured/` directory of the
-training repo — https://github.com/njtierney/training — where the demo site
+training repo - https://github.com/njtierney/training - where the demo site
 and the full documentation live.
 
 They are copied rather than referenced because this book is its own

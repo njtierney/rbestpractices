@@ -18,13 +18,13 @@ book:
     - "index.qmd"
     - "setup.qmd"
     - "project-organisation.qmd"
-    - "code-style-and-readability.qmd"
-    - "writing-readable-code.qmd"
-    - "writing-functions.qmd"
-    - "writing-a-reprex-getting-unstuck.qmd"
-    - "putting-it-all-together.qmd"
+    # - "code-style-and-readability.qmd"
+    # - "writing-readable-code.qmd"
+    # - "writing-functions.qmd"
+    # - "writing-a-reprex-getting-unstuck.qmd"
+    # - "putting-it-all-together.qmd"
   appendices:
-    - "appendix-speed-of-thought.qmd"
+    # - "appendix-speed-of-thought.qmd"
 
 format:
   html:
@@ -48,6 +48,6 @@ format:
     include-in-header: tufte.tex
     keep-tex: true
     # tufte-book's float machinery cannot handle Quarto's default
-    # `\begin{figure}[H]` — it fails with "Extra }, or forgotten
+    # `\begin{figure}[H]` - it fails with "Extra }, or forgotten
     # \endgroup" at \end{figure}. Any captioned image triggers it.
     fig-pos: 'ht'
