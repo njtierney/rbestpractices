@@ -12,3 +12,5 @@ docs
 *.toc
 
 **/*.quarto_ipynb
+site_libs
+index_files
