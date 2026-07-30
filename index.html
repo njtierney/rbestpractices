@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,16 @@
 
 <title>R Best Practices</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -32,17 +38,17 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./setup.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-607e4eb43c82add38e78977e37880f76.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7002e898bdb3cc4fe1c43d944ce9f4e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -83,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Best Practices</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -100,7 +106,8 @@ ul.task-list li input[type="checkbox"] {
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R Best Practices</a> 
         <div class="sidebar-tools-main">
-    <a href="https://https://github.com/njtierney/r-best-practices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/njtierney/rbestpractices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./R-Best-Practices.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -114,7 +121,19 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R Best Practices</span></span></a>
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project-organisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></a>
   </div>
 </li>
     </ul>
@@ -127,19 +146,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome"><span class="header-section-number">1</span> Welcome</a></li>
-  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials"><span class="header-section-number">2</span> Course Materials</a></li>
-  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule"><span class="header-section-number">3</span> Schedule</a>
+  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course materials</a></li>
+  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule</a>
   <ul class="collapse">
-  <li><a href="#project-organisation" id="toc-project-organisation" class="nav-link" data-scroll-target="#project-organisation"><span class="header-section-number">3.1</span> Project Organisation</a></li>
-  <li><a href="#code-style-and-readability" id="toc-code-style-and-readability" class="nav-link" data-scroll-target="#code-style-and-readability"><span class="header-section-number">3.2</span> Code Style and Readability</a></li>
-  <li><a href="#writing-readable-code" id="toc-writing-readable-code" class="nav-link" data-scroll-target="#writing-readable-code"><span class="header-section-number">3.3</span> Writing readable code</a></li>
-  <li><a href="#writing-functions" id="toc-writing-functions" class="nav-link" data-scroll-target="#writing-functions"><span class="header-section-number">3.4</span> Writing Functions</a></li>
-  <li><a href="#writing-a-reprex-getting-unstuck" id="toc-writing-a-reprex-getting-unstuck" class="nav-link" data-scroll-target="#writing-a-reprex-getting-unstuck"><span class="header-section-number">3.5</span> Writing a reprex / getting unstuck</a></li>
-  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together"><span class="header-section-number">3.6</span> Putting It All Together</a></li>
+  <li><a href="#project-organisation" id="toc-project-organisation" class="nav-link" data-scroll-target="#project-organisation">Project Organisation</a></li>
+  <li><a href="#code-style-and-readability" id="toc-code-style-and-readability" class="nav-link" data-scroll-target="#code-style-and-readability">Code style and readability</a></li>
+  <li><a href="#writing-readable-code" id="toc-writing-readable-code" class="nav-link" data-scroll-target="#writing-readable-code">Writing readable code</a></li>
+  <li><a href="#writing-functions" id="toc-writing-functions" class="nav-link" data-scroll-target="#writing-functions">Writing Functions</a></li>
+  <li><a href="#writing-a-reprex-getting-unstuck" id="toc-writing-a-reprex-getting-unstuck" class="nav-link" data-scroll-target="#writing-a-reprex-getting-unstuck">Writing a reprex / getting unstuck</a></li>
+  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together">Putting It All Together</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://https://github.com/njtierney/r-best-practices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://https://github.com/njtierney/r-best-practices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -175,12 +194,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Welcome</h1>
+<section id="welcome" class="level1 unnumbered">
+<h1 class="unnumbered">Welcome</h1>
 <p>Welcome to R Best Practices! This course covers essential best practices for writing clear, maintainable, and reproducible R code.</p>
 </section>
-<section id="course-materials" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Course Materials</h1>
+<section id="course-materials" class="level1 unnumbered">
+<h1 class="unnumbered">Course materials</h1>
 <p>Materials will be added here as we progress through the course.</p>
 <p><a href="https://r-best-practices.njtierney.com" class="uri">https://r-best-practices.njtierney.com</a></p>
 <p><strong>Prerequisites</strong></p>
@@ -199,39 +218,45 @@ ul.task-list li input[type="checkbox"] {
 <li>How to make a reproducible example (reprex)</li>
 </ul>
 </section>
-<section id="schedule" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Schedule</h1>
-<section id="project-organisation" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="project-organisation"><span class="header-section-number">3.1</span> Project Organisation</h2>
+<section id="schedule" class="level1">
+<h1>Schedule</h1>
+<section id="project-organisation" class="level2">
+<h2 class="anchored" data-anchor-id="project-organisation">Project Organisation</h2>
 <ul>
-<li>Common project structures</li>
-<li>Pitfalls of organisation</li>
 <li>Understanding file paths</li>
-<li>RStudio and positron set up</li>
+<li>Pitfalls of organisation</li>
+<li>Common project structures</li>
+<li>Naming files</li>
 <li>“Good Enough”/Common Sense principles of project organisation</li>
 <li>Always have a README</li>
+<li>RStudio and positron set up</li>
 </ul>
 </section>
-<section id="code-style-and-readability" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="code-style-and-readability"><span class="header-section-number">3.2</span> Code Style and Readability</h2>
+<section id="code-style-and-readability" class="level2">
+<h2 class="anchored" data-anchor-id="code-style-and-readability">Code style and readability</h2>
 <ul>
 <li>Style is like grammar</li>
-<li>why we care about consistent names, spaces, indentation</li>
+<li>Layout, naming, and correctness are three different jobs</li>
+<li>Why we care about consistent names, spaces, and indentation</li>
 <li>Using the {air} formatter</li>
 <li>Using linters</li>
+<li>Bonus: typing skills and keyboard shortcuts</li>
 </ul>
 </section>
-<section id="writing-readable-code" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="writing-readable-code"><span class="header-section-number">3.3</span> Writing readable code</h2>
+<section id="writing-readable-code" class="level2">
+<h2 class="anchored" data-anchor-id="writing-readable-code">Writing readable code</h2>
 <ul>
+<li>Where we are up to: what the tools fixed, and what they didn’t</li>
 <li>Good vs bad variable names</li>
 <li>De-chunking code</li>
-<li>How to review code</li>
-<li>Review your own code</li>
+<li>What to look for: code smells, inputs and outputs, complexity, refactoring</li>
+<li>A process for reviewing code</li>
+<li>Reviewing someone else’s code</li>
+<li>Clean as you go</li>
 </ul>
 </section>
-<section id="writing-functions" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="writing-functions"><span class="header-section-number">3.4</span> Writing Functions</h2>
+<section id="writing-functions" class="level2">
+<h2 class="anchored" data-anchor-id="writing-functions">Writing Functions</h2>
 <ul>
 <li>The problem functions solve</li>
 <li>Anatomy of a function</li>
@@ -240,8 +265,8 @@ ul.task-list li input[type="checkbox"] {
 <li>How to use a debugger</li>
 </ul>
 </section>
-<section id="writing-a-reprex-getting-unstuck" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="writing-a-reprex-getting-unstuck"><span class="header-section-number">3.5</span> Writing a reprex / getting unstuck</h2>
+<section id="writing-a-reprex-getting-unstuck" class="level2">
+<h2 class="anchored" data-anchor-id="writing-a-reprex-getting-unstuck">Writing a reprex / getting unstuck</h2>
 <ul>
 <li>How to share problems</li>
 <li>Using {reprex}</li>
@@ -252,8 +277,8 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul>
 </section>
-<section id="putting-it-all-together" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="putting-it-all-together"><span class="header-section-number">3.6</span> Putting It All Together</h2>
+<section id="putting-it-all-together" class="level2">
+<h2 class="anchored" data-anchor-id="putting-it-all-together">Putting It All Together</h2>
 <ul>
 <li>Take an existing project and provide code review</li>
 <li>Apply code linting, code styling, functions</li>
@@ -665,6 +690,15 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./setup.html" class="pagination-link" aria-label="Setup">
+        <span class="nav-page-text">Setup</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -673,7 +707,7 @@ ul.task-list li input[type="checkbox"] {
     </div>   
     <div class="nav-footer-center">
 <p>Copyright 2026, Nicholas Tierney</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://https://github.com/njtierney/r-best-practices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://https://github.com/njtierney/r-best-practices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
