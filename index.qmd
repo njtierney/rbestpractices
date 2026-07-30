@@ -1,12 +1,8 @@
----
-title: "R Best Practices"
----
-
-# Welcome
+# Welcome {.unnumbered}
 
 Welcome to R Best Practices! This course covers essential best practices for writing clear, maintainable, and reproducible R code.
 
-# Course Materials
+# Course materials {.unnumbered}
 
 Materials will be added here as we progress through the course.
 

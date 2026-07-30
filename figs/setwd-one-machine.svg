@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 414" width="900" height="414" role="img" aria-labelledby="t d">
+<title id="t">setwd() names a place only one machine has</title>
+<desc id="d">A script whose first line is setwd to a slash Users slash njtierney slash Desktop path, shown running in three places. On your own machine today the folder is where the path says, and the script works. On a colleague&#8217;s machine the project sits under slash home slash sam slash projects, and the script fails. On your own machine six months later the folder has moved to Downloads, and the script fails again.</desc>
+<defs><style>
+ .h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;font-weight:bold;fill:#1b2733}
+ .s{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12.5px;fill:#4a5160}
+ .n{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:11.5px;fill:#4a5160}
+ .m{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:13px;fill:#1b2733}
+ .mm{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:11.5px;fill:#4a5160}
+ .mk{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:12px;font-weight:bold}
+ .v{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:bold}
+</style></defs>
+<rect width="900" height="414" fill="#fff"/>
+<text class="h" x="30" y="46">The first line of the script</text>
+<rect x="30" y="58" width="840" height="38" rx="6" fill="#fbfbfb" stroke="#e6e8eb"/>
+<text class="m" x="44" y="83">setwd("/Users/njtierney/Desktop/analysis-2026")</text>
+<text class="s" x="30" y="126">The same script, run in three places:</text>
+<text class="h" x="30" y="160">Your machine, today</text>
+<rect x="30" y="172" width="270" height="98" rx="8" fill="#f6f8fa" stroke="#dde3e8"/>
+<text class="mk" x="44" y="198" fill="#1B9E77">/Users/njtierney/Desktop/</text>
+<text class="mm" x="62" y="220">└─ analysis-2026/</text>
+<text class="n" x="44" y="250">The folder you set it up in.</text>
+<rect x="111" y="286" width="108" height="28" rx="14" fill="#1B9E77" opacity="0.12"/>
+<text class="v" x="165" y="305" text-anchor="middle" fill="#1B9E77">&#10003; works</text>
+<text class="h" x="315" y="160">A colleague's machine</text>
+<rect x="315" y="172" width="270" height="98" rx="8" fill="#f6f8fa" stroke="#dde3e8"/>
+<text class="mk" x="329" y="198" fill="#E7298A">/home/sam/projects/</text>
+<text class="mm" x="347" y="220">└─ analysis-2026/</text>
+<text class="n" x="329" y="250">There is no /Users/njtierney here.</text>
+<rect x="396" y="286" width="108" height="28" rx="14" fill="#E7298A" opacity="0.12"/>
+<text class="v" x="450" y="305" text-anchor="middle" fill="#E7298A">&#10007; fails</text>
+<text class="h" x="600" y="160">Your machine, in six months</text>
+<rect x="600" y="172" width="270" height="98" rx="8" fill="#f6f8fa" stroke="#dde3e8"/>
+<text class="mk" x="614" y="198" fill="#E7298A">/Users/njtierney/Downloads/</text>
+<text class="mm" x="632" y="220">└─ analysis-2026/</text>
+<text class="n" x="614" y="250">You moved the folder. Same computer.</text>
+<rect x="681" y="286" width="108" height="28" rx="14" fill="#E7298A" opacity="0.12"/>
+<text class="v" x="735" y="305" text-anchor="middle" fill="#E7298A">&#10007; fails</text>
+<line x1="30" y1="344" x2="870" y2="344" stroke="#e6e8eb"/>
+<text class="h" x="30" y="374">That path is not part of your project</text>
+<text class="s" x="30" y="398">It is a fact about one machine, on one day. Move the folder and the script breaks on your own computer.</text>
+</svg>

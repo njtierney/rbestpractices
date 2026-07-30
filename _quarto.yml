@@ -1,4 +1,4 @@
-project: 
+project:
   type: book
   output-dir: docs
 
@@ -6,21 +6,48 @@ book:
   title: "R Best Practices"
   author: "Nicholas Tierney"
   site-url: https://r-best-practices.njtierney.com
-  repo-url: https://https://github.com/njtierney/r-best-practices
+  repo-url: https://github.com/njtierney/rbestpractices
   repo-branch: main
   repo-actions: [edit, issue]
   date: "2026-02-17"
-  page-footer: "Copyright 2026, Nicholas Tierney" 
+  page-footer: "Copyright 2026, Nicholas Tierney"
   page-navigation: true
   search: true
+  downloads: [pdf]
   chapters:
     - "index.qmd"
+    - "setup.qmd"
+    - "project-organisation.qmd"
+    - "code-style-and-readability.qmd"
+    - "writing-readable-code.qmd"
+    - "writing-functions.qmd"
+    - "writing-a-reprex-getting-unstuck.qmd"
+    - "putting-it-all-together.qmd"
+  appendices:
+    - "appendix-speed-of-thought.qmd"
 
 format:
   html:
-    theme: 
+    theme:
       - cosmo
-    code-background: true
+      - measured/_measured-palette.scss    # Dark2 colours
+      - measured/_measured-structure.scss  # code blocks, callout shape
+      - measured/_measured-house.scss      # what each callout type means
+      - measured/measured-legible.scss     # Atkinson Hyperlegible + Fira Code
+      - book-grid.scss                     # book column is narrower than a website
     code-copy: true
-    code-overflow: wrap
+    code-line-numbers: true
     toc: true
+    # `code-overflow: wrap` is deliberately NOT set. measured sizes blocks
+    # to 80 characters and scrolls beyond that; wrapping instead would
+    # destroy the indentation that shows the shape of a pipeline, which is
+    # the thing the style chapter spends its time arguing for.
+  pdf:
+    documentclass: tufte-book
+    classoption: [justified, a4paper]
+    include-in-header: tufte.tex
+    keep-tex: true
+    # tufte-book's float machinery cannot handle Quarto's default
+    # `\begin{figure}[H]` — it fails with "Extra }, or forgotten
+    # \endgroup" at \end{figure}. Any captioned image triggers it.
+    fig-pos: 'ht'

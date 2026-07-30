@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 454" width="900" height="454" role="img" aria-labelledby="t d">
+<title id="t">Why code reads better down a column than across a page</title>
+<desc id="d">The same analysis two ways. As one long line, the eye makes a single wide sweep and has to hold the start of the line in memory to reach the end. Broken one step per line, the eye makes five short downward steps, and each step can be named: read, filter, mutate, group, summarise.</desc>
+<defs><style>
+ .h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:17px;font-weight:bold}
+ .s{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14.5px}
+ .m{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:13px}
+ .mm{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:15.5px}
+ .w{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:12.5px}
+ .n{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:bold}
+ .v{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15.5px;font-weight:bold}
+</style><marker id="ah-o" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#D95F02"/></marker><marker id="ah-g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1B9E77"/></marker></defs>
+<rect width="900" height="454" fill="#fff"/>
+<text class="h" x="30" y="50" fill="#1b2733">All on one line</text>
+<text class="h" x="490" y="50" fill="#1b2733">One step per line</text>
+<rect x="30" y="66" width="400" height="184" rx="8" fill="#fbfbfb" stroke="#e6e8eb" stroke-width="1"/>
+<text class="m" x="44" y="98" fill="#9aa0a6">1</text>
+<text class="m" x="66" y="98" fill="#1b2733">penguins &lt;- read_csv("data/pengu&#8230;</text>
+<path d="M 68,124 H 438" stroke="#D95F02" stroke-width="2.4" fill="none" marker-end="url(#ah-o)"/>
+<text class="n" x="68" y="152" fill="#D95F02">one sweep, 275 characters</text>
+<text class="s" x="44" y="184" fill="#4a5160">You cannot see the end of the line.</text>
+<text class="s" x="44" y="206" fill="#4a5160">So you hold the start of it in your</text>
+<text class="s" x="44" y="228" fill="#4a5160">head while you go looking.</text>
+<rect x="490" y="66" width="380" height="184" rx="8" fill="#fbfbfb" stroke="#e6e8eb" stroke-width="1"/>
+<text class="m" x="504" y="98" fill="#9aa0a6">1</text>
+<text class="m" x="526" y="98" fill="#1b2733">penguins &lt;- read_csv(&#8230;) |&gt;</text>
+<text class="m" x="504" y="125" fill="#9aa0a6">2</text>
+<text class="m" x="542" y="125" fill="#1b2733">filter(&#8230;) |&gt;</text>
+<text class="m" x="504" y="152" fill="#9aa0a6">3</text>
+<text class="m" x="542" y="152" fill="#1b2733">mutate(&#8230;) |&gt;</text>
+<text class="m" x="504" y="179" fill="#9aa0a6">4</text>
+<text class="m" x="542" y="179" fill="#1b2733">group_by(species) |&gt;</text>
+<text class="m" x="504" y="206" fill="#9aa0a6">5</text>
+<text class="m" x="542" y="206" fill="#1b2733">summarise(&#8230;)</text>
+<path d="M 514,82 V 232" stroke="#1B9E77" stroke-width="2.4" fill="none" marker-end="url(#ah-g)"/>
+<text class="s" x="30" y="290" fill="#4a5160">Your eye is very good at going down a column,</text>
+<text class="s" x="30" y="312" fill="#4a5160">and poor at going across a page.</text>
+<text class="h" x="490" y="290" fill="#1b2733">Each step has a name</text>
+<rect x="490.0" y="304" width="53.2" height="30" rx="15" fill="#1B9E77" opacity="0.12"/>
+<text class="n" x="516.6" y="324" fill="#1B9E77" text-anchor="middle">read</text>
+<rect x="552.2" y="304" width="68.8" height="30" rx="15" fill="#1B9E77" opacity="0.12"/>
+<text class="n" x="586.6" y="324" fill="#1B9E77" text-anchor="middle">filter</text>
+<rect x="630.0" y="304" width="68.8" height="30" rx="15" fill="#1B9E77" opacity="0.12"/>
+<text class="n" x="664.4" y="324" fill="#1B9E77" text-anchor="middle">mutate</text>
+<rect x="707.8" y="304" width="61.0" height="30" rx="15" fill="#1B9E77" opacity="0.12"/>
+<text class="n" x="738.3" y="324" fill="#1B9E77" text-anchor="middle">group</text>
+<rect x="777.8" y="304" width="92.2" height="30" rx="15" fill="#1B9E77" opacity="0.12"/>
+<text class="n" x="823.9" y="324" fill="#1B9E77" text-anchor="middle">summarise</text>
+<line x1="30" y1="358" x2="870" y2="358" stroke="#e6e8eb"/>
+<text class="s" x="30" y="388" fill="#4a5160">This is why newspapers set type in columns, and why books are not printed on rolls of paper a metre wide.</text>
+<text class="s" x="30" y="410" fill="#4a5160">It is the same reason an 80 character limit helps:</text>
+<text class="s" x="30" y="432" fill="#4a5160">it keeps the sweep short enough that you never lose the start of the line.</text>
+</svg>

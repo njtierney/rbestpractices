@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 648" width="900" height="648" role="img" aria-labelledby="t d">
+<title id="t">Cutting an example down until the problem is obvious</title>
+<desc id="d">Four steps. An eight line pipeline warns that an argument is not numeric or logical. Dropping group_by and summarise gives the same warning from two lines. Dropping mutate gives the same warning from one line. Finally, looking at the column shows it is a factor, so taking its mean was never going to work. The answer arrived without anyone being asked.</desc>
+<defs><style>
+ .h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:17px;font-weight:bold}
+ .s{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14.5px}
+ .m{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:13px}
+ .mm{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:15.5px}
+ .w{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:12.5px}
+ .n{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:bold}
+ .v{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15.5px;font-weight:bold}
+</style><marker id="dn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa0a6"/></marker></defs>
+<rect width="900" height="648" fill="#fff"/>
+<text class="h" x="30" y="46" fill="#1b2733">Make the example smaller, one step at a time</text>
+<rect x="30" y="80" width="376.692" height="106" rx="7" fill="#fbfbfb" stroke="#e6e8eb" stroke-width="1"/>
+<text class="m" x="46" y="108" fill="#1b2733">diamonds |&gt;</text>
+<text class="m" x="62" y="129" fill="#1b2733">mutate(price_per_carat = price / carat) |&gt;</text>
+<text class="m" x="62" y="150" fill="#1b2733">group_by(cut) |&gt;</text>
+<text class="m" x="62" y="171" fill="#1b2733">summarise(mean_color = mean(color))</text>
+<rect x="424" y="80" width="80.6" height="26" rx="13" fill="#4a5160" opacity="0.12"/>
+<text class="n" x="464.3" y="98" fill="#4a5160" text-anchor="middle">the original</text>
+<text class="w" x="424" y="134" fill="#D95F02">! argument is not numeric or logical: returning NA</text>
+<path d="M 48,190 V 230" stroke="#9aa0a6" stroke-width="1.8" marker-end="url(#dn)"/>
+<text class="s" x="62" y="215" fill="#4a5160">drop the part the warning did not mention</text>
+<rect x="30" y="238" width="298.432" height="64" rx="7" fill="#fbfbfb" stroke="#e6e8eb" stroke-width="1"/>
+<text class="m" x="46" y="266" fill="#1b2733">diamonds |&gt;</text>
+<text class="m" x="62" y="287" fill="#1b2733">mutate(mean_color = mean(color))</text>
+<rect x="424" y="238" width="80.6" height="26" rx="13" fill="#4a5160" opacity="0.12"/>
+<text class="n" x="464.3" y="256" fill="#4a5160" text-anchor="middle">2 lines</text>
+<text class="w" x="424" y="292" fill="#D95F02">! argument is not numeric or logical: returning NA</text>
+<path d="M 48,306 V 346" stroke="#9aa0a6" stroke-width="1.8" marker-end="url(#dn)"/>
+<text class="s" x="62" y="331" fill="#4a5160">drop the part the warning did not mention</text>
+<rect x="30" y="354" width="188.51999999999998" height="43" rx="7" fill="#fbfbfb" stroke="#e6e8eb" stroke-width="1"/>
+<text class="m" x="46" y="382" fill="#1b2733">mean(diamonds$color)</text>
+<rect x="424" y="354" width="72.8" height="26" rx="13" fill="#4a5160" opacity="0.12"/>
+<text class="n" x="460.4" y="372" fill="#4a5160" text-anchor="middle">1 line</text>
+<text class="w" x="424" y="408" fill="#D95F02">! argument is not numeric or logical: returning NA</text>
+<path d="M 48,401 V 441" stroke="#9aa0a6" stroke-width="1.8" marker-end="url(#dn)"/>
+<text class="s" x="62" y="426" fill="#4a5160">drop the part the warning did not mention</text>
+<rect x="30" y="449" width="313.736" height="85" rx="7" fill="#f4faf7" stroke="#1B9E77" stroke-width="1.6"/>
+<text class="m" x="46" y="477" fill="#1b2733">head(diamonds$color)</text>
+<text class="m" x="46" y="498" fill="#1b2733">#&gt; [1] E E E I J J</text>
+<text class="m" x="46" y="519" fill="#1b2733">#&gt; Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J</text>
+<rect x="424" y="449" width="104.0" height="26" rx="13" fill="#1B9E77" opacity="0.12"/>
+<text class="n" x="476.0" y="467" fill="#1B9E77" text-anchor="middle">the answer</text>
+<text class="h" x="30" y="576" fill="#1B9E77">Does it make sense to take the mean of some letters?</text>
+<text class="s" x="30" y="604" fill="#4a5160">Of course not. And notice that nobody was asked. Each cut made the example smaller,</text>
+<text class="s" x="30" y="626" fill="#4a5160">and the smaller it got, the more obvious the problem became.</text>
+</svg>

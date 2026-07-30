@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" width="560" height="380" role="img" aria-labelledby="title desc">
+  <title id="title">Lionel Hutz business card</title>
+  <desc id="desc">A business card reading "LIONEL HUTZ ESQ. / WORKS ON CONTINGENCY / NO MONEY DOWN / PHONE: 555-0189", with a small scales of justice symbol. There is no punctuation between or after the lines, so it reads as "works on contingency, no money down".</desc>
+
+  <defs>
+    <style>
+      .print { font-family: "Times New Roman", Times, "Liberation Serif", serif; fill: #1b1b1b; }
+    </style>
+  </defs>
+
+  <rect width="560" height="380" fill="#f2efe6"/>
+
+  <g transform="rotate(-2 280 190)">
+
+    <!-- card body, deliberately slightly irregular -->
+    <path d="M 26,30 L 536,22 L 542,350 L 32,358 Z"
+          fill="#fdfcf7" stroke="#2a2a2a" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M 38,42 L 524,35 L 529,338 L 44,345 Z"
+          fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+    <!-- name -->
+    <text class="print" x="272" y="92" font-size="46" letter-spacing="3" text-anchor="middle">LIONEL HUTZ</text>
+    <text class="print" x="470" y="96" font-size="17" letter-spacing="1">ESQ.</text>
+    <line x1="72" y1="105" x2="490" y2="102" stroke="#2a2a2a" stroke-width="1.6"/>
+
+    <!-- body -->
+    <text class="print" x="268" y="152" font-size="27" letter-spacing="2.5" text-anchor="middle">WORKS  ON</text>
+    <text class="print" x="252" y="186" font-size="27" letter-spacing="2.5" text-anchor="middle">CONTINGENCY</text>
+    <text class="print" x="266" y="236" font-size="27" letter-spacing="2.5" text-anchor="middle">NO  MONEY  DOWN</text>
+
+    <!-- scales of justice -->
+    <g stroke="#1b1b1b" stroke-width="2.1" fill="none" stroke-linecap="round">
+      <line x1="280" y1="270" x2="280" y2="299"/>
+      <line x1="259" y1="300" x2="301" y2="300"/>
+      <path d="M 268,300 L 280,290 L 292,300"/>
+      <line x1="236" y1="271" x2="324" y2="271"/>
+      <circle cx="280" cy="266" r="3.6" fill="#1b1b1b"/>
+      <path d="M 236,271 L 226,286 M 236,271 L 246,286"/>
+      <path d="M 224,286 Q 236,298 248,286"/>
+      <path d="M 324,271 L 314,286 M 324,271 L 334,286"/>
+      <path d="M 312,286 Q 324,298 336,286"/>
+    </g>
+
+    <!-- phone -->
+    <text class="print" x="272" y="330" font-size="21" letter-spacing="1.5" text-anchor="middle">PHONE: 555-0189</text>
+
+  </g>
+</svg>

@@ -2,26 +2,32 @@
 
 ## Project Organisation
 
-- Common project structures
-- Pitfalls of organisation
 - Understanding file paths
-- RStudio and positron set up
+- Pitfalls of organisation
+- Common project structures
+- Naming files
 - "Good Enough"/Common Sense principles of project organisation
 - Always have a README
+- RStudio and positron set up
 
-## Code Style and Readability
+## Code style and readability
 
 - Style is like grammar
-- why we care about consistent names, spaces, indentation
+- Layout, naming, and correctness are three different jobs
+- Why we care about consistent names, spaces, and indentation
 - Using the {air} formatter
 - Using linters
+- Bonus: typing skills and keyboard shortcuts
 
 ## Writing readable code
 
+- Where we are up to: what the tools fixed, and what they didn't
 - Good vs bad variable names
 - De-chunking code
-- How to review code
-- Review your own code
+- What to look for: code smells, inputs and outputs, complexity, refactoring
+- A process for reviewing code
+- Reviewing someone else's code
+- Clean as you go
 
 ## Writing Functions
 
