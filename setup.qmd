@@ -30,7 +30,61 @@ Four kinds of box turn up throughout, each with its own colour and icon:
 - **🔎 Going deeper** - optional extra detail, a longer example, or a list you might want later. Boxes titled **Read more** point at the blog post or talk a section is adapted from, so you can follow the original if you want it.
 - **🚨** - the things that will actually bite you. There are not many. That is the point of them.
 
-Some boxes are collapsed, showing only their title. Click the title to open one. If you are reading the PDF they are all open already, which is one reason the PDF is longer than it looks online.
+Rather than describe them, here is one of each.
+
+::: {.callout-note title="Your Turn"}
+
+Exercises look like this. Most of them give you something to run:
+
+```r
+R.version.string
+```
+
+Some of them just ask you something. Here is the one I actually care about: what is the worst R code you have ever had to work with? Your own counts, and mine definitely does.
+
+There is no wrong answer. I am asking because the answer usually tells me which parts of the day to slow down on.
+
+:::
+
+::: {.callout-caution title="Some history: where the name R comes from"}
+
+Two things at once, which I think is lovely.
+
+R was written by Ross Ihaka and Robert Gentleman at the University of Auckland in the early 1990s, and they share a first initial. It is also a play on S, the language it was modelled on, in the same way that C came after B.
+
+So the name is a pun and a signature at the same time. You can read their own account of it in [R: A Language for Data Analysis and Graphics](https://www.stat.auckland.ac.nz/~ihaka/downloads/R-paper.pdf).
+
+:::
+
+::: {.callout-tip title="Going deeper: how these boxes are made" collapse="true"}
+
+You just clicked a title, so that is the collapsing demonstrated.
+
+These are Quarto callouts, and there is nothing clever going on. Each one is a fenced div with a class on it:
+
+````markdown
+::: {.callout-note title="Your Turn"}
+
+Something for you to do.
+
+:::
+````
+
+The colours and the icons come from a stylesheet in the book's repo, not from Quarto. Quarto ships five callout types with its own icons, and I have repainted all five.
+
+If you want them in your own work, the docs are at [Quarto: callout blocks](https://quarto.org/docs/authoring/callouts.html).
+
+:::
+
+::: {.callout-important title="Restart R after a big install"}
+
+If you install a package that is already loaded in your session, R can end up half on the old version and half on the new one. You then get errors that make no sense and do not survive a restart, which is a miserable way to spend twenty minutes.
+
+So once you have worked through the installs below, restart R. In RStudio that is `Cmd / Ctrl + Shift + F10`.
+
+:::
+
+Some boxes are collapsed, showing only their title, like the **Going deeper** one above. Click the title to open one. If you are reading the PDF they are all open already, which is one reason the PDF is longer than it looks online.
 
 ### The code
 

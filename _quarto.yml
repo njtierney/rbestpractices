@@ -23,7 +23,7 @@ book:
     # - "writing-functions.qmd"
     # - "writing-a-reprex-getting-unstuck.qmd"
     # - "putting-it-all-together.qmd"
-  appendices:
+  # appendices:
     # - "appendix-speed-of-thought.qmd"
 
 format:
