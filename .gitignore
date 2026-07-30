@@ -10,7 +10,17 @@ docs
 *.pdf
 *.tex
 *.toc
+*.rds
 
 **/*.quarto_ipynb
 site_libs
 index_files
+
+##
+
+*_files
+*_cache
+notes
+_freeze
+*.ipynb
+*.html
