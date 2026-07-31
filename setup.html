@@ -192,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
   <li><a href="#the-r-packages" id="toc-the-r-packages" class="nav-link" data-scroll-target="#the-r-packages">The R packages</a></li>
-  <li><a href="#air-the-formatter" id="toc-air-the-formatter" class="nav-link" data-scroll-target="#air-the-formatter">Air, the formatter</a></li>
+  <li><a href="#code-formatters" id="toc-code-formatters" class="nav-link" data-scroll-target="#code-formatters">Code formatters</a></li>
   <li><a href="#jarl-the-linter" id="toc-jarl-the-linter" class="nav-link" data-scroll-target="#jarl-the-linter">Jarl, the linter</a></li>
   <li><a href="#checking-it-all-worked" id="toc-checking-it-all-worked" class="nav-link" data-scroll-target="#checking-it-all-worked">Checking it all worked</a></li>
   <li><a href="#if-something-will-not-install" id="toc-if-something-will-not-install" class="nav-link" data-scroll-target="#if-something-will-not-install">If something will not install</a></li>
@@ -426,16 +426,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-8"><a href="#cb6-8" aria-label="8"></a>  <span class="st">"reprex"</span>,</span>
 <span id="cb6-9"><a href="#cb6-9" aria-label="9"></a>  <span class="st">"goodpractice"</span>,</span>
 <span id="cb6-10"><a href="#cb6-10" aria-label="10"></a>  <span class="st">"sf"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a>  <span class="st">"pak,</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a><span class="st">  "</span>sp<span class="st">"</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-label="13"></a><span class="st">))</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a>  <span class="st">"pak"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a>  <span class="st">"sp"</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-label="13"></a>))</span>
 <span id="cb6-14"><a href="#cb6-14" aria-label="14"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-label="15"></a><span class="st">install.packages('fnmate', repos = c('https://milesmcbain.r-universe.dev', 'https://cloud.r-project.org'))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-15"><a href="#cb6-15" aria-label="15"></a><span class="fu">install.packages</span>(<span class="st">'fnmate'</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">'https://milesmcbain.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>sf</code> and <code>sp</code> are only needed for one optional exercises. They are the heaviest things on the list, so if they give you trouble, leave them and let me know.</p>
 </section>
-<section id="air-the-formatter" class="level3">
-<h3 class="anchored" data-anchor-id="air-the-formatter">Air, the formatter</h3>
+<section id="code-formatters" class="level3">
+<h3 class="anchored" data-anchor-id="code-formatters">Code formatters</h3>
 <p><a href="https://posit-dev.github.io/air/">Air</a> is an R formatter from Posit. It is not an R package, so it installs from the terminal rather than from R.</p>
+<p>See their installation instruction on their website:</p>
+<p>But briefly, here are the most popular ways to install:</p>
 <p>On macOS and Linux:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="ex">curl</span> <span class="at">-LsSf</span> https://github.com/posit-dev/air/releases/latest/download/air-installer.sh <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>On Windows:</p>
@@ -444,6 +446,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="ex">air</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You should get a version number back. If you get “command not found”, the install did not finish, so try it again.</p>
 <p>We set up format-on-save together in chapter 2, so there is nothing else to do with air before we start.</p>
+<p>If you have trouble installing {air}, we have installed the {styler} R package before, which does the same thing, just not as fast.</p>
 </section>
 <section id="jarl-the-linter" class="level3">
 <h3 class="anchored" data-anchor-id="jarl-the-linter">Jarl, the linter</h3>
