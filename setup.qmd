@@ -187,7 +187,7 @@ install.packages(c(
   "reprex",
   "goodpractice",
   "sf",
-  "pak,
+  "pak",
   "sp"
 ))
 
@@ -196,9 +196,13 @@ install.packages('fnmate', repos = c('https://milesmcbain.r-universe.dev', 'http
 
 `sf` and `sp` are only needed for one optional exercises. They are the heaviest things on the list, so if they give you trouble, leave them and let me know.
 
-### Air, the formatter
+### Code formatters
 
 [Air](https://posit-dev.github.io/air/) is an R formatter from Posit. It is not an R package, so it installs from the terminal rather than from R.
+
+See their installation instruction on their website:
+
+But briefly, here are the most popular ways to install:
 
 On macOS and Linux:
 
@@ -221,6 +225,8 @@ air --version
 You should get a version number back. If you get "command not found", the install did not finish, so try it again.
 
 We set up format-on-save together in chapter 2, so there is nothing else to do with air before we start.
+
+If you have trouble installing {air}, we have installed the {styler} R package before, which does the same thing, just not as fast.
 
 ### Jarl, the linter
 
