@@ -2,6 +2,11 @@ project:
   type: book
   output-dir: docs
 
+# Applied to every chapter. linkate collects each chapter's links and lists
+# them at the end. Set here rather than per-chapter so they cannot drift.
+filters:
+  - linkate
+
 book:
   title: "R Best Practices"
   author: "Nicholas Tierney"
@@ -20,11 +25,11 @@ book:
     - "project-organisation.qmd"
     - "code-style-and-readability.qmd"
     - "writing-readable-code.qmd"
-    # - "writing-functions.qmd"
-    # - "writing-a-reprex-getting-unstuck.qmd"
-    # - "putting-it-all-together.qmd"
+  #   - "writing-functions.qmd"
+  #   - "writing-a-reprex-getting-unstuck.qmd"
+  #   - "putting-it-all-together.qmd"
   # appendices:
-    # - "appendix-speed-of-thought.qmd"
+  #   - "appendix-speed-of-thought.qmd"
 
 format:
   html:

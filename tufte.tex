@@ -43,6 +43,32 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+% --- tufte-book refuses to define \subsubsection ---------------------------
+%
+% tufte-common.def replaces \subsubsection with an error, on Bringhurst's
+% argument (_The Elements of Typographic Style_, 4.2.2) that a document
+% needing a fourth heading level wants restructuring rather than another size
+% of type. Using one aborts the build with:
+%
+%   Class tufte-book Error: \subsubsection is undefined by this class.
+%
+% This book reaches four levels in one place: Files / Directories / Paths,
+% nested under "Files, directories, paths". Define a quiet italic heading
+% rather than lose the PDF. \@startsection is used rather than a plain
+% \textbf so that the table of contents and hyperref anchors still work.
+%
+% If the fourth level ever goes away, this can go with it.
+\makeatletter
+\renewcommand\subsubsection{%
+  \@startsection{subsubsection}%
+    {3}%                                 level
+    {\z@}%                               indent
+    {1.4ex \@plus .4ex \@minus .2ex}%    space before
+    {0.6ex \@plus .2ex}%                 space after
+    {\normalfont\normalsize\itshape}%    style
+}
+\makeatother
+
 % --- Fix: Quarto's margin packages vs tufte's own --------------------------
 %
 % Quarto emits, near the end of its preamble:

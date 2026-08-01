@@ -196,7 +196,7 @@ install.packages('fnmate', repos = c('https://milesmcbain.r-universe.dev', 'http
 
 `sf` and `sp` are only needed for one optional exercises. They are the heaviest things on the list, so if they give you trouble, leave them and let me know.
 
-### Code formatters
+### Code formatters {#sec-code-formatters}
 
 [Air](https://posit-dev.github.io/air/) is an R formatter from Posit. It is not an R package, so it installs from the terminal rather than from R.
 
@@ -226,13 +226,15 @@ You should get a version number back. If you get "command not found", the instal
 
 We set up format-on-save together in chapter 2, so there is nothing else to do with air before we start.
 
-If you have trouble installing {air}, we have installed the {styler} R package before, which does the same thing, just not as fast.
+If you have trouble installing {air}, `{styler}` is in the package list above and does the same job, just not as fast.
 
-### Jarl, the linter
+### Jarl, the linter {#sec-jarl-setup}
 
 [Jarl](https://jarl.etiennebacher.com/) is a fast linter by [Etienne Bacher](https://www.etiennebacher.com/), built on top of Air. Installation instructions are on its site.
 
-If jarl gives you any trouble, do not worry about it. `lintr` is in the package list above and does the same job from inside R, and everything in chapter 2 works with either.
+**Jarl is optional.** Like air, it is a command line tool rather than an R package, so the install can go wrong in all the same ways, and I do not want you fighting it before we start.
+
+If it gives you any trouble, do not worry about it. `{flir}` is in the package list above - it is by Etienne as well, it installs the way every other R package installs, and it is the one that will still fix things for you. `{lintr}` is in the list too. Everything in chapter 2 works with any of the three.
 
 ### Checking it all worked
 
@@ -242,7 +244,7 @@ Run this in R. It should print `TRUE` for everything.
 pkgs <- c(
   "tidyverse", "here", "lintr", "styler",
   "spelling", "usethis", "reprex", "fnmate",
-  "fnmate", "goodpractice", "sf", "sp"
+  "flir", "goodpractice", "sf", "sp"
 )
 
 sapply(pkgs, requireNamespace, quietly = TRUE)
@@ -262,7 +264,7 @@ Please do send me an email before the session rather than fighting with it on yo
 
 Installation problems are almost always specific to one machine, and they are much faster to solve with two people looking at them. They are also, genuinely, not a reflection on you. Every one of us has lost an afternoon to a package that would not build. Ask me for some horror stories.
 
-# Get course exercise materials on your machine {#sec-rbp-exercises}
+## Get course exercise materials on your machine {#sec-rbp-exercises}
 
 
 :::{.callout-note title="Your Turn"}
@@ -274,16 +276,28 @@ Let's download the course exercise - try running this code:
 use_course("njtierney/rbp-exercises")
 ```
 
-Which will prompt you to download the repository, <https://github.com/njtierney/rbp-exercises>, and then open it in an RStudio project. 
+Which will prompt you to download the repository, <https://github.com/njtierney/rbp-exercises>, and then open it in an RStudio project.
 
-<!-- TODO If time, make a gif of this -->
+::: {.content-visible when-format="html"}
+
+![](gifs/demo-use-course.gif){fig-alt="An animation of use_course running in RStudio. It asks permission to download the exercises, unpacks them into a folder on the Desktop, and opens that folder as a new RStudio project in a fresh session, with the numbered exercise folders listed in the Files pane."}
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+![](figs/demo-use-course-still.png){fig-alt="RStudio open on the downloaded rbp-exercises project in a clean session. The Files pane lists the numbered exercise folders and rbp-exercises.Rproj, and the console shows a freshly started R."}
+
+*Where you end up. This one is a screen recording in the web version of the book.*
+
+:::
 
 If you have troubles with this (sometimes firewalls can stop you) you can download it from the github page <https://github.com/njtierney/rbp-exercises> like so:
 
-![](figs/rstudio-download-rbp-exercises.png)
+![](figs/rstudio-download-rbp-exercises.png){fig-alt="The rbp-exercises repository on GitHub, showing the numbered exercise folders. The green Code button has been clicked and its dropdown is open, with Download ZIP highlighted at the bottom of the list."}
 
 Then, unzip that, and click on the rbp-exercises.Rproj file:
 
-![](figs/rstudio-show-rbp-rpoj.png)
+![](figs/rstudio-show-rbp-rpoj.png){fig-alt="The unzipped rbp-exercises folder in a file browser, listing the numbered exercise folders. rbp-exercises.Rproj is highlighted, with README.md underneath it. That .Rproj file is the one to open."}
 
 :::
