@@ -192,14 +192,122 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+% --- Fix: Quarto's margin packages vs tufte's own --------------------------
+%
+% Quarto emits, near the end of its preamble:
+%
+%   \@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
+%   \@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
+%
+% Both abort the build on this class, because tufte-common.def has already
+% defined \sidenote and \marginnote itself:
+%
+%   "Command \marginnote already defined."
+%   "Command '\sidenote' already defined."
+%
+% Those two packages give an ordinary class the margin apparatus that
+% tufte-book is built around, so here they are redundant - and nothing in
+% the book calls either command. Declaring them already loaded makes Quarto
+% take the empty branch and leaves tufte's versions in place. This has to
+% come before Quarto's block, which it does: include-in-header lands earlier
+% in the preamble.
+\makeatletter
+\@namedef{ver@sidenotes.sty}{9999/01/01}
+\@namedef{ver@marginnote.sty}{9999/01/01}
+\makeatother
+
+% --- Every image runs the full width of its column ------------------------
+%
+% Images arrive here three ways, and only the first is already full width:
+%
+%   1. `width=100%` in the .qmd  -> \includegraphics[width=1\linewidth]
+%   2. `width=70%`  in the .qmd  -> \includegraphics[width=0.7\linewidth]
+%   3. no width at all           -> \pandocbounded{\includegraphics{...}},
+%      which only ever *shrinks* an image to fit, never grows it, so a small
+%      PNG stays small.
+%
+% Rather than edit every image in the source - which would also change the
+% HTML, where the 70% sizing is wanted - force the width here. This file is
+% only loaded by the PDF format, so HTML is untouched.
+%
+% The passed options `#1` are kept and our width is appended *after* them:
+% graphicx uses the last value given for a key, so this beats an explicit
+% `width=0.7\linewidth` while preserving `alt=`, which carries the fig-alt
+% text into the tagged PDF.
+\usepackage{letltxmacro}
+\LetLtxMacro{\rbporigincludegraphics}{\includegraphics}
+\renewcommand{\includegraphics}[2][]{%
+  \rbporigincludegraphics[#1,width=\linewidth,height=\maxdimen,keepaspectratio]{#2}%
+}
+
 % Code blocks are wider than tufte's narrow text column, so allow a little
 % overflow into the margin rather than letting lines run off the page.
-% (Wrapping Shaded in `fullwidth` does not work: Shaded contains snugshade,
-% and the environments do not nest.)
 \usepackage{fvextra}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{
   breaklines, breaknonspaceingroup, breakanywhere, commandchars=\\\{\}
 }
+
+% --- Code blocks run out into the margin -----------------------------------
+%
+% Quarto sets code as `Shaded` (from `framed`) wrapping `Highlighting`, and
+% `Shaded` takes its width from \hsize, which in tufte is the narrow text
+% column. That squeezes pipelines onto wrapped lines.
+%
+% Wrapping Shaded in tufte's `fullwidth` does not work: `fullwidth` is a
+% `changepage` list environment, and `framed` cannot survive inside a list.
+% It fails with "\begin{snugshade} ended by \end{list}".
+%
+% So widen the measure rather than moving the block: add tufte's own
+% \@tufte@overhang to \hsize before `framed` reads it. `framed` keeps its
+% page-breaking, which a \parbox-based box would lose, and long code blocks
+% here do break across pages.
+%
+% The \ifdim guard keeps this to top-level code only: widening code set
+% inside a callout would push it out through the side of the box.
+%
+% The comparison has to be against a saved copy of the body width, not
+% against \textwidth. Quarto sets callouts as tcolorbox, and tcolorbox
+% re-points \textwidth at the box's inner width along with \linewidth and
+% \hsize - so `\ifdim\linewidth=\textwidth` is true inside a callout too,
+% and every code block gets widened. \rbpbodywidth is set once, at the top
+% level, where it records the real measure.
+\makeatletter
+\newdimen\rbpbodywidth
+\AtBeginDocument{\rbpbodywidth=\textwidth}
+\let\rbporigShaded\Shaded
+\let\rbporigendShaded\endShaded
+\renewenvironment{Shaded}{%
+  \begingroup
+  \ifdim\linewidth=\rbpbodywidth
+    \advance\linewidth by \@tufte@overhang
+    \advance\hsize by \@tufte@overhang
+    \advance\columnwidth by \@tufte@overhang
+  \fi
+  \rbporigShaded
+}{%
+  \rbporigendShaded
+  \endgroup
+}
+\makeatother
+
+% --- Figures span the text column and the margin ---------------------------
+%
+% A plain `figure` in tufte-book is only as wide as the narrow text column,
+% which leaves the diagrams in this book too small to read. tufte-book's
+% `figure*` is its fullwidth float: it spans the text column, the gutter and
+% the margin column, and still sets the caption in the margin.
+%
+% Quarto always emits `\begin{figure}`, and there is no format option that
+% changes that on this class - `fig-column` only affects the HTML. So alias
+% the environment: every figure becomes a fullwidth one. Combined with the
+% \includegraphics width above, `\linewidth` inside the float is now the
+% full measure, so the image fills it.
+\makeatletter
+\AtBeginDocument{%
+  \expandafter\let\expandafter\figure\csname figure*\endcsname
+  \expandafter\let\expandafter\endfigure\csname endfigure*\endcsname
+}
+\makeatother
 \makeatletter
 \@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
@@ -260,12 +368,6 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tikz}{}{\usepackage{tikz}}
-\makeatother
-        \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
-          \node[shape=circle,draw,inner sep=1pt] (char) {{\scriptsize#1}};}}  
-                  
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -485,9 +587,19 @@ unstuck}\label{writing-a-reprex-getting-unstuck}
 
 \markboth{Setup}{Setup}
 
-Two things before we start: how this book is put together, and what to
-install. The first part takes two minutes to read and will make the rest
-of the course easier to follow.
+Two things before we start:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  How this book is put together, and
+\item
+  What to install.
+\end{enumerate}
+
+The first part takes two minutes to read and will make the rest of the
+course easier to follow.
 
 \section*{How this book works}\label{how-this-book-works}
 \addcontentsline{toc}{section}{How this book works}
@@ -503,10 +615,10 @@ cover, and that is on purpose.
 
 We follow one path through it live, and the rest stays here for when you
 want it. So if we skip a section, or if you notice a box we never
-opened, nothing has gone wrong --- it is there for you to come back to.
-I would rather write the complete version and choose what to teach on
-the day than write only what fits and leave you with notes that stop
-where the session did.
+opened, nothing has gone wrong - it is there for you to come back to. I
+would rather write the complete version and choose what to teach on the
+day than write only what fits and leave you with notes that stop where
+the session did.
 
 \subsection*{How we will work}\label{how-we-will-work}
 \addcontentsline{toc}{subsection}{How we will work}
@@ -527,28 +639,105 @@ Four kinds of box turn up throughout, each with its own colour and icon:
 \begin{itemize}
 \tightlist
 \item
-  \textbf{✏️ Your Turn} --- something for you to do. Most of these we do
+  \textbf{✏️ Your Turn} - something for you to do. Most of these we do
   together in the session, and a few are there for afterwards. The ones
   that ask what you think have no wrong answers; I am genuinely curious
   what has gone wrong for you before.
 \item
-  \textbf{🕰️ Some history} --- where something came from. Why a linter
-  is called a linter, where the backslash in
-  \texttt{\textbackslash{}(x)} comes from. Entirely skippable, and
-  quietly my favourite part of the book.
+  \textbf{🕰️ Some history} - where something came from. Why a linter is
+  called a linter, where the backslash in \texttt{\textbackslash{}(x)}
+  comes from. Entirely skippable, and quietly my favourite part of the
+  book.
 \item
-  \textbf{🔎 Going deeper} --- optional extra detail, a longer example,
-  or a list you might want later. Boxes titled \textbf{Read more} point
-  at the blog post or talk a section is adapted from, so you can follow
-  the original if you want it.
+  \textbf{🔎 Going deeper} - optional extra detail, a longer example, or
+  a list you might want later. Boxes titled \textbf{Read more} point at
+  the blog post or talk a section is adapted from, so you can follow the
+  original if you want it.
 \item
-  \textbf{🚨} --- the things that will actually bite you. There are not
+  \textbf{🚨} - the things that will actually bite you. There are not
   many. That is the point of them.
 \end{itemize}
 
-Some boxes are collapsed, showing only their title. Click the title to
-open one. If you are reading the PDF they are all open already, which is
-one reason the PDF is longer than it looks online.
+Rather than describe them, here is one of each.
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+Exercises look like this. Most of them give you something to run:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R.version.string}
+\end{Highlighting}
+\end{Shaded}
+
+Some of them just ask you something. Here is the one I actually care
+about: what is the worst R code you have ever had to work with? Your own
+counts, and mine definitely does.
+
+There is no wrong answer. I am asking because the answer usually tells
+me which parts of the day to slow down on.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-caution-color!10!white, colframe=quarto-callout-caution-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Some history: where the name R comes from}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+Two things at once, which I think is lovely.
+
+R was written by Ross Ihaka and Robert Gentleman at the University of
+Auckland in the early 1990s, and they share a first initial. It is also
+a play on S, the language it was modelled on, in the same way that C
+came after B.
+
+So the name is a pun and a signature at the same time. You can read
+their own account of it in
+\href{https://www.stat.auckland.ac.nz/~ihaka/downloads/R-paper.pdf}{R: A
+Language for Data Analysis and Graphics}.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Going deeper: how these boxes are made}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+You just clicked a title, so that is the collapsing demonstrated.
+
+These are Quarto callouts, and there is nothing clever going on. Each
+one is a fenced div with a class on it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::: \{.callout{-}note title="Your Turn"\}}
+
+\NormalTok{Something for you to do.}
+
+\NormalTok{:::}
+\end{Highlighting}
+\end{Shaded}
+
+The colours and the icons come from a stylesheet in the book's repo, not
+from Quarto. Quarto ships five callout types with its own icons, and I
+have repainted all five.
+
+If you want them in your own work, the docs are at
+\href{https://quarto.org/docs/authoring/callouts.html}{Quarto: callout
+blocks}.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-important-color!10!white, colframe=quarto-callout-important-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{Restart R after a big install}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+If you install a package that is already loaded in your session, R can
+end up half on the old version and half on the new one. You then get
+errors that make no sense and do not survive a restart, which is a
+miserable way to spend twenty minutes.
+
+So once you have worked through the installs below, restart R. In
+RStudio that is \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ F10}.
+
+\end{tcolorbox}
+
+Some boxes are collapsed, showing only their title, like the
+\textbf{Going deeper} one above. Click the title to open one. If you are
+reading the PDF they are all open already, which is one reason the PDF
+is longer than it looks online.
 
 \subsection*{The code}\label{the-code}
 \addcontentsline{toc}{subsection}{The code}
@@ -571,8 +760,8 @@ Code blocks look like this:
 \end{Shaded}
 
 Lines starting with \texttt{\#\textgreater{}} are \textbf{output}, not
-code. You do not type those --- they are what R prints back, shown so
-you can check you got the same thing.
+code. You do not type those - they are what R prints back, shown so you
+can check you got the same thing.
 
 Longer blocks have line numbers in the margin so that I can say ``look
 at line 4'' and we are both looking at the same line. Short blocks do
@@ -591,19 +780,17 @@ We use the base pipe, \texttt{\textbar{}\textgreater{}}, rather than
 \begin{itemize}
 \tightlist
 \item
-  \textbf{This book} --- \url{https://r-best-practices.njtierney.com},
-  and there is a PDF download in the sidebar if you would rather print
-  it or annotate it.
+  \textbf{This book} - \url{https://r-best-practices.njtierney.com}, and
+  there is a PDF download in the sidebar if you would rather print it or
+  annotate it.
 \item
-  \textbf{The book's source} ---
+  \textbf{The book's source} -
   \url{https://github.com/njtierney/rbestpractices}. Every page has an
   ``Edit this page'' link, which goes straight to the file that made it.
 \item
-  \textbf{The messy project repo} ---
-  \url{https://github.com/njtierney/rbp-messy-project}. This is the one
-  you will need. It is a collection of deliberately badly organised
-  projects, and several exercises ask you to open a file in it. Clone or
-  download it before the first session if you can.
+  \textbf{The books exercises} -
+  \url{https://github.com/njtierney/rbp-exercises}. We will discuss how
+  to ``automagically'' open this in the course
 \end{itemize}
 
 \textbf{If you find a mistake, please tell me.} Every page has a link to
@@ -616,15 +803,15 @@ people hit them at once. Finding one is a favour, not a complaint.
 
 \markright{What to install}
 
-Everything below is worth doing before the first session, and none of it
-is a disaster if you do not get to it.
+If you can, it is worthwhile to install the below before the first
+session.
 
 We have time on the day, and I would much rather spend ten minutes
 helping you get set up than have you sit out an exercise. So work
 through what you can, and bring the rest along.
 
-\subsection*{R and an editor}\label{r-and-an-editor}
-\addcontentsline{toc}{subsection}{R and an editor}
+\subsection*{R}\label{r}
+\addcontentsline{toc}{subsection}{R}
 
 You need \textbf{R 4.5.0 or later}, from
 \url{https://cran.r-project.org/}. Check what you have with:
@@ -641,11 +828,17 @@ ships a \texttt{penguins} dataset with base R, so a few of the examples
 work without installing anything at all. Before 4.5.0, you had to get it
 from a package.
 
-You also need an editor. Either
-\href{https://posit.co/download/rstudio-desktop/}{RStudio} or
-\href{https://positron.posit.co/}{Positron} is fine, and the course
-covers both. If you already have one and you like it, stay where you
-are.
+You also need an editor - the thing you use to edit your R code.
+
+Personally, I recommend
+\href{https://posit.co/download/rstudio-desktop/}{RStudio}.
+
+If you like, you can use \href{https://positron.posit.co/}{Positron} -
+for this course I mostly focus on RStudio, but am able to discuss some
+of the features with positron, which is posit(the company that made
+RStudio)'s latest generation tool.
+
+If you already have one and you like it, stay where you are.
 
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{If you are on an older R}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
@@ -678,23 +871,28 @@ In this book & In palmerpenguins \\
 \end{longtable}
 }
 
-The units left the names but not the data --- \texttt{body\_mass} is
-still in grams.
+The units left the names but not the data - \texttt{body\_mass} is still
+in grams.
 
 I wrote about this and the rest of what landed in 4.5.0 here:
 \href{https://www.njtierney.com/posts/2025-04-14-r-version-4-5-0-is-out/}{R
 version 4.5.0 is out}.
 
+You can use Ella Kaye's
+\href{https://ellakaye.github.io/basepenguins/}{\texttt{basepenguins}} R
+package to help you move your existing scripts across if you want to use
+base R penguins.
+
 Separately, some examples read a \texttt{penguins.csv} file rather than
 the dataset. Those use the longer names, because that is what is in the
-file --- not because of your R version.
+file - not because of your R version.
 
 \end{tcolorbox}
 
 \subsection*{The R packages}\label{the-r-packages}
 \addcontentsline{toc}{subsection}{The R packages}
 
-One line, and it will take a few minutes:
+It might will take a few minutes:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -706,25 +904,30 @@ One line, and it will take a few minutes:
   \StringTok{"spelling"}\NormalTok{,}
   \StringTok{"usethis"}\NormalTok{,}
   \StringTok{"reprex"}\NormalTok{,}
-  \StringTok{"fnmate"}\NormalTok{,}
   \StringTok{"goodpractice"}\NormalTok{,}
   \StringTok{"sf"}\NormalTok{,}
+  \StringTok{"pak"}\NormalTok{,}
   \StringTok{"sp"}
 \NormalTok{))}
+
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{\textquotesingle{}fnmate\textquotesingle{}}\NormalTok{, }\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}https://milesmcbain.r{-}universe.dev\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}https://cloud.r{-}project.org\textquotesingle{}}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
-\texttt{sf} and \texttt{sp} are only needed for one optional exercise in
-chapter 3, where we review a real script somebody published. They are
-the heaviest things on the list, so if they give you trouble, leave them
-and let me know.
+\texttt{sf} and \texttt{sp} are only needed for one optional exercises.
+They are the heaviest things on the list, so if they give you trouble,
+leave them and let me know.
 
-\subsection*{Air, the formatter}\label{air-the-formatter}
-\addcontentsline{toc}{subsection}{Air, the formatter}
+\subsection*{Code formatters}\label{code-formatters}
+\addcontentsline{toc}{subsection}{Code formatters}
 
 \href{https://posit-dev.github.io/air/}{Air} is an R formatter from
 Posit. It is not an R package, so it installs from the terminal rather
 than from R.
+
+See their installation instruction on their website:
+
+But briefly, here are the most popular ways to install:
 
 On macOS and Linux:
 
@@ -756,6 +959,9 @@ the install did not finish, so try it again.
 We set up format-on-save together in chapter 2, so there is nothing else
 to do with air before we start.
 
+If you have trouble installing \{air\}, we have installed the \{styler\}
+R package before, which does the same thing, just not as fast.
+
 \subsection*{Jarl, the linter}\label{jarl-the-linter}
 \addcontentsline{toc}{subsection}{Jarl, the linter}
 
@@ -776,7 +982,7 @@ Run this in R. It should print \texttt{TRUE} for everything.
 \begin{Highlighting}[]
 \NormalTok{pkgs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
   \StringTok{"tidyverse"}\NormalTok{, }\StringTok{"here"}\NormalTok{, }\StringTok{"lintr"}\NormalTok{, }\StringTok{"styler"}\NormalTok{,}
-  \StringTok{"spelling"}\NormalTok{, }\StringTok{"usethis"}\NormalTok{, }\StringTok{"reprex"}\NormalTok{,}
+  \StringTok{"spelling"}\NormalTok{, }\StringTok{"usethis"}\NormalTok{, }\StringTok{"reprex"}\NormalTok{, }\StringTok{"fnmate"}\NormalTok{,}
   \StringTok{"fnmate"}\NormalTok{, }\StringTok{"goodpractice"}\NormalTok{, }\StringTok{"sf"}\NormalTok{, }\StringTok{"sp"}
 \NormalTok{)}
 
@@ -804,7 +1010,8 @@ it on your own.
 Installation problems are almost always specific to one machine, and
 they are much faster to solve with two people looking at them. They are
 also, genuinely, not a reflection on you. Every one of us has lost an
-afternoon to a package that would not build.
+afternoon to a package that would not build. Ask me for some horror
+stories.
 
 \bookmarksetup{startatroot}
 
@@ -818,15 +1025,19 @@ This course is all about best practices in R. I want you to know the
 principles, and have practice at writing clear, maintainable, and
 reproducible R code.
 
-To build these practices, you need a good base. A good place to work
-from here is to have a clean workspace. If you have a clean, and tidy
-and repeatable way of organising your projects, you will have a clearer
-sense of how to run the code when you come back to it.
+To build these practices, you need a good, clean, base. We start by
+talking about basic ``hygiene'' for your projects and files, before
+moving on to how to organise your project, and some potential pitfalls.
 
-It doesn't have to be perfect, but the goal is that by the end of this,
-you will know how to make your projects just a little better each time.
+Remember: your project doesn't have to be perfectly organised. Instead,
+we focus on making the next project a little better, each time.
 
-\section{Overview}\label{overview}
+\bookmarksetup{startatroot}
+
+\chapter*{Overview}\label{overview}
+\addcontentsline{toc}{chapter}{Overview}
+
+\markboth{Overview}{Overview}
 
 \begin{itemize}
 \tightlist
@@ -834,43 +1045,46 @@ you will know how to make your projects just a little better each time.
   \textbf{Duration} 60 minutes
 \end{itemize}
 
-\section{Questions}\label{questions}
-
-Note: ensure these questions all map onto the concepts here and are
-answered by them, in order.
-
 \begin{itemize}
 \tightlist
 \item
-  What is a file path?
-\item
-  What is a project, anyway?
-\item
-  Why organise your project?
-\item
-  What are some common project structures?
-\item
-  How do you organise your work?
-\item
-  What are ``good enough'' common sense principles of project
-  organisation
-\item
-  Why should every project have a README?
-\item
-  How to set up RStudio or Positron
+  \textbf{Questions}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What is a file path?
+  \item
+    What is a project, anyway?
+  \item
+    Why organise your project?
+  \item
+    What are some common project structures?
+  \item
+    How do you organise your work?
+  \item
+    What are ``good enough'' common sense principles of project
+    organisation
+  \item
+    Why should every project have a README?
+  \item
+    How to set up RStudio or Positron
+  \end{itemize}
 \end{itemize}
 
-Before we get into projects, and organising them, I really think it is
-worthwhile spending a bit of time talking about \textbf{file paths}.
+\bookmarksetup{startatroot}
 
-\section[A common problem: file paths]{\texorpdfstring{A common problem:
+\chapter[A common problem: file paths]{\texorpdfstring{A common problem:
 file
 paths\footnote{This section draws from
   \href{https://qmd4sci.njtierney.com/workflow.html}{``Workflow''} from
   my course: \href{https://qmd4sci.njtierney.com}{``quarto for
   scientists''}.}}{A common problem: file paths}}\label{a-common-problem-file-paths}
 
-Have you ever run into this problem?
+Before we get into projects, and organising them, I really think it is
+worthwhile spending a bit of time talking about \textbf{file paths}.
+
+I can almost guarantee that you have run into this problem:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -888,31 +1102,97 @@ Error in `file()`:
 ! cannot open the connection
 \end{verbatim}
 
-This error is R saying: I do not know where
-``my-very-important-data-file-somewhere.csv'' is.
+This error is R saying:
 
-Practising \emph{good file storage hygiene} will help maintain an order
-to \textbf{files}, \textbf{paths}, and \textbf{directories}. Having an
-order there means fewer errors like the above.
+\begin{quote}
+I do not know where ``my-very-important-data-file-somewhere.csv'' is.
+\end{quote}
 
-Fewer errors means less time fighting strange errors and more time doing
-the task. It will make you more productive.
+There are lots of reasons that R doesn't know where that file could be -
+but the chances are that \emph{you} know exactly where it is, and now
+you need to get into the mind of R, to understand where it thinks it is.
+
+We can resolve these errors if we keep our \textbf{files},
+\textbf{paths}, and \textbf{directories} ordered. This goes together
+with a \textbf{workflow} for clearly, and portably letting R know where
+these are. This practice is referred to as \textbf{good file path
+hygiene}.
 
 But we need to define a few of these terms: files, directories, and
 paths.
+
+\section{Files, Directories, Paths}\label{files-directories-paths}
+
+Below we show some examples of a folder structure, of directories, and
+files
+
+\begin{verbatim}
+Users --------------------------------------------->> Directory/
+  `-- njtierney ----------------------------------->> Directory/
+      `-- Desktop --------------------------------->> Directory/
+          `-- analysis-2026 ----------------------->> Directory/
+              |-- analysis-2026.Rproj -----< File
+              |-- data ---------------------------->> Directory/
+              |   `-- penguins.csv -------< File
+              `-- exploratory-analysis ------------>> Directory/
+              |   |-- explore.R ----------< File
+              |   `-- eda-document.docx --< File
+              |   `-- eda-document.qmd ---< File
+              |   `-- graph.png ----------< File
+              `-- README.md --------------< File
+\end{verbatim}
+
+We can refer to a given location with a ``path'' - which we refer to as
+a ``file path'' or a ``directory path'' depending on which we are
+navigating to. Here are some examples of paths for two directories, and
+two files.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Users/njtierney/Desktop/analysis-2026/} - directory path of
+  ``analysis-2026''
+\item
+  \texttt{Users/njtierney/Desktop/analysis-2026/README.md} - file path
+  of ``README.md''
+\item
+  \texttt{Users/njtierney/Desktop/analysis-2026/data} - directory path
+  of ``data''
+\item
+  \texttt{Users/njtierney/Desktop/analysis-2026/data/penguins.csv} -
+  file path of ``penguins.csv''
+\end{itemize}
+
+Let's talk a bit more about files, directories and paths.
 
 \subsection{Files 📄}\label{files}
 
 \begin{itemize}
 \tightlist
 \item
-  Something I can open. Examples are: R script, ``example.R'', a word
-  doc, ``report.docx'', an image ``puppy.png'', a README, ``README.md''.
+  Files are something I can open.
 \item
-  Files have ``file extensions, which are the last characters, which
-  tell us what kind of file they are.''.R'' is an R script, ``.png'' is
-  an image file - standing for ``portable network graphics'', ``.md'' is
-  a\textbf{m}ark\textbf{d}own text file.
+  These are all files: ``explore.R'', ``eda-document.docx'',
+  ``graph.png'', ``README.md'', ``penguins.csv''
+\item
+  Files have ``file extensions'', which are the last characters after a
+  \texttt{.}, and they tell us what kind of file they are:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ``explore.R'' ends with \textbf{.R}, it is an R script
+  \item
+    ``eda-document.docx'' is a Microsoft Word Document, ``.doc'' is an
+    older format
+  \item
+    ``graph.png'' is an image (specifically, a
+    \href{https://en.wikipedia.org/wiki/PNG}{``PNG''})
+  \item
+    ``README.md'' is a is a\textbf{m}ark\textbf{d}own text file.
+  \item
+    ``penguins.csv'' is a ``comma separated values'' file
+  \end{itemize}
 \end{itemize}
 
 \subsection{Directories 📁}\label{directories}
@@ -938,10 +1218,11 @@ easily:
 \begin{itemize}
 \tightlist
 \item
-  Machine readable: ``1811 Macquarie Street, Hobart, Tasmania''
+  Machine readable:
+  \texttt{/Users/njtierney/Desktop/analysis-2026/data/penguins.csv}
 \item
-  Not-quite machine readable: ``The big white building on the corner
-  with the pine tree in town''
+  Not-quite machine readable: ``The folder on my desktop named analysis
+  2026''
 \end{itemize}
 
 So, the \textbf{file path}:
@@ -950,34 +1231,17 @@ So, the \textbf{file path}:
 /Users/njtierney/Desktop/analysis-2026/data/penguins.csv
 \end{verbatim}
 
-Describes the location, (the address) of \texttt{penguins.csv}.
+Describes the location of \texttt{penguins.csv}
 
 It might be easier to see this as a tree, or how this file might look in
 a file explorer on your computer:
 
-\section{tree}
-
-\begin{verbatim}
-Users
-  `-- njtierney
-      `-- Desktop
-          `-- analysis-2026
-              |-- analysis-2026.Rproj
-              |-- data
-              |   `-- penguins.csv   << THE FILE IS HERE
-              `-- exploratory-analysis
-                  |-- eda-script.R
-                  `-- eda-document.qmd
-\end{verbatim}
-
-\section{file explorer}
-
 \pandocbounded{\includegraphics[keepaspectratio]{figs/project-org-file-explorer.png}}
 
-\emph{Example of file and folder structure}
+\section{Reading files}\label{reading-files}
 
-Each level is a folder inside the one above it. To read that data file,
-you might write:
+So to read CSV in R, you can put the path of penguins.csv in
+\texttt{read\_csv()}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -985,8 +1249,23 @@ you might write:
 \end{Highlighting}
 \end{Shaded}
 
-So in the above, the ``path'' is
-\texttt{"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"}.
+In our diagram, that is this file:
+
+\begin{verbatim}
+Users
+  `-- njtierney 
+      `-- Desktop 
+          `-- analysis-2026 
+              |-- analysis-2026.Rproj 
+              |-- data 
+              |   `-- penguins.csv -------<< This file is being read in
+              `-- exploratory-analysis
+              |   |-- explore.R 
+              |   `-- eda-document.qmd 
+              |   `-- eda-document.docx 
+              |   `-- graph.png 
+              `-- README.md 
+\end{verbatim}
 
 You might also note that sometimes in your work, you don't write down
 this full path - it is very long! You might do something like:
@@ -1008,19 +1287,7 @@ path:
   \textbf{relative paths} starts from wherever you currently are.
 \end{itemize}
 
-To continue our directions analogy:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{absolute paths} - the full driving directions to take you from
-  Hobart to Cradle Mountain
-\item
-  \textbf{relative paths} - the directions from where you are (which
-  might be just down the road!) to Cradle Mountain.
-\end{itemize}
-
-So, the code below is using an absolute path:
+So, the code below is using an \textbf{absolute} path:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1028,7 +1295,9 @@ So, the code below is using an absolute path:
 \end{Highlighting}
 \end{Shaded}
 
-The code below is using a relative path:
+\pandocbounded{\includegraphics[keepaspectratio]{figs/org-absolute-path-pen.png}}
+
+The code below is using a \textbf{relative} path:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1036,19 +1305,24 @@ The code below is using a relative path:
 \end{Highlighting}
 \end{Shaded}
 
-Of the two, the relative path might look nice, because it is shorter.
-And that's sort of true.
+\pandocbounded{\includegraphics[keepaspectratio]{figs/org-relative-path-pen.png}}
 
-But the absolute path will work from anywhere on your machine. Every
-time. Now.
+\begin{itemize}
+\tightlist
+\item
+  The relative path looks nice and shorter. But it requires context - it
+  needs to know from where you are reading.
+\item
+  The absolute path will work from anywhere on your machine. It reads
+  from the lowest folder on your machine.
+\end{itemize}
 
-But will it work on your colleagues machine? On your machine in two
-weeks, next month, next year?
-
-My absolute path will not work on your machine, because your computer
-(almost certainly) doesn't have a \texttt{/Users/njtierney/} folder. It
-won't work on your own machine after you reorganise your folders when
-you spring clean. It won't work on the cloud.
+But, will the absolute work on your colleagues machine? On your machine
+in two weeks, next month, next year? No.~My absolute path will not work
+on your machine. Your computer (almost certainly) doesn't have a
+\texttt{/Users/njtierney/} folder. It won't work on your own machine
+after you reorganise your folders when you spring clean. It won't work
+on the cloud.
 
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
@@ -1063,7 +1337,7 @@ you spring clean. It won't work on the cloud.
   Run \texttt{getwd()}. Where are you?
 \item
   Look at your most recent analysis script. Find every file path in it.
-  How many are absolute?
+  How many are absolute? How many are relative?
 \end{enumerate}
 
 \end{tcolorbox}
@@ -1125,7 +1399,7 @@ path}:
 \begin{itemize}
 \tightlist
 \item
-  0\% chance of working on someone else's machine --- \textbf{and this
+  0\% chance of working on someone else's machine - \textbf{and this
   could include you, in six months}.
 \item
   Means your file is not self-contained or portable. What happens if
@@ -1173,15 +1447,15 @@ setwd("C:\Users\jenny\path\that\only\I\have")
 I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.
 \end{quote}
 
-\section{Is there an answer to the
-madness?}\label{is-there-an-answer-to-the-madness}
+Let's talk about using projects
 
-Yes.
+\bookmarksetup{startatroot}
 
-When you start on a new idea, a new project, a new paper --- anything
-new --- it should start its life as a \textbf{project}. In RStudio that
-is an \texttt{.Rproj} file; in Positron it is a \textbf{workspace
-folder}.
+\chapter{Project oriented workflow}\label{project-oriented-workflow}
+
+When you start on a new idea, a new project, a new paper - anything new
+- it should start its life as a \textbf{project}. In RStudio that is an
+\texttt{.Rproj} file; in Positron it is a \textbf{workspace folder}.
 
 A project keeps related work together in the same place. They also do
 the following:
@@ -1221,19 +1495,40 @@ And finally, the big one:
 \textbf{Projects resolve file path problems}, because they automatically
 set the working directory to the location of the project.
 
-This means you get two habits from this:
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+Let's get started with the course exercise - try running this code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{use\_course}\NormalTok{(}\StringTok{"njtierney/rbp{-}exercises"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Which will prompt you to download the repository,
+\url{https://github.com/njtierney/rbp-exercises}, and then open it in an
+RStudio project.
+
+If you have troubles with this (sometimes firewalls can stop you) you
+can download it from the github page
+\url{https://github.com/njtierney/rbp-exercises} like so:
+
+\pandocbounded{\includegraphics[keepaspectratio]{figs/rstudio-download-rbp-exercises.png}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{One project, one folder, one \texttt{.Rproj} file.} Open the
-  project by double-clicking the \texttt{.Rproj} file, not by opening R
-  and navigating around.
+  Run \texttt{here::here()}. Is it where you expected?
 \item
-  \textbf{Use relative paths only.} You never call \texttt{setwd()}
-  again.
+  Open another rstudio project. Take one absolute path from your most
+  recent script and rewrite it with \texttt{here()}.
+\item
+  What would have to be true about your working directory for the old
+  version to work?
 \end{enumerate}
+
+\end{tcolorbox}
 
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-caution-color!10!white, colframe=quarto-callout-caution-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{Aside: creating a project}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
@@ -1334,7 +1629,7 @@ and
 \end{Shaded}
 
 Note that these absolute paths will be different on my computer compared
-to yours --- which is exactly the point.
+to yours - which is exactly the point.
 
 You can read that \texttt{here} code as:
 
@@ -1370,26 +1665,8 @@ So in practice:
 
 works whether the code is called from the top of the project, from
 inside \texttt{analysis/}, or from a Quarto document being rendered in a
-subfolder --- all places where a plain relative path can quietly mean
+subfolder - all places where a plain relative path can quietly mean
 something different.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Open a project of your own, and run \texttt{here::here()}. Is it where
-  you expected?
-\item
-  Take one absolute path from your most recent script and rewrite it
-  with \texttt{here()}.
-\item
-  What would have to be true about your working directory for the old
-  version to work?
-\end{enumerate}
-
-\end{tcolorbox}
 
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
@@ -1450,11 +1727,11 @@ telling can be really useful here:
 \item
   \textbf{Who} did it: Was it just you? Were there many people?
 \item
-  \textbf{What} you did: what was run
+  \textbf{What} you did: What was run
 \item
   \textbf{When} you did it: Last year, last month?
 \item
-  \textbf{Where} you did it: on your computer? the cloud?
+  \textbf{Where} you did it: On your computer? The cloud?
 \item
   \textbf{Why} you did it: what was the goal
 \item
@@ -1486,14 +1763,9 @@ The point is not to tidy your project just so it is tidy. The point is
 having a tidy project that is well organised makes it easier to check,
 run later, and understand.
 
-Note: I think I'd like to very quickly just give people a win here and
-show them that this part of the lesson is just: write a README, folks.
-And then some additional motivation
+\bookmarksetup{startatroot}
 
-Note: I need a preamble link into the next section, or consider moving
-these sections around.
-
-\section{Pitfalls of organisation}\label{pitfalls-of-organisation}
+\chapter{Pitfalls of organisation}\label{pitfalls-of-organisation}
 
 There are so many ways to organise a project. And there is no one
 correct. And organising a project well is hard. While there isn't a
@@ -1511,12 +1783,12 @@ all of these, so know that I am not judging you if these are how you
 work now. What I am saying is that it is OK, and that there are some
 ways you can improve.
 
-I have put most of these patterns together into one repository, which
-you can see at:
+You can see these patterns in the course exercises repository:
+\url{https://github.com/njtierney/rbp-exercises}
 
-https://github.com/njtierney/rbp-materials
+We will quickly move through these now.
 
-\subsection{Everything in one folder}\label{everything-in-one-folder}
+\section{Everything in one folder}\label{everything-in-one-folder}
 
 \begin{verbatim}
 01-everything-in-one-folder/
@@ -1532,7 +1804,7 @@ https://github.com/njtierney/rbp-materials
 └── results.csv
 \end{verbatim}
 
-Notice that the R scripts, the data, the figures, a Word document, a
+Notice the R scripts, the data, the figures, a Word document, a
 screenshot, and \texttt{Untitled1.R}, are all \emph{flat} - they are in
 the same folder. This works until there are more than about fifteen
 files, at which point finding anything becomes a search problem.
@@ -1674,17 +1946,13 @@ the similar parts together, I am creating work for myself.
   \end{itemize}
 \end{itemize}
 
-\begin{itemize}
-\tightlist
-\item
-  The problem: Flat directory structure can make it hard to group things
-  to understand how they are related.
-\item
-  The (partial) solution: Put similar things into folders (directories)
-  that give them structure.
-\end{itemize}
+Problem: Flat directory structure can make it hard to group things to
+understand how they are related.
 
-\subsection{No clear entry point}\label{no-clear-entry-point}
+(partial) solution: Put similar things into folders (directories) that
+give them structure.
+
+\section{No clear entry point}\label{no-clear-entry-point}
 
 \begin{verbatim}
 02-no-clear-entry-point/
@@ -1820,19 +2088,21 @@ Open a project you worked on more than six months ago.
   Which files could you delete and regenerate from code?
 \item
   Which files could you \emph{not} regenerate? Those are the ones that
-  actually matter --- are they backed up?
+  actually matter - are they backed up?
 \end{enumerate}
 
 \end{tcolorbox}
 
-\section{Common project structures}\label{common-project-structures}
+\bookmarksetup{startatroot}
+
+\chapter{Common project structures}\label{common-project-structures}
 
 There is no single correct structure, but there is a common shape that
 most working structures converge on:
 
 \begin{figure}[ht]
 
-{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={A project folder called my-project, drawn as six rows, one for each kind of thing it holds. Row one: my-project.Rproj and README.md, labelled start here --- open the .Rproj, read the README. Row two: data-raw/ containing penguins-raw.csv and clean-penguins.R, labelled read only --- never edited by hand, nothing writes here. Row three: data/ containing penguins.csv, labelled made by code --- written by data-raw/clean-penguins.R. Row four: R/ containing functions.R, labelled used, not run --- functions you call from the scripts below. Row five: analysis/ containing 01-clean-data.R, 02-fit-model.R and 03-make-figures.R, labelled run in order, with an arrow running down the three numbered scripts. Row six: output/ containing figures/ and models/, labelled safe to delete --- regenerated by re-running analysis/. Underneath, the test: could I delete this folder and get it back by running my code? Yes for data/ and output/, no for data-raw/, which is why that is the folder you back up.}]{figs/project-structure-kinds.png}
+{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={A project folder called my-project, drawn as six rows, one for each kind of thing it holds. Row one: my-project.Rproj and README.md, labelled start here - open the .Rproj, read the README. Row two: data-raw/ containing penguins-raw.csv and clean-penguins.R, labelled read only - never edited by hand, nothing writes here. Row three: data/ containing penguins.csv, labelled made by code - written by data-raw/clean-penguins.R. Row four: R/ containing functions.R, labelled used, not run - functions you call from the scripts below. Row five: analysis/ containing 01-clean-data.R, 02-fit-model.R and 03-make-figures.R, labelled run in order, with an arrow running down the three numbered scripts. Row six: output/ containing figures/ and models/, labelled safe to delete - regenerated by re-running analysis/. Underneath, the test: could I delete this folder and get it back by running my code? Yes for data/ and output/, no for data-raw/, which is why that is the folder you back up.}]{figs/project-structure-kinds.png}
 
 }
 
@@ -1897,8 +2167,7 @@ my-project/
 
 \end{tcolorbox}
 
-\subsection{Naming the files
-themselves}\label{naming-the-files-themselves}
+\section{Naming the files themselves}\label{naming-the-files-themselves}
 
 Naming is hard. We will come back to this throughout the course.
 
@@ -1955,7 +2224,7 @@ Look at the file names in your most recent project.
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
 Sketch the folder structure for a project you are working on right now.
-Don't create it yet --- just write it out.
+Don't create it yet - just write it out.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2131,7 +2400,7 @@ tidy it up later.
 Write a README for the project you sketched above. Ten lines. Answer the
 three questions.
 
-Do it now, before you write any code --- you will find it clarifies what
+Do it now, before you write any code - you will find it clarifies what
 you are actually about to do.
 
 \end{tcolorbox}
@@ -2179,8 +2448,8 @@ session's work.}
 \section{Positron}
 
 The same settings live under Settings → Extensions → R. The equivalent
-behaviour is off by default, so there is usually nothing to change ---
-but it is worth looking, so you know where it is.
+behaviour is off by default, so there is usually nothing to change - but
+it is worth looking, so you know where it is.
 
 This matters for two reasons:
 
@@ -2198,7 +2467,7 @@ This matters for two reasons:
 \end{enumerate}
 
 Your history is the list of commands you have typed. Not saving it means
-you won't come to rely on something you typed in a previous session ---
+you won't come to rely on something you typed in a previous session -
 which is a good habit to build.
 
 You can also do this from code:
@@ -2237,10 +2506,10 @@ While you are in the settings, two more worth turning on:
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Show line numbers} --- you cannot discuss code you cannot
-  point at.
+  \textbf{Show line numbers} - you cannot discuss code you cannot point
+  at.
 \item
-  \textbf{Rainbow parentheses} --- cheap insurance against a very common
+  \textbf{Rainbow parentheses} - cheap insurance against a very common
   class of error.
 \end{itemize}
 
@@ -2258,8 +2527,8 @@ While you are in the settings, two more worth turning on:
   Open your most recent analysis script and run it from the top in the
   clean session.
 \item
-  Did it work? If not --- and it very often does not --- that gap is
-  exactly what the rest of this course is about.
+  Did it work? If not - and it very often does not - that gap is exactly
+  what the rest of this course is about.
 \end{enumerate}
 
 \end{tcolorbox}
@@ -2317,7 +2586,7 @@ inconsistencies, and other known problem patterns.
   \textbf{Duration} 45 minutes
 \end{itemize}
 
-\section{Questions}\label{questions-1}
+\section{Questions}\label{questions}
 
 \begin{itemize}
 \tightlist
@@ -2899,6 +3168,15 @@ On macOS and Linux:
 \end{Highlighting}
 \end{Shaded}
 
+If you already use Homebrew, this one works too, and it's the one I'd
+reach for:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{brew}\NormalTok{ install air}
+\end{Highlighting}
+\end{Shaded}
+
 On Windows:
 
 \begin{Shaded}
@@ -2938,7 +3216,60 @@ rest of this section needs it.
   Windows, and \textbf{write the path down}. You need it in a minute.
 \end{enumerate}
 
+If it won't install, don't spend the whole session fighting it. Read the
+next section, use \texttt{\{styler\}} for today, and come back to air
+later.
+
 \end{tcolorbox}
+
+\subsection{If you can't install air, use
+\{styler\}}\label{if-you-cant-install-air-use-styler}
+
+Sometimes the install just doesn't go. You're on a locked down work
+machine, you can't get at a terminal, or the installer refuses and won't
+tell you why.
+
+You're not stuck.
+
+\href{https://styler.r-lib.org/}{\texttt{\{styler\}}} is an R package
+that formats your code, and it installs the way every other R package
+you have ever used installs:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"styler"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+No terminal, no installer script, no path to write down.
+
+It follows the same tidyverse style guide air does, so the output is
+very close. Not identical, but close enough that nothing in this chapter
+changes.
+
+You point it at a file, or at a whole directory:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{styler}\SpecialCharTok{::}\FunctionTok{style\_file}\NormalTok{(}\StringTok{"analysis/01{-}clean{-}data.R"}\NormalTok{)}
+\NormalTok{styler}\SpecialCharTok{::}\FunctionTok{style\_dir}\NormalTok{(}\StringTok{"."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+There's also an RStudio addin, under Addins \textgreater{} Style active
+file. If you're going down this road, bind it to a keyboard shortcut,
+because you'll use it constantly.
+
+Now the honest bit.
+
+Air is faster, and it hooks into format on save, which is the whole
+point of the next section. With styler you have to remember to run it.
+
+That is a real difference and I'm not going to pretend otherwise.
+
+But code you formatted by hand is still formatted, and it beats a mess.
+If air won't install, take styler, keep moving, and sort air out another
+day.
 
 \section{Format on save, which is the good
 bit}\label{format-on-save-which-is-the-good-bit}
@@ -3445,6 +3776,55 @@ Use whichever you like. Use one of them.
 
 \end{tcolorbox}
 
+\subsection{If you can't install jarl, use
+\{flir\}}\label{if-you-cant-install-jarl-use-flir}
+
+Same story as air. Jarl is a command line tool, so the install can go
+wrong in all the same ways.
+
+Your backup is
+\href{https://flir.etiennebacher.com/}{\texttt{\{flir\}}}, which is an
+ordinary R package:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"flir"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+It's by Etienne as well, and it's fast for the same sorts of reasons.
+The documented benchmark is 172 milliseconds against 3.44 seconds for
+\texttt{\{lintr\}} on the same code.
+
+Two functions do the work:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flir}\SpecialCharTok{::}\FunctionTok{lint}\NormalTok{(}\StringTok{"06{-}bad{-}style/dodgy{-}logic.R"}\NormalTok{)}
+\NormalTok{flir}\SpecialCharTok{::}\FunctionTok{fix}\NormalTok{(}\StringTok{"06{-}bad{-}style/dodgy{-}logic.R"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{lint()} tells you what it found. \texttt{fix()} applies the
+changes it's confident about, the same way \texttt{jarl\ check\ -\/-fix}
+does.
+
+Call them with \texttt{flir::} in front, as above. If you run
+\texttt{library(flir)} instead, its \texttt{fix()} will mask the
+\texttt{fix()} that comes with R, and you'll get a warning that has
+nothing to do with your code.
+
+That second one is why I'm pointing you at flir rather than at
+\texttt{\{lintr\}}. If you can't install jarl, flir is the only one of
+these that will still fix things for you.
+
+One thing you should know. Etienne has moved on to jarl, and says on the
+flir site that he won't be adding new rules to it. So flir is finished
+rather than growing.
+
+For our purposes that's fine. It catches everything in this chapter, it
+installs anywhere R installs, and it fixes what it can.
+
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
 Back to \texttt{06-bad-style/}. There's a second file there,
@@ -3458,7 +3838,8 @@ wrong.
   Read it, and see if you can spot the bug by eye. Give yourself two
   minutes.
 \item
-  Run \texttt{jarl\ check\ 06-bad-style/dodgy-logic.R}, or
+  Run \texttt{jarl\ check\ 06-bad-style/dodgy-logic.R}. If you don't
+  have jarl, use \texttt{flir::lint("06-bad-style/dodgy-logic.R")} or
   \texttt{lintr::lint("06-bad-style/dodgy-logic.R")}.
 \item
   Now run \texttt{jarl\ check} over your own most recent project. What
@@ -3532,7 +3913,7 @@ someone else's without being a pain about it.
   \textbf{Duration} 45 minutes
 \end{itemize}
 
-\section{Questions}\label{questions-2}
+\section{Questions}\label{questions-1}
 
 \begin{itemize}
 \tightlist
@@ -3848,7 +4229,7 @@ perfectly, instantly, every time.
 
 \begin{figure}[ht]
 
-{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={Two stacked bands. The upper grey band holds step 1, run the automated checks first, with pills for air format, jarl check, spelling colon colon spell underscore check underscore files, and restart R run from the top; it is labelled done by a machine, in seconds. An arrow crosses the gap saying only then is it worth a person\textquotesingle s time. The lower purple band holds steps 2 to 5 --- read it top to bottom and edit nothing, chunk it up, expression, and re-expression --- labelled only a person can do these.}]{figs/review-process-machine-then-person.png}
+{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={Two stacked bands. The upper grey band holds step 1, run the automated checks first, with pills for air format, jarl check, spelling colon colon spell underscore check underscore files, and restart R run from the top; it is labelled done by a machine, in seconds. An arrow crosses the gap saying only then is it worth a person\textquotesingle s time. The lower purple band holds steps 2 to 5 - read it top to bottom and edit nothing, chunk it up, expression, and re-expression - labelled only a person can do these.}]{figs/review-process-machine-then-person.png}
 
 }
 
@@ -4102,7 +4483,7 @@ README, and nothing else.
 
 That is the more common situation. Most code you inherit comes from
 someone who has left, moved teams, or simply doesn't remember. Notice
-what you end up doing instead of asking --- and notice how much of the
+what you end up doing instead of asking - and notice how much of the
 intention you can recover from the code itself, which is the best
 argument there is for writing readable code in the first place.
 
@@ -4180,1930 +4561,6 @@ is, but how it got that way.
 Parts of this chapter are adapted from my blog post,
 \href{https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/}{How
 to get good with R}.
-
-\end{tcolorbox}
-
-\bookmarksetup{startatroot}
-
-\chapter{Writing functions}\label{writing-functions-1}
-
-At some point you notice you have copied the same six lines for the
-third time, with one number changed each time. That is a function
-waiting to happen.
-
-This section is about noticing that moment, and knowing what to do about
-it. We look at the problem functions solve, what a good small function
-looks like, and how to get inside one when it misbehaves.
-
-\section{Overview}\label{overview-3}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Duration} 60 minutes
-\end{itemize}
-
-\section{Questions}\label{questions-3}
-
-\begin{itemize}
-\tightlist
-\item
-  What problem do functions actually solve?
-\item
-  What does a well-designed function look like?
-\item
-  How do I look inside a function when it goes wrong?
-\end{itemize}
-
-\section{The problem functions solve}\label{the-problem-functions-solve}
-
-I do not think I can overstate this: learning to write functions changed
-how I think about code, and how I think about solving problems. It takes
-time to develop, and the payoff is enormous.
-
-Let me tell you how I got there, because I got there slowly.
-
-In 2013 I was writing code to calculate a t-test from scratch. At the
-top of my script was something like:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{var\_1 }\OtherTok{\textless{}{-}}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{x1}
-\NormalTok{var\_2 }\OtherTok{\textless{}{-}}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{x2}
-\end{Highlighting}
-\end{Shaded}
-
-and then a pile of code that computed the result.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{The whole script, if you want to see it}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-This is roughly what the rest of it looked like. You do not need to read
-it closely. The thing I want you to notice is how much of it there is,
-and where the two lines I kept editing are.
-
-\protect\phantomsection\label{annotated-cell-117}%
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{var\_1 }\OtherTok{\textless{}{-}}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{x1 }\hspace*{\fill}\NormalTok{\circled{1}}
-\NormalTok{var\_2 }\OtherTok{\textless{}{-}}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{x2 }
-
-\NormalTok{n\_1 }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(var\_1)}
-\NormalTok{n\_2 }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(var\_2)}
-
-\NormalTok{mean\_1 }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(var\_1)}
-\NormalTok{mean\_2 }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(var\_2)}
-
-\NormalTok{var\_within\_1 }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((var\_1 }\SpecialCharTok{{-}}\NormalTok{ mean\_1)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/}\NormalTok{ (n\_1 }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}
-\NormalTok{var\_within\_2 }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((var\_2 }\SpecialCharTok{{-}}\NormalTok{ mean\_2)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/}\NormalTok{ (n\_2 }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}
-
-\NormalTok{pooled\_var }\OtherTok{\textless{}{-}}\NormalTok{ ((n\_1 }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ var\_within\_1 }\SpecialCharTok{+}\NormalTok{ (n\_2 }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ var\_within\_2) }\SpecialCharTok{/}\NormalTok{ (n\_1 }\SpecialCharTok{+}\NormalTok{ n\_2 }\SpecialCharTok{{-}} \DecValTok{2}\NormalTok{)}
-\NormalTok{std\_error }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(pooled\_var }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{/}\NormalTok{ n\_1 }\SpecialCharTok{+} \DecValTok{1} \SpecialCharTok{/}\NormalTok{ n\_2))}
-
-\NormalTok{t\_statistic }\OtherTok{\textless{}{-}}\NormalTok{ (mean\_1 }\SpecialCharTok{{-}}\NormalTok{ mean\_2) }\SpecialCharTok{/}\NormalTok{ std\_error}
-\NormalTok{degrees\_freedom }\OtherTok{\textless{}{-}}\NormalTok{ n\_1 }\SpecialCharTok{+}\NormalTok{ n\_2 }\SpecialCharTok{{-}} \DecValTok{2}
-\NormalTok{p\_value }\OtherTok{\textless{}{-}} \DecValTok{2} \SpecialCharTok{*} \FunctionTok{pt}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{abs}\NormalTok{(t\_statistic), }\AttributeTok{df =}\NormalTok{ degrees\_freedom)}
-
-\NormalTok{t\_statistic}
-\NormalTok{p\_value}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{description}
-\tightlist
-\item[\circled{1}]
-These two lines are the only part that ever changed.
-\end{description}
-
-\end{tcolorbox}
-
-Every time I wanted to look at a different pair of variables, I went
-back to the top, changed those two lines, and ran the whole script
-again.
-
-Two lines out of twenty. The other eighteen never changed, and I re-ran
-all of them, by hand, every single time.
-
-Something about this felt wrong. But I didn't have the words for it.
-
-What I was reaching for sounded something like:
-
-\begin{quote}
-I want to run this script, but get the top couple of lines to change
-depending on which variables I specify.
-\end{quote}
-
-What I needed was a function. I just didn't know it.
-
-I had been \emph{taught} functions by then. And I had been \emph{using}
-functions the whole time, things like \texttt{lm()}, \texttt{table()},
-\texttt{subset()}, and \texttt{read.csv()}. I used them every day
-without ever thinking about where they came from, or that I could make
-my own.
-
-But the examples I was taught with were ``convert Celsius to
-Fahrenheit'' and ``identify odd numbers'', and I couldn't see how those
-applied to anything I actually did.
-
-They seemed like useful kitchen trinkets. An apple corer, a garlic
-press. Rather than a fundamental skill, like knowing how to use a knife.
-
-Functions are the knife.
-
-So rather than argue that, let me show you.
-
-What does this code do?
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dat }\OtherTok{\textless{}{-}}\NormalTok{ tibble}\SpecialCharTok{::}\FunctionTok{tibble}\NormalTok{(}
-  \AttributeTok{weight =} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{, }\AttributeTok{mean =} \DecValTok{80}\NormalTok{, }\AttributeTok{sd =} \DecValTok{6}\NormalTok{),}
-  \AttributeTok{height =} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{, }\AttributeTok{mean =} \DecValTok{165}\NormalTok{, }\AttributeTok{sd =} \DecValTok{10}\NormalTok{)}
-\NormalTok{)}
-
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{weight\_0 }\OtherTok{\textless{}{-}}\NormalTok{ (dat}\SpecialCharTok{$}\NormalTok{weight }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{/} \FunctionTok{sd}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{height\_0 }\OtherTok{\textless{}{-}}\NormalTok{ (dat}\SpecialCharTok{$}\NormalTok{height }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{height, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{/} \FunctionTok{sd}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Before you read on, have a proper go at this one. It is the whole
-argument of this chapter in a single example.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Look at those two lines of code. Don't run them.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  In one sentence, what is this code doing?
-\item
-  There is a bug in it. Find it.
-\item
-  How long did that take you, and what made it hard?
-\end{enumerate}
-
-\end{tcolorbox}
-
-So, what is it doing?
-
-This is mean centering and scaling. It's a transformation that gives
-your data a mean of 0 and a standard deviation of 1, which some
-statistical models want.
-
-But reading that code, it's hard to see that's what's happening. Nothing
-in it says ``centre and scale''. You have to reconstruct the intent from
-the arithmetic.
-
-Worse, it invites errors, because you have to repeat
-\texttt{dat\$weight} or \texttt{dat\$height} several times per line.
-
-And there \emph{is} an error.
-
-Look at the second line again. For \texttt{height\_0}, I divide by the
-standard deviation of \textbf{weight}, not height.
-
-That's a copy-paste bug, it's completely silent, and it produces numbers
-that look entirely plausible. If you found it, well done. If you didn't,
-that is exactly the point, and it is why I would rather not rely on
-either of us spotting it.
-
-A function fixes this by \emph{abstracting away} the need to write the
-variable in each time. Break it into two steps:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mean\_center }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(variable) \{}
-\NormalTok{  variable }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(variable, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\NormalTok{scale\_sd }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(variable) \{}
-\NormalTok{  variable }\SpecialCharTok{/} \FunctionTok{sd}\NormalTok{(variable, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-Now we can write:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{height }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{mean\_center}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{scale\_sd}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-Or write one function that does both steps:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{center\_scale }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(variable) \{}
-\NormalTok{  centered }\OtherTok{\textless{}{-}} \FunctionTok{mean\_center}\NormalTok{(variable)}
-\NormalTok{  centered\_scaled }\OtherTok{\textless{}{-}} \FunctionTok{scale\_sd}\NormalTok{(centered)}
-\NormalTok{  centered\_scaled}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-What is nice here is that each function \emph{describes what it does} in
-its name. Reading \texttt{center\_scale}, you can see it does a thing
-called \texttt{mean\_center} first, then \texttt{scale\_sd} next.
-
-So compare the original:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{weight\_0 }\OtherTok{\textless{}{-}}\NormalTok{ (dat}\SpecialCharTok{$}\NormalTok{weight }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{/} \FunctionTok{sd}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{height\_0 }\OtherTok{\textless{}{-}}\NormalTok{ (dat}\SpecialCharTok{$}\NormalTok{height }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{height, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{/} \FunctionTok{sd}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-with:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{weight\_0 }\OtherTok{\textless{}{-}} \FunctionTok{center\_scale}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight)}
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{height\_0 }\OtherTok{\textless{}{-}} \FunctionTok{center\_scale}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{height)}
-\end{Highlighting}
-\end{Shaded}
-
-The bug I planted above isn't just fixed in the second version. It's
-become almost impossible to write.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Someone has probably done this already}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Base R has \texttt{scale()}, which does exactly this, though it returns
-a matrix so you need to wrap it:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dat}\SpecialCharTok{$}\NormalTok{weight\_0 }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{scale}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{weight))}
-\end{Highlighting}
-\end{Shaded}
-
-Which is a good argument for checking whether a solution exists before
-writing your own. You don't need to write everything from scratch.
-
-At worst you find nobody has solved your problem, which is an
-opportunity. Usually you learn the words other people use to describe
-it, which makes your next search much better.
-
-\end{tcolorbox}
-
-\subsection{Other things worth turning into a
-function}\label{other-things-worth-turning-into-a-function}
-
-Centering and scaling is one kind of job. Here are a few others, so the
-idea doesn't get stuck to that one example.
-
-\textbf{A calculation you keep redoing.} Body mass index, a rate per
-thousand, a unit conversion.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{bmi }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(weight\_kg, height\_m) \{}
-\NormalTok{  weight\_kg }\SpecialCharTok{/}\NormalTok{ height\_m}\SpecialCharTok{\^{}}\DecValTok{2}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{A filter you keep re-typing, where the name is the useful part.}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{adults\_only }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
-\NormalTok{  data[data}\SpecialCharTok{$}\NormalTok{age }\SpecialCharTok{\textgreater{}=} \DecValTok{18}\NormalTok{, ]}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-You could write that condition inline every time. But
-\texttt{adults\_only(survey)} says what you meant, and the next reader
-doesn't have to work out whether \texttt{\textgreater{}=\ 18} was
-deliberate.
-
-\textbf{A plot you make over and over with the same styling.}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{plot\_by\_species }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, yvar) \{}
-  \FunctionTok{ggplot}\NormalTok{(data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ species, }\AttributeTok{y =}\NormalTok{ \{\{ yvar \}\})) }\SpecialCharTok{+}
-    \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
-    \FunctionTok{theme\_minimal}\NormalTok{()}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{A check you want to run on every dataset that comes in.}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{n\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
-  \FunctionTok{colSums}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(data))}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-None of these are clever. That is deliberate. Most of the functions I
-write are three lines long and do something faintly boring, and they are
-still the thing that makes the analysis readable.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Fifteen small functions worth having}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Here are fifteen I actually use, or something close to them. None is
-more than a few lines. Read them for the \emph{shape} rather than the
-detail, and steal any that look useful.
-
-\textbf{Describing what you were given}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{n\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))}
-\NormalTok{\}}
-
-\NormalTok{n\_complete }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{sum}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(x))}
-\NormalTok{\}}
-
-\NormalTok{prop\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{digits =} \DecValTok{2}\NormalTok{) \{}
-  \FunctionTok{round}\NormalTok{(}\FunctionTok{n\_missing}\NormalTok{(x) }\SpecialCharTok{/} \FunctionTok{length}\NormalTok{(x), digits)}
-\NormalTok{\}}
-
-\NormalTok{missing\_by\_column }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
-\NormalTok{  purrr}\SpecialCharTok{::}\FunctionTok{map\_int}\NormalTok{(data, n\_missing)}
-\NormalTok{\}}
-
-\NormalTok{count\_sorted }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{sort}\NormalTok{(}\FunctionTok{table}\NormalTok{(x, }\AttributeTok{useNA =} \StringTok{"ifany"}\NormalTok{), }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Summarising}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{se }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{na\_rm =} \ConstantTok{TRUE}\NormalTok{) \{}
-  \FunctionTok{sd}\NormalTok{(x, }\AttributeTok{na.rm =}\NormalTok{ na\_rm) }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{n\_complete}\NormalTok{(x))}
-\NormalTok{\}}
-
-\NormalTok{ci\_95 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{1.96}\NormalTok{, }\FloatTok{1.96}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{se}\NormalTok{(x)}
-\NormalTok{\}}
-
-\NormalTok{rate\_per\_1000 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(events, population, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{) \{}
-  \FunctionTok{round}\NormalTok{(events }\SpecialCharTok{/}\NormalTok{ population }\SpecialCharTok{*} \DecValTok{1000}\NormalTok{, digits)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Cleaning}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{recode\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{99}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{999}\NormalTok{, }\StringTok{""}\NormalTok{)) \{}
-  \FunctionTok{ifelse}\NormalTok{(x }\SpecialCharTok{\%in\%}\NormalTok{ values, }\ConstantTok{NA}\NormalTok{, x)}
-\NormalTok{\}}
-
-\NormalTok{drop\_empty\_cols }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
-\NormalTok{  keep }\OtherTok{\textless{}{-}}\NormalTok{ purrr}\SpecialCharTok{::}\FunctionTok{map\_int}\NormalTok{(data, n\_complete) }\SpecialCharTok{\textgreater{}} \DecValTok{0}
-\NormalTok{  data[, keep, drop }\OtherTok{=} \ConstantTok{FALSE}\NormalTok{]}
-\NormalTok{\}}
-
-\NormalTok{complete\_rows }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
-\NormalTok{  data[}\FunctionTok{complete.cases}\NormalTok{(data), ]}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Checking, before you trust it}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{check\_columns }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, required) \{}
-\NormalTok{  missing\_cols }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(required, }\FunctionTok{names}\NormalTok{(data))}
-  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(missing\_cols) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
-    \FunctionTok{stop}\NormalTok{(}\StringTok{"Missing columns: "}\NormalTok{, }\FunctionTok{paste}\NormalTok{(missing\_cols, }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{))}
-\NormalTok{  \}}
-  \FunctionTok{invisible}\NormalTok{(data)}
-\NormalTok{\}}
-
-\NormalTok{is\_outlier }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{mult =} \FloatTok{1.5}\NormalTok{) \{}
-\NormalTok{  quartiles }\OtherTok{\textless{}{-}} \FunctionTok{quantile}\NormalTok{(x, }\FunctionTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\FloatTok{0.75}\NormalTok{), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{  spread }\OtherTok{\textless{}{-}}\NormalTok{ quartiles[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{{-}}\NormalTok{ quartiles[}\DecValTok{1}\NormalTok{]}
-\NormalTok{  x }\SpecialCharTok{\textless{}}\NormalTok{ quartiles[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{{-}}\NormalTok{ mult }\SpecialCharTok{*}\NormalTok{ spread }\SpecialCharTok{|}\NormalTok{ x }\SpecialCharTok{\textgreater{}}\NormalTok{ quartiles[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ mult }\SpecialCharTok{*}\NormalTok{ spread}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Looking at things}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{head\_tail }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, }\AttributeTok{n =} \DecValTok{3}\NormalTok{) \{}
-  \FunctionTok{rbind}\NormalTok{(}\FunctionTok{head}\NormalTok{(data, n), }\FunctionTok{tail}\NormalTok{(data, n))}
-\NormalTok{\}}
-
-\NormalTok{pct }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(prop, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{) \{}
-  \FunctionTok{paste0}\NormalTok{(}\FunctionTok{round}\NormalTok{(prop }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, digits), }\StringTok{"\%"}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-Three things to notice across the whole list.
-
-Several of them \textbf{call each other}. \texttt{prop\_missing()} uses
-\texttt{n\_missing()}, \texttt{se()} uses \texttt{n\_complete()},
-\texttt{ci\_95()} uses \texttt{se()}. None of them repeats the other's
-logic.
-
-Most of them are \textbf{named for the question they answer}, not for
-how they answer it. \texttt{is\_outlier()}, not
-\texttt{iqr\_bounds\_check()}.
-
-And most take a \textbf{default} for the one thing people argue about,
-so the common call is short and you can still override it.
-
-\end{tcolorbox}
-
-To summarise:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Functions help us reason about code by abstracting away details we do
-  not need to care about.
-\item
-  Give functions good names --- they should describe what they do.
-\item
-  Functions should do one task.
-\item
-  Functions should return one thing.
-\end{enumerate}
-
-If you remember nothing else from this chapter, remember the first one.
-\textbf{Functions are for taking something complicated and giving it a
-clear name.} Everything else is detail, and we get to the detail next.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Look at your most recent analysis script.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Find a chunk of code you have written more than once, with something
-  small changed each time.
-\item
-  Write down, in one sentence, what that chunk is \emph{for}.
-\item
-  That sentence is the name of a function you haven't written yet. Don't
-  write it yet, just note it down.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Anatomy of a function}\label{anatomy-of-a-function}
-
-Every function in R has the same few parts. Once you can point at them,
-functions stop looking like magic.
-
-The reason to learn the names is practical. When you know a thing is
-called a ``default argument'', you can search for it, read the help page
-about it, and ask someone a question that gets you a useful answer.
-Without the words, you are stuck describing the shape of the problem and
-hoping.
-
-We'll use two small functions here. The first counts how many values are
-missing:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{n\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))}
-\NormalTok{\}}
-
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Ozone)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 37
-\end{verbatim}
-
-The second uses that one to work out what \emph{proportion} is missing,
-which is usually the first thing I want to know about a dataset I have
-been handed:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{prop\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{digits =} \DecValTok{2}\NormalTok{) \{}
-\NormalTok{  prop }\OtherTok{\textless{}{-}} \FunctionTok{n\_missing}\NormalTok{(x) }\SpecialCharTok{/} \FunctionTok{length}\NormalTok{(x)}
-  \FunctionTok{round}\NormalTok{(prop, digits)}
-\NormalTok{\}}
-
-\FunctionTok{prop\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Ozone)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 0.24
-\end{verbatim}
-
-Notice that \texttt{prop\_missing()} calls \texttt{n\_missing()}. That
-is worth pointing at, because it is how most real code gets built. You
-write a small function that does one thing, and then you use it inside
-the next one, instead of writing \texttt{sum(is.na(x))} again and hoping
-you type it the same way.
-
-\begin{figure}[ht]
-
-{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={The function prop\_missing defined with function(x, digits = 2), with six parts highlighted in colour: the name, the function keyword, the argument x, the default digits = 2, the body, and the return value.}]{figs/function-anatomy.png}
-
-}
-
-\caption{The parts of a function.}
-
-\end{figure}%
-
-Taking the parts one at a time:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{The name.} \texttt{prop\_missing}. This is how you call it
-  later, so it is worth the two minutes it takes to pick a good one.
-\item
-  \textbf{\texttt{function()}.} This is the bit that actually creates a
-  function. \texttt{prop\_missing\ \textless{}-} just binds it to a
-  name, the same way you would bind any other value.
-\item
-  \textbf{The arguments.} \texttt{x} and \texttt{digits}. These are the
-  things that change each time you call it. They are the answer to
-  ``what did I keep editing at the top of my script?''
-\item
-  \textbf{A default.} \texttt{digits\ =\ 2}. If the caller doesn't
-  supply \texttt{digits}, it is 2. Defaults let you make a function easy
-  to call in the common case, without giving up control in the uncommon
-  one.
-\item
-  \textbf{The body.} Everything between the braces. This is the code
-  that runs.
-\item
-  \textbf{The return value.} R returns the \textbf{last thing
-  evaluated}, so here that's the rounded proportion. You can write
-  \texttt{return()} explicitly, and sometimes should for an early exit,
-  but you don't have to.
-\end{itemize}
-
-The arguments are the part that trips people up, because \texttt{x} and
-\texttt{digits} do not have values when you write the definition. They
-are names waiting for something. The values arrive when you call the
-function, and where they arrive is decided by the order you write them
-in:
-
-\begin{figure}[ht]
-
-{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={Three panels. The first shows the definition prop\_missing \textless- function(x, digits = 2), with x highlighted in orange and digits = 2 in brown. The second shows the call prop\_missing(airquality\$Ozone), with airquality\$Ozone underlined in orange and labelled \textquotesingle becomes x\textquotesingle, a badge noting that digits falls back to 2, and the result 0.24. The third shows prop\_missing(airquality\$Ozone, digits = 4), with airquality\$Ozone labelled \textquotesingle becomes x\textquotesingle{} and digits = 4 labelled \textquotesingle becomes digits\textquotesingle, returning 0.2418.}]{figs/function-in-use.png}
-
-}
-
-\caption{Argument values arrive at the call, not at the definition.}
-
-\end{figure}%
-
-The same function, two different answers, and nothing about the function
-changed. That is the whole point of an argument.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Here is a function. Don't run it, and don't worry about what it
-computes.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{rate\_per\_1000 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(count, population, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{) \{}
-\NormalTok{  rate }\OtherTok{\textless{}{-}}\NormalTok{ (count }\SpecialCharTok{/}\NormalTok{ population) }\SpecialCharTok{*} \DecValTok{1000}
-  \FunctionTok{round}\NormalTok{(rate, digits)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-Name the parts:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  What is the \textbf{name} of this function?
-\item
-  What are its \textbf{arguments}?
-\item
-  Which argument has a \textbf{default}, and what is it?
-\item
-  What is the \textbf{body}?
-\item
-  What does it \textbf{return}?
-\item
-  Now call it two ways: once letting \texttt{digits} take its default,
-  and once setting it yourself.
-\end{enumerate}
-
-The point of this one is the vocabulary. Once you can say ``the third
-argument has a default'', you can look it up and you can ask about it.
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Two more parts, once the above is comfortable}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-These are worth knowing about eventually. Skip them for now if you are
-still getting the hang of the parts above.
-
-\textbf{Side effects.} Anything a function does \emph{other} than return
-a value. Printing to the console, writing a file, drawing a plot,
-setting an option. Side effects are not bad, and plenty of useful
-functions have them. But a function that both returns something useful
-\emph{and} quietly writes a file is harder to reason about than one that
-does a single one of those things.
-
-\textbf{Functions are values.} An argument can be a function. Here is
-the situation where you would want that.
-
-Say you want to know how many values are missing in each column of your
-data. With the function we already have, you could write:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Ozone)}
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Solar.R)}
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Wind)}
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Temp)}
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Month)}
-\FunctionTok{n\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Day)}
-\end{Highlighting}
-\end{Shaded}
-
-That is six lines to say one thing. You have to know every column name,
-you have to type each one correctly, and when the data gains a column
-next month you have to remember to come back and add a line.
-
-It is the copy-paste problem from the start of this chapter, wearing a
-different hat.
-
-What you want to say is ``do this to every column''. To say that, you
-need to hand one function to another function:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(purrr)}
-
-\FunctionTok{map\_int}\NormalTok{(airquality, n\_missing)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Ozone Solar.R    Wind    Temp   Month     Day 
-     37       7       0       0       0       0 
-\end{verbatim}
-
-One line, and it does not care how many columns there are or what they
-are called.
-
-Look closely at how \texttt{n\_missing} is written there. \textbf{No
-brackets.} We are not calling it, we are handing it over, the same way
-we would hand over a number or a data frame. That is what ``functions
-are values'' means.
-
-And you can accept a function in your own functions too:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{n\_complete }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{sum}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(x))}
-\NormalTok{\}}
-
-\NormalTok{summarise\_columns }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, f) \{}
-  \FunctionTok{map\_dbl}\NormalTok{(data, f)}
-\NormalTok{\}}
-
-\FunctionTok{summarise\_columns}\NormalTok{(airquality, n\_complete)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Ozone Solar.R    Wind    Temp   Month     Day 
-    116     146     153     153     153     153 
-\end{verbatim}
-
-\begin{quote}
-\textbf{A quick word on \texttt{map()}}
-
-\href{https://purrr.tidyverse.org/}{\texttt{purrr}} is the tidyverse
-package for applying a function to each element of something. The whole
-family works the same way, and the suffix tells you what comes back:
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{map()} gives you a \textbf{list}, always.
-\item
-  \texttt{map\_int()} gives you an \textbf{integer vector}, or an error.
-\item
-  \texttt{map\_dbl()}, \texttt{map\_chr()}, \texttt{map\_lgl()} do the
-  same for numbers, text and \texttt{TRUE}/\texttt{FALSE}.
-\end{itemize}
-
-That ``or an error'' is the point. You say what shape you are expecting,
-and if the function cannot deliver it you find out straight away, rather
-than three lines later when something else breaks.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{map\_dbl}\NormalTok{(airquality, as.character)}
-\CommentTok{\#\textgreater{} Error in \textasciigrave{}map\_dbl()\textasciigrave{}:}
-\CommentTok{\#\textgreater{} i In index: 1.}
-\CommentTok{\#\textgreater{} i With name: Ozone.}
-\CommentTok{\#\textgreater{} Caused by error:}
-\CommentTok{\#\textgreater{} ! Result must be length 1, not 153.}
-\end{Highlighting}
-\end{Shaded}
-
-Base R has its own versions of these, called \texttt{lapply()},
-\texttt{vapply()} and \texttt{sapply()}. You will meet them in other
-people's code, they do the same job with different names, and we will
-come to the differences later.
-\end{quote}
-
-\begin{quote}
-\textbf{Anonymous functions, and that \texttt{\textbackslash{}(x)}
-thing}
-
-Everything so far has handed over a function that already had a name.
-Sometimes you want to hand over a function you will never need again,
-where naming it would just add clutter to the top of your script.
-
-You can write the function right there, in the argument:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{map\_dbl}\NormalTok{(airquality, }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Ozone Solar.R    Wind    Temp   Month     Day 
-   42.1   185.9    10.0    77.9     7.0    15.8 
-\end{verbatim}
-
-That \texttt{function(x)\ round(mean(x,\ na.rm\ =\ TRUE),\ 1)} is an
-ordinary function. It simply never got a name, which is why it is called
-an \textbf{anonymous function}.
-
-It does the same job as this:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mean\_rounded }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{)}
-\NormalTok{\}}
-
-\FunctionTok{map\_dbl}\NormalTok{(airquality, mean\_rounded)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Ozone Solar.R    Wind    Temp   Month     Day 
-   42.1   185.9    10.0    77.9     7.0    15.8 
-\end{verbatim}
-
-So which should you write? My rule is straightforward. If you would use
-it twice, or if a name would explain something, give it a name.
-Otherwise, leave it anonymous.
-
-While you are learning, name them. A named function is something you can
-call on its own and poke at, which makes it far easier to debug.
-
-\textbf{The shorthand: \texttt{\textbackslash{}(x)}}
-
-Since R 4.1 you can write \texttt{\textbackslash{}(x)} instead of
-\texttt{function(x)}:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{map\_dbl}\NormalTok{(airquality, \textbackslash{}(x) }\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Ozone Solar.R    Wind    Temp   Month     Day 
-   42.1   185.9    10.0    77.9     7.0    15.8 
-\end{verbatim}
-
-Identical to the version above, just shorter.
-\texttt{\textbackslash{}(x)\ x\ +\ 1} and \texttt{function(x)\ x\ +\ 1}
-are the same thing.
-
-You will see \texttt{\textbackslash{}(x)} constantly in modern R code,
-so it is worth being able to read. When you are writing your own, use
-whichever you find clearer.
-\end{quote}
-
-\begin{quote}
-\textbf{Some history: where the backslash comes from}
-
-\texttt{\textbackslash{}(x)} is written with a backslash because it
-looks a little like \textbf{λ}, the Greek letter lambda.
-
-That comes from
-\href{https://en.wikipedia.org/wiki/Lambda_calculus}{lambda calculus}, a
-way of describing computation worked out by
-\href{https://en.wikipedia.org/wiki/Alonzo_Church}{Alonzo Church} in the
-1930s, where \texttt{λx.} means ``a function of x''.
-
-Plenty of programming languages borrowed the idea and the word, which is
-why you will hear anonymous functions called ``lambdas'' in Python,
-JavaScript and elsewhere.
-\end{quote}
-
-\begin{quote}
-\textbf{Some history: older purrr code and the
-\texttt{\textasciitilde{}\ .x} shorthand}
-
-In older code, and in plenty of code still being written today, you will
-see this instead:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{map\_dbl}\NormalTok{(airquality, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Ozone Solar.R    Wind    Temp   Month     Day 
-   42.1   185.9    10.0    77.9     7.0    15.8 
-\end{verbatim}
-
-That \texttt{\textasciitilde{}} is a \textbf{formula}, and purrr treats
-it as a shorthand for a function. Inside it, \texttt{.x} stands for
-whatever is being passed in.
-
-So all three of these do the same thing:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{map\_dbl}\NormalTok{(airquality, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{))}
-\FunctionTok{map\_dbl}\NormalTok{(airquality, \textbackslash{}(x) }\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{))}
-\FunctionTok{map\_dbl}\NormalTok{(airquality, }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-The formula version came first, because until R 4.1 there was no short
-way to write a function, and \texttt{function(x)} every time got tiring.
-Now that \texttt{\textbackslash{}(x)} exists, purrr's own documentation
-recommends it, and it is what I would write in new code.
-
-You still need to be able to \emph{read} \texttt{\textasciitilde{}\ .x},
-because it is everywhere.
-
-Two more things you will meet alongside it. A bare \texttt{.} works in
-place of \texttt{.x}, and in two-argument functions like \texttt{map2()}
-the arguments are \texttt{.x} and \texttt{.y}:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{map2\_dbl}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .x }\SpecialCharTok{*}\NormalTok{ .y)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1]  4 10 18
-\end{verbatim}
-\end{quote}
-
-\end{tcolorbox}
-
-\section{Good (simple) function
-design}\label{good-simple-function-design}
-
-Functions are \textbf{tools for managing complexity}. That is also
-called \emph{abstraction}, or \emph{abstracting away}.
-
-So the question when writing one is always: \textbf{what complexity am I
-managing? What am I abstracting away?}
-
-Here is a real piece of analysis code. It asks whether temperature
-differs on days when ozone is missing, compared with days when it is
-not:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{is\_different }\OtherTok{\textless{}{-}}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Temp}
-\NormalTok{when\_missing\_index }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Ozone))}
-\NormalTok{when\_complete\_index }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Ozone))}
-\NormalTok{is\_different\_miss }\OtherTok{\textless{}{-}}\NormalTok{ is\_different[when\_missing\_index]}
-\NormalTok{is\_different\_complete }\OtherTok{\textless{}{-}}\NormalTok{ is\_different[when\_complete\_index]}
-\NormalTok{result\_ozone\_temp }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(is\_different\_miss, is\_different\_complete)}
-\end{Highlighting}
-\end{Shaded}
-
-That works. But you can't use it on another pair of variables without
-editing it, and you can't tell at a glance what it's \emph{for}.
-
-\textbf{Writing a function is writing.} You don't get it right on the
-first pass, and you're not supposed to.
-
-Here's the actual process.
-
-\textbf{Start with the bones.} Make an empty function and paste the code
-into the body.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{misstest }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(Temp, Ozone) \{}
-  \CommentTok{\# paste the text into the body}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Ask what you are interested in.} Which parts change? Here it is
-the variable we are testing, and the variable whose missingness we are
-splitting on.
-
-\textbf{Work out what to name things.} Replace the hard-coded
-\texttt{airquality\$Temp} with an argument. Comment out the old line
-rather than deleting it, so you can see what you are replacing:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{misstest }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(is\_different, when\_missing) \{}
-  \CommentTok{\# is\_different \textless{}{-} airquality$Temp}
-\NormalTok{  when\_missing\_index }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(when\_missing))}
-\NormalTok{  when\_complete\_index }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(when\_missing))}
-\NormalTok{  is\_different\_miss }\OtherTok{\textless{}{-}}\NormalTok{ is\_different[when\_missing\_index]}
-\NormalTok{  is\_different\_complete }\OtherTok{\textless{}{-}}\NormalTok{ is\_different[when\_complete\_index]}
-\NormalTok{  result\_ozone\_temp }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(is\_different\_miss, is\_different\_complete)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-Naming is tricky, and it's fine for it to take a few goes.
-
-\textbf{Return the last thing.} The function currently assigns to
-\texttt{result\_ozone\_temp} and returns it invisibly. Put it on its own
-line at the end so the return is explicit to a reader:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{  result\_ozone\_temp }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(is\_different\_miss, is\_different\_complete)}
-\NormalTok{  result\_ozone\_temp}
-\ErrorTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Clean up the old lettuce.} Remove the commented-out lines now
-that you no longer need them.
-
-\textbf{Name the function so it evokes the action.} \texttt{misstest}
-was a placeholder. What does this actually do?
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{missingness\_impact }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(is\_different, when\_missing) \{}
-\NormalTok{  when\_missing\_index }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(when\_missing))}
-\NormalTok{  when\_complete\_index }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(when\_missing))}
-\NormalTok{  is\_different\_miss }\OtherTok{\textless{}{-}}\NormalTok{ is\_different[when\_missing\_index]}
-\NormalTok{  is\_different\_complete }\OtherTok{\textless{}{-}}\NormalTok{ is\_different[when\_complete\_index]}
-  \FunctionTok{t.test}\NormalTok{(is\_different\_miss, is\_different\_complete)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Then use it}, and write the output to a variable:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{temp\_difference\_ozone\_missing }\OtherTok{\textless{}{-}} \FunctionTok{missingness\_impact}\NormalTok{(}
-  \AttributeTok{when\_missing =}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Ozone,}
-  \AttributeTok{is\_different =}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Temp}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-The process, in short:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Copy} the text into the body.
-\item
-  \textbf{Identify} the complexity to manage.
-\item
-  \textbf{Abstract} that complexity.
-\item
-  \textbf{Iterate} --- writing functions is iterative, just like regular
-  writing.
-\end{enumerate}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Circling back to DRY}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-You will often be told: ``if you copy and paste the same code three
-times, write a function.''
-
-That's true, but it treats the symptom. The real problem is
-\textbf{complex code}.
-
-You only end up repeating yourself because you couldn't \emph{express}
-the idea. So the cause is expression and reasoning, not repetition.
-
-A function isn't only needed when you repeat code. It's needed when you
-have an idea worth naming.
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Earlier you wrote down a sentence describing a chunk of your own code.
-Now build the function around it, using the process above.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Copy.} Make an empty function, and paste the chunk into the
-  body. Don't change anything yet.
-\item
-  \textbf{Identify.} Which parts of it change between uses? Those are
-  your arguments.
-\item
-  \textbf{Abstract.} Replace the hard-coded parts with argument names.
-  Comment the old lines out rather than deleting them, so you can see
-  what you are replacing.
-\item
-  \textbf{Iterate.} Get it working first, then go back and improve the
-  names. The first name you pick is rarely the one you keep.
-\end{enumerate}
-
-Then call your function, and check you get the same answer you got
-before you started. That check matters. It is very easy to tidy
-something into a different result.
-
-If you don't have a chunk of your own to hand, use
-\texttt{06-bad-style/messy-analysis.R} from the course repository. The
-loop at the bottom is doing the same thing to each species, one at a
-time.
-
-\end{tcolorbox}
-
-\section{Using \{fnmate\} to speed up creating
-functions}\label{using-fnmate-to-speed-up-creating-functions}
-
-The process above has one annoying step. You write the call you
-\emph{wish} existed, then go and create the function somewhere else,
-with the right arguments, and switch back.
-
-\href{https://github.com/milesmcbain/fnmate}{\texttt{\{fnmate\}}} by
-Miles McBain removes that step. Write the call you want:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{temp\_difference }\OtherTok{\textless{}{-}} \FunctionTok{missingness\_impact}\NormalTok{(}
-  \AttributeTok{when\_missing =}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Ozone,}
-  \AttributeTok{is\_different =}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Temp}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Put your cursor on it, trigger \texttt{\{fnmate\}}, and it generates the
-function definition --- correctly named, with the right argument names
---- in your \texttt{R/} directory, ready for you to fill in the body.
-
-This matters more than a keystroke saving. It makes the
-\textbf{outside-in} approach cheap. You imagine the interface you want
-first, then write the thing that satisfies it.
-
-Without tooling, outside-in is enough extra effort that most people
-default to inside-out.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Install it with
-  \texttt{remotes::install\_github("milesmcbain/fnmate")}. If the
-  install gives you trouble, skip it and do the rest by hand. The habit
-  is the point, not the package.
-\item
-  Think of something you want to do but haven't written yet. Write
-  \textbf{only the call}, with the argument names you wish existed.
-\item
-  Read what you wrote back. Could someone else tell what it does from
-  the call alone? If not, rename things now, while it costs you nothing.
-\item
-  Now generate the function, with \texttt{\{fnmate\}} or by hand, and
-  fill in the body.
-\end{enumerate}
-
-Notice the order you just worked in. You designed the interface first
-and the implementation second, which is the opposite of how most of us
-write code.
-
-\end{tcolorbox}
-
-\section{How to use a debugger}\label{how-to-use-a-debugger}
-
-R is interactive. You run some code, you see the output immediately, and
-when something goes wrong you can poke around and look at it. It is a
-lovely way to do data analysis.
-
-Functions break that. A function is a box, and by default you can't see
-inside it while it runs.
-
-To look inside, you need a debugger.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-caution-color!10!white, colframe=quarto-callout-caution-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{A confession}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-If you have ever copied the internals of a function into a new script,
-hard-coded the arguments at the top, and run it line by line --- this
-section is for you.
-
-I say that as someone who did exactly that for years.
-
-\end{tcolorbox}
-
-Three tools to know:
-
-\textbf{\texttt{browser()}} goes \emph{inside} a function. When you run
-the function, you land at that point in the code:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mean\_center }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(variable) \{}
-  \FunctionTok{browser}\NormalTok{()}
-\NormalTok{  variable }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(variable, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-Run that, then call \texttt{mean\_center(1:10)}, and you'll be dropped
-in at the \texttt{browser()} line with \texttt{variable} available to
-inspect.
-
-The important thing to remember is that you have to \textbf{remove
-\texttt{browser()} afterwards}.
-
-\textbf{\texttt{debug()} and \texttt{undebug()}} do the same job without
-editing the function. \texttt{debug()} turns on debugging mode for a
-function --- as though \texttt{browser()} were on its first line:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{debug}\NormalTok{(mean\_center)}
-\FunctionTok{mean\_center}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{)}
-\CommentTok{\# poke around, inspect the values}
-\FunctionTok{undebug}\NormalTok{(mean\_center)}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{\texttt{debugonce()}} does the \texttt{debug()} step exactly
-once, so you never need to call \texttt{undebug()}.
-
-This matters more than it sounds. I've forgotten to call
-\texttt{undebug()} and felt a genuine madness descend as every
-subsequent call dropped me into the debugger.
-
-So: if you want to see where a function is going wrong, reach for
-\texttt{debugonce()}.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Here is \texttt{prop\_missing()} again, with one small change. It still
-runs, and it still gives you a plausible looking number. It is wrong.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{n\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-  \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))}
-\NormalTok{\}}
-
-\NormalTok{prop\_missing }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{digits =} \DecValTok{2}\NormalTok{) \{}
-\NormalTok{  prop }\OtherTok{\textless{}{-}} \FunctionTok{n\_missing}\NormalTok{(x) }\SpecialCharTok{/} \FunctionTok{length}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(x))}
-  \FunctionTok{round}\NormalTok{(prop, digits)}
-\NormalTok{\}}
-
-\FunctionTok{prop\_missing}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Ozone)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Run it. You get \texttt{0.32}. Earlier in this chapter the answer was
-  \texttt{0.24}. Which is right?
-\item
-  Run \texttt{debugonce(prop\_missing)}, then call it again. You will
-  land inside the function.
-\item
-  Step forward one line at a time by typing \texttt{n} and pressing
-  enter. At any point, type the name of a variable to see what it
-  currently holds.
-\item
-  Type \texttt{length(x)} and then \texttt{length(na.omit(x))}. What is
-  the difference between them, and which one belongs in a proportion?
-\item
-  Type \texttt{Q} to quit the debugger, fix the function, and run it
-  again.
-\end{enumerate}
-
-This is the kind of bug worth practising on. Nothing errors, nothing
-warns you, and \texttt{0.32} is every bit as believable as
-\texttt{0.24}.
-
-Then do the same on a function of your own that you don't entirely
-trust.
-
-The habit worth building: when a function surprises you, your first move
-is \texttt{debugonce()}, not copying the body into a new script.
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Read more}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Parts of this chapter are adapted from my blog post,
-\href{https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/}{How
-to get good with R}.
-
-The function design walkthrough, and the argument that DRY treats the
-symptom rather than the cause, come from my talk \textbf{Practical
-functions: practically magic} ---
-\href{https://njtierney.github.io/funfun/\#/title-slide}{slides} and
-\href{https://github.com/njtierney/funfun}{source}.
-
-Its take-home messages are worth repeating here. Good functions:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Manage \textbf{complexity}
-\item
-  Explain and express \textbf{ideas}
-\item
-  Can be \textbf{individually reasoned} with
-\item
-  Take \textbf{iteration}
-\end{enumerate}
-
-\end{tcolorbox}
-
-\bookmarksetup{startatroot}
-
-\chapter{Writing a reprex / getting
-unstuck}\label{writing-a-reprex-getting-unstuck-1}
-
-Everyone gets stuck. The skill is not avoiding it, it is getting unstuck
-quickly, and being able to ask for help in a way that actually gets you
-an answer.
-
-This section is about the reproducible example, or reprex. We look at
-how to build one, why building one so often solves the problem before
-you ask anybody, and some practical habits for debugging.
-
-\section{Overview}\label{overview-4}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Duration} 15 minutes
-\end{itemize}
-
-\section{Questions}\label{questions-4}
-
-\section{How to share problems}\label{how-to-share-problems}
-
-When you hit an error you cannot solve by tinkering, it is worth
-spending some time building a small example of the code that breaks.
-
-This takes practice. And here's the thing nobody tells you.
-
-\textbf{In the process of reducing the problem to its core, you'll often
-solve it yourself.}
-
-It's the same experience as describing a problem out loud to a colleague
-and arriving at the answer before they've said anything.
-
-So a reprex isn't only a way to ask for help. It's a debugging technique
-that happens to produce something shareable.
-
-Let's tear one down. Say we are summarising the \texttt{diamonds} data:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyverse)}
-
-\NormalTok{diamonds }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{price\_per\_carat =}\NormalTok{ price }\SpecialCharTok{/}\NormalTok{ carat) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{group\_by}\NormalTok{(cut) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{summarise}\NormalTok{(}
-    \AttributeTok{price\_mean =} \FunctionTok{mean}\NormalTok{(price\_per\_carat),}
-    \AttributeTok{price\_sd =} \FunctionTok{sd}\NormalTok{(price\_per\_carat),}
-    \AttributeTok{mean\_color =} \FunctionTok{mean}\NormalTok{(color)}
-\NormalTok{  )}
-\CommentTok{\#\textgreater{} Warning: There were 5 warnings in \textasciigrave{}summarise()\textasciigrave{}.}
-\CommentTok{\#\textgreater{} The first warning was:}
-\CommentTok{\#\textgreater{} ℹ In argument: \textasciigrave{}mean\_color = mean(color)\textasciigrave{}.}
-\CommentTok{\#\textgreater{} ℹ In group 1: \textasciigrave{}cut = Fair\textasciigrave{}.}
-\CommentTok{\#\textgreater{} Caused by warning in \textasciigrave{}mean.default()\textasciigrave{}:}
-\CommentTok{\#\textgreater{} ! argument is not numeric or logical: returning NA}
-\end{Highlighting}
-\end{Shaded}
-
-The warning gives us a clue: it is something about \texttt{mean\_color}.
-So try just that:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{diamonds }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{mean\_color =} \FunctionTok{mean}\NormalTok{(color))}
-\CommentTok{\#\textgreater{} Warning: There was 1 warning in \textasciigrave{}mutate()\textasciigrave{}.}
-\CommentTok{\#\textgreater{} ℹ In argument: \textasciigrave{}mean\_color = mean(color)\textasciigrave{}.}
-\CommentTok{\#\textgreater{} Caused by warning in \textasciigrave{}mean.default()\textasciigrave{}:}
-\CommentTok{\#\textgreater{} ! argument is not numeric or logical: returning NA}
-\end{Highlighting}
-\end{Shaded}
-
-Same warning, and we've dropped \texttt{group\_by()} and
-\texttt{summarise()} entirely. Strip it further:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{mean}\NormalTok{(diamonds}\SpecialCharTok{$}\NormalTok{color)}
-\CommentTok{\#\textgreater{} Warning in mean.default(diamonds$color): argument is not numeric or}
-\CommentTok{\#\textgreater{} logical: returning NA}
-\CommentTok{\#\textgreater{} [1] NA}
-\end{Highlighting}
-\end{Shaded}
-
-Still the same. We are now down to one line. So what is in
-\texttt{color}?
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{head}\NormalTok{(diamonds}\SpecialCharTok{$}\NormalTok{color)}
-\CommentTok{\#\textgreater{} [1] E E E I J J}
-\CommentTok{\#\textgreater{} Levels: D \textless{} E \textless{} F \textless{} G \textless{} H \textless{} I \textless{} J}
-\end{Highlighting}
-\end{Shaded}
-
-Ah. Does it make sense to take the mean of some letters? Of course not.
-
-Notice what happened. We never needed to ask anyone.
-
-Each step made the example smaller, and the smaller it got, the more
-obvious the problem became.
-
-That's the technique.
-
-\begin{figure}[ht]
-
-{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio,alt={Four steps. An eight line pipeline warns that an argument is not numeric or logical. Dropping group\_by and summarise gives the same warning from two lines. Dropping mutate gives the same warning from one line. Finally, looking at the column shows it is a factor, so taking its mean was never going to work. The answer arrived without anyone being asked.}]{figs/reprex-reduction.png}
-
-}
-
-\caption{Cutting the example down until the problem is obvious.}
-
-\end{figure}%
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Using \{reprex\}}\label{using-reprex}
-
-Making reproducible examples by hand is fiddly. You have to make sure
-the environment is clean, the right packages are loaded, the code is
-formatted, and any images come out at a sensible size.
-
-If your problem is tightly defined that might take a couple of minutes.
-
-Other times it takes far longer. Say, when you've got a variable sitting
-in your environment that you've forgotten how you created, and didn't
-realise was load-bearing. \emph{OH GOD HOW DID I EVEN DO THIS.} Ahem.
-
-So, after some sensible swearing, you might ask:
-
-\begin{quote}
-Surely there is an easy, reproducible way to make reproducible examples?
-\end{quote}
-
-There is: the \href{https://reprex.tidyverse.org/}{\texttt{\{reprex\}}}
-package, by Jenny Bryan.
-
-The workflow is four steps:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Copy your code to the clipboard.
-\item
-  Run \texttt{reprex()} and wait a moment for it to execute.
-\item
-  \texttt{\{reprex\}} shows you an HTML preview of the code \emph{and
-  its output}.
-\item
-  A markdown version is placed on your clipboard, ready to paste.
-\end{enumerate}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{reprex}\SpecialCharTok{::}\FunctionTok{reprex}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-By default the output is formatted for GitHub. There is also
-\texttt{reprex(venue\ =\ "so")} for Stack Overflow.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Why this actually works}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\texttt{\{reprex\}} takes your copied code and runs
-\texttt{rmarkdown::render()} on it, \textbf{in a fresh R session}.
-
-That's the whole trick. It means \texttt{\{reprex\}} will \textbf{fail
-hard and fail early} if your example isn't reproducible.
-
-Forgot a \texttt{library()} call? You'll see the error. Relying on an
-object you made an hour ago? You'll see that too.
-
-So when \texttt{reprex()} gives you a working example, you \emph{know}
-it works. Not because you were careful, but because it was run somewhere
-your local mess doesn't exist.
-
-\end{tcolorbox}
-
-It also handles images, which is the sort of thing you only notice by it
-never being a problem.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Practicing reprex}\label{practicing-reprex}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Practical tips on debugging}\label{practical-tips-on-debugging}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\subsection{Keep solving vs cleaning
-up}\label{keep-solving-vs-cleaning-up}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Read more}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Parts of this chapter are adapted from my blog posts
-\href{https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/}{How
-to get good with R} and
-\href{https://www.njtierney.com/posts/2019-01-11-magic-reprex/}{Magic
-reprex}, the latter of which has gifs of the whole workflow in action.
-
-\end{tcolorbox}
-
-\bookmarksetup{startatroot}
-
-\chapter{Putting it all together}\label{putting-it-all-together-1}
-
-This is the part where you point everything from today at some real
-code.
-
-We take an existing project, review it, and work through the whole lot:
-organisation, \texttt{\{air\}}, a linter, and pulling repeated code into
-functions. Then we talk about what you found.
-
-\section{Overview}\label{overview-5}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Duration} 15 minutes
-\end{itemize}
-
-\section{Questions}\label{questions-5}
-
-\section{Take an existing project and provide code
-review}\label{take-an-existing-project-and-provide-code-review}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Apply code linting, code styling,
-functions}\label{apply-code-linting-code-styling-functions}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Getting better, beyond the
-code}\label{getting-better-beyond-the-code}
-
-Everything in this course has been about the code itself. But a lot of
-getting good at R has nothing to do with typing R.
-
-Here is what I would actually recommend, and none of it requires
-permission or a budget:
-
-\textbf{Find a community of people who use R.} This is the single
-highest-leverage one. A local useR group, an online community, a Slack
-or Discord, a reading group at work. You learn faster around people who
-are also learning.
-
-\textbf{Read other people's code.} Pick a package you use and read its
-source. You will find things you did not know were possible, and you
-will find things that look wrong to you --- both are useful.
-
-\textbf{Practise reading the documentation.} Help files have a
-consistent structure, and once you can navigate one quickly you can
-navigate all of them. This is a skill, and it improves with deliberate
-use.
-
-\textbf{Read books and learning material.}
-\href{https://r4ds.hadley.nz/}{R for Data Science} and
-\href{https://adv-r.hadley.nz/}{Advanced R} are both free online.
-
-\textbf{Offload ideas and tasks somewhere outside your head.} GitHub
-issues, a notebook, a task list --- anything that means an idea does not
-have to be carried around. Your head is for having ideas, not for
-holding them.
-
-\textbf{Ask yourself how relevant what you are doing right now is to the
-problem you set out to solve.} I get distracted often. Asking this
-question is how I redirect. It is remarkable how frequently the honest
-answer is ``not very''.
-
-\textbf{Write about your work publicly.} This is the one that surprised
-me most. Knowing that someone might read it forced me to clean up my
-code and keep a tidy ship, and I learned a great deal in the process of
-explaining things.
-
-\textbf{Have a strong desire to improve.} I cannot give you this one.
-But if you are reading this at the end of a course you chose to take,
-you probably already have it.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\section{Discussion and Q \& A}\label{discussion-and-q-a}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Not the end}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-There is more to all of this, and I do not have all the answers.
-
-I am a decent R programmer. I am also still learning all the time, and I
-make mistakes a lot. I am not perfect, far from it. But I hope some of
-this helps you on your own journey of improving at R.
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  TODO: exercise for this section.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Read more}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Parts of this chapter are adapted from my blog post,
-\href{https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/}{How
-to get good with R}.
-
-\end{tcolorbox}
-
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{part}{Appendices}
-\appendix
-
-\chapter{Working closer to the speed of
-thought}\label{sec-speed-of-thought}
-
-The rest of this book is about making code readable once it is written.
-This appendix is about how it gets written in the first place, and it is
-the one thing here you can start on today.
-
-None of it is required to write good R. But tools that let you work with
-less resistance are good, and typing is the one nobody teaches you.
-
-\section{Overview}\label{overview-6}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Duration} 15 minutes, or a few minutes a day for a couple of
-  months
-\end{itemize}
-
-\section{Questions}\label{questions-6}
-
-\begin{itemize}
-\tightlist
-\item
-  Why would typing speed matter for writing code?
-\item
-  Which keyboard shortcuts are actually worth learning?
-\end{itemize}
-
-\section{Typing, and the speed of
-thought}\label{typing-and-the-speed-of-thought}
-
-Here's the jam: \textbf{if you can type faster, you operate closer to
-the speed of thought.} It's not really about working faster. It's about
-being able to clearly express what's in your head. And when you can do
-that, you put yourself in a good position to enter the
-\href{https://en.wikipedia.org/wiki/Flow_(psychology)}{flow state},
-being in the zone, completely absorbed, where things feel easy and make
-sense.
-
-When you type quickly and accurately, you aren't making the small
-stumbling mistakes that pull you out of that state.
-
-Keyboard shortcuts do the same job. More of what's in your head gets
-onto the screen without friction.
-
-I don't think being a fast typist is \textbf{necessary} to be a better
-programmer. But tools that let you work with less resistance are good.
-
-I once switched to a new keyboard and felt like I was walking around
-with ankle weights and a large unwieldy backpack. I simply couldn't get
-what was in my head onto the screen.
-
-So I spent a couple of months working on typing every day. It made my
-typing faster and more accurate, which made my coding faster. I ended up
-ditching the keyboard and keeping the skill.
-
-Two things worth knowing:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Accuracy first.} There's not much benefit in typing the wrong
-  and unintelligible words very quickly.
-  \href{https://www.keybr.com/}{keybr} is good for this, and I have
-  heard good things about \href{https://monkeytype.com/}{monkeytype}.
-\item
-  \textbf{You don't need a new keyboard.} I've spent a lot of time and
-  money looking for a good one and I'm still not there. My favourite is
-  still an old wireless Mac keyboard. Practising is a better use of your
-  time than shopping. But if you want the keyboard, get the keyboard.
-\end{itemize}
-
-\section{Shortcuts worth learning
-first}\label{shortcuts-worth-learning-first}
-
-\begin{figure}[ht]
-
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={An xkcd comic showing a keyboard where the vowel keys have LCD displays.}]{index_files/mediabag/xkeyboarcd.png}}
-
-}
-
-\caption{Sourced from \href{https://xkcd.com/2150/}{xkcd 2150}}
-
-\end{figure}%
-
-You already use keyboard shortcuts every day without thinking about
-them. Saving with \texttt{Cmd\ /\ Ctrl\ +\ S}, or undoing with
-\texttt{Cmd\ /\ Ctrl\ +\ Z}.
-
-So this is not a new skill. It's the same skill, pointed at the things
-you do most often in R.
-
-These are the ones that come up repeatedly in this course:
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Enter} --- run the current line
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ Enter} --- run the whole script or
-  chunk
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ F10} --- restart R. We will use
-  this a lot
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ S} --- save, and with air set up, reformat
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ C} --- comment or uncomment the
-  current line
-\item
-  \texttt{Cmd\ /\ Ctrl} + click on a function --- jump to where it is
-  defined
-\item
-  \texttt{Ctrl} + \texttt{.} --- go to a file or function by name
-\item
-  \texttt{Alt\ /\ Option\ +\ Shift\ +\ J} --- jump to a section of the
-  current file
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ F} --- find in files, across a
-  whole directory
-\end{itemize}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-caution-color!10!white, colframe=quarto-callout-caution-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-caution-color}{\faFire}\hspace{0.5em}{What about \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ A}?}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-That's RStudio's own ``reformat section'', and it's what people reached
-for before air existed.
-
-You can stop using it. Air does a better job, does it to the whole file,
-and does it on save without you asking.
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{More shortcuts, once those are automatic}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\textbf{Moving around}
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{Alt\ +\ Left\ /\ Right} --- move the cursor one word at a
-  time. Add \texttt{Shift} to select
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Left\ /\ Right} --- jump to the start or end
-  of the line
-\item
-  \texttt{Alt\ +\ Up\ /\ Down} --- move the current line up or down
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Alt\ +\ Up\ /\ Down} --- copy the current
-  line up or down
-\item
-  \texttt{Ctrl\ +\ Alt\ +\ Up\ /\ Down} --- multiple cursors
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ D} --- delete the current line
-\end{itemize}
-
-Being able to move by word, or jump to the end of a line, matters more
-than it sounds. You stop leaning on the arrow key to get where you're
-going.
-
-\textbf{Elsewhere on your machine}
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Z}, then
-  \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ Z} --- undo, then undo the undo
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ Tab} --- change application
-\item
-  \texttt{Cmd\ +\ Space} --- Spotlight on macOS
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ F} --- search for a word. Works in nearly
-  everything: PDFs, browsers, code
-\item
-  \texttt{Cmd\ /\ Ctrl\ +\ T} / \texttt{+\ W} / \texttt{+\ Shift\ +\ T}
-  --- new browser tab, close tab, reopen the tab you just closed
-\end{itemize}
-
-\textbf{Finding and setting your own}
-
-In RStudio, \texttt{Alt\ +\ Shift\ +\ K} brings up a shortcut menu
-(\texttt{Esc} to dismiss), and Tools → Keyboard Shortcuts Help lets you
-see and change all of them.
-
-Some packages add shortcuts as RStudio add-ins, which you can then bind.
-Two worth having:
-
-\begin{itemize}
-\tightlist
-\item
-  Render a reprex from the current selection, which needs the
-  \texttt{\{reprex\}} package. Mine is
-  \texttt{Cmd\ /\ Ctrl\ +\ Shift\ +\ R}
-\item
-  Define a function at the cursor with
-  \href{https://github.com/milesmcbain/fnmate}{\texttt{\{fnmate\}}}.
-  Very much worth a look, this one accelerated my functional programming
-  considerably
-\end{itemize}
-
-\href{https://github.com/gadenbuie/shrtcts}{\texttt{\{shrtcts\}}} by
-\href{https://www.garrickadenbuie.com/}{Garrick Aden-Buie} lets you set
-up arbitrary shortcuts of your own.
-
-\textbf{Where to look things up}
-
-\begin{itemize}
-\tightlist
-\item
-  The
-  \href{https://rstudio.github.io/cheatsheets/html/rstudio-ide.html\#keyboard-shortcuts}{RStudio
-  IDE cheat sheet} has an index of the lot.
-\item
-  Posit's guide to
-  \href{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}{customising
-  keyboard shortcuts} covers rebinding them.
-\end{itemize}
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Your Turn}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Bring up the shortcut reference with
-  \texttt{Alt\ /\ Option\ +\ Shift\ +\ K}, and find the shortcut for
-  inserting a pipe (\texttt{\textbar{}\textgreater{}}).
-\item
-  Pick two shortcuts from the list above that you do not currently use,
-  and write them on something you will see tomorrow.
-\item
-  Spend three minutes practising them on a script of your own.
-\item
-  Spend five minutes on \href{https://www.keybr.com/}{keybr}. Note your
-  accuracy, not your speed.
-\end{enumerate}
-
-Ask me to demonstrate a few of my favourite combos: multiple cursors,
-moving and copying lines, and jumping to a function by name. They are
-much easier to understand when you watch them than when you read about
-them.
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Read more}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-This appendix is adapted from my blog post
-\href{https://www.njtierney.com/posts/2023-11-23-get-good-type-fast/}{Get
-good with R: typing skills and shortcuts}, which has more detail,
-including a note on vim and emacs, and, importantly, how to get
-\emph{out} of vim.
 
 \end{tcolorbox}
 

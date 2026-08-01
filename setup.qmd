@@ -261,3 +261,29 @@ If both of those look right, you are set.
 Please do send me an email before the session rather than fighting with it on your own.
 
 Installation problems are almost always specific to one machine, and they are much faster to solve with two people looking at them. They are also, genuinely, not a reflection on you. Every one of us has lost an afternoon to a package that would not build. Ask me for some horror stories.
+
+# Get course exercise materials on your machine {#sec-rbp-exercises}
+
+
+:::{.callout-note title="Your Turn"}
+
+Let's download the course exercise - try running this code:
+
+```{r}
+#| eval: false
+use_course("njtierney/rbp-exercises")
+```
+
+Which will prompt you to download the repository, <https://github.com/njtierney/rbp-exercises>, and then open it in an RStudio project. 
+
+<!-- TODO If time, make a gif of this -->
+
+If you have troubles with this (sometimes firewalls can stop you) you can download it from the github page <https://github.com/njtierney/rbp-exercises> like so:
+
+![](figs/rstudio-download-rbp-exercises.png)
+
+Then, unzip that, and click on the rbp-exercises.Rproj file:
+
+![](figs/rstudio-show-rbp-rpoj.png)
+
+:::

@@ -1,56 +1,186 @@
-# Project organisation
+---
+title: Project organisation
+filters:
+  - linkate
+---
 
 > "Remember, you are always collaborating with your future self."
 
 This course is all about best practices in R. I want you to know the principles, and have practice at writing clear, maintainable, and reproducible R code.
 
-To build these practices, you need a good base. A good place to work from here is to have a clean workspace. If you have a clean, and tidy and repeatable way of organising your projects, you will have a clearer sense of how to run the code when you come back to it.
+To build these practices, you need a good, clean, base. We start by talking about basic "hygiene" for your projects and files, before moving on to how to organise your project, and some potential pitfalls.
 
-It doesn't have to be perfect, but the goal is that by the end of this, you will know how to make your projects just a little better each time.
+Remember: your project doesn't have to be perfectly organised. Instead, we focus on making the next project a little better, each time.
 
-## Overview
+# Overview {.unnumbered}
 
-* **Duration** 60 minutes
-
-## Questions
+- **Duration** 60 minutes
 
 <!-- Note: ensure these questions all map onto the concepts here and are answered by them, in order. -->
 
-- What is a file path?
-- What is a project, anyway?
-- Why organise your project?
-- What are some common project structures?
-- How do you organise your work?
-- What are "good enough" common sense principles of project organisation
-- Why should every project have a README?
-- How to set up RStudio or Positron
+- **Questions**
+  - How to set up RStudio or Positron
+  - What is a file path?
+  - What is a project, anyway?
+  - Why organise your project?
+  - What are some common project structures?
+  - How do you organise your work?
+  - What are "good enough" common sense principles of project organisation
+  - Why should every project have a README?
+
+
+## Getting set up
+
+Go to [course exercises -@sec-rbp-exercises] and follow the instructions on downloading the course materials.
+
+Let's talk about some easy-wins in how you set up RStudio and positron, to make it easier to make things reproducible.
+
+We want to go to global options, like so:
+
+Tools → Global Options (or `Cmd + ,` on macOS) → General.
+
+Under **Workspace**:
+
+- Uncheck **Restore .RData into workspace at startup**
+- Set **Save workspace to .RData on exit** to **Never**
+
+Under **History**:
+
+- Uncheck **Always save history (even when not saving .RData)**
+- Uncheck **Remove duplicate entries in history**
+
+![](figs/rstudio-remove-data.png){fig-alt="Setting the options so you neither restore nor save your previous session's work." width=70%}
+
+*Setting the options so you neither restore nor save your previous session's work.*
+
+This matters for two reasons:
+
+1. **Reproducibility.** You don't want old objects from your last analysis cluttering your session - and you also don't want to depend on them, accidentally.
+2. **Privacy.** You really do not want private data written into a `.RData` file on disk. You want to read data in, deliberately, every time.
+
+Your history is the list of commands you have typed. Not saving it means you won't come to rely on something you typed in a previous session - which is a good habit to build. You can also do this via the `{usethis}` package:
+
+```{r}
+#| eval: false
+usethis::use_blank_slate()
+```
+
+Now when you restart R, it will always give you clean session. You should make a habit of restarting R and starting from scratch. If your code works from a clean session, you know it will works. And, if it doesn't work in a new session, you know you have a bug you need to solve.
+
+There is event a keyboard shortcut to restart R - worth knowing about:
+
+- **Restart R**: `Cmd/Ctrl + Shift + F10`
+
+While you are in the settings, two more worth turning on:
+
+- **Show line numbers** - you cannot discuss code you cannot point at.
+- **Rainbow parentheses** - cheap insurance against a very common class of error.
+
+![](figs/rstudio-setting-rainbow.png)
+
+::: {.callout-note title="Your Turn"}
+
+There is a really neat feature in RStudio called the "Command Pallete" - it's kind of like "spotlight" or "search" for any setting in RStudio.
+
+Try opening it and searching for "rainbow", using the keyboard shortcut:
+
+- Windows: `Ctrl + Shift + P`
+- Mac: `Cmd + Shift + P`
+
+Try it now, and search for "rename file" and "rainbow":
+
+![](figs/rstudio-show-cmd-palette)
+
+Read more at [Posit's RStudio guide to the Command Palette](https://docs.posit.co/ide/user/ide/guide/ui/command-palette.html)
+
+:::
+
+## Positron
+
+The same settings live under Settings → Extensions → R. The equivalent
+behaviour is off by default, so there is usually nothing to change - but it is
+worth looking, so you know where it is.
+
+Positron also has the command palette! The same command as RStudio.
+
+- Windows: `Ctrl + Shift + P`
+- Mac: `Cmd + Shift + P`
+
+<!-- SCREENSHOT NEEDED: Positron settings, Extensions > R, showing the
+     workspace/restore options. -->
+
+
+
+::: {.callout-note title="Your Turn"}
+
+1. Turn off workspace saving using the settings above, or run `usethis::use_blank_slate()`.
+2. Restart R with `Cmd/Ctrl + Shift + F10`.
+3. Open your most recent analysis script and run it from the top in the clean session.
+4. Did it work? If not - and it very often does not - that gap is exactly what the rest of this course is about.
+
+:::
+
+
+# A common problem: file paths^[This section draws from ["Workflow"](https://qmd4sci.njtierney.com/workflow.html) from my course: ["quarto for scientists"](https://qmd4sci.njtierney.com).]
 
 Before we get into projects, and organising them, I really think it is worthwhile spending a bit of time talking about **file paths**.
 
-## A common problem: file paths^[This section draws from ["Workflow"](https://qmd4sci.njtierney.com/workflow.html) from my course: ["quarto for scientists"](https://qmd4sci.njtierney.com).]
-
-
-Have you ever run into this problem?
+I can almost guarantee that you have run into this problem:
 
 ```{r}
 #| error: true
 read.csv("my-very-important-data-file-somewhere.csv")
 ```
 
-This error is R saying: I do not know where "my-very-important-data-file-somewhere.csv" is.
+This error is R saying: 
 
-Practising _good file storage hygiene_ will help maintain an order to **files**, **paths**, and **directories**. Having an order there means fewer errors like the above.
+> I do not know where "my-very-important-data-file-somewhere.csv" is.
 
-Fewer errors means less time fighting strange errors and more time doing the task. It will make you more productive.
+There are lots of reasons that R doesn't know where that file could be - but the chances are that _you_ know exactly where it is, and now you need to get into the mind of R, to understand where it thinks it is.
+
+We can resolve these errors if we keep our **files**, **paths**, and **directories** ordered. This goes together with a **workflow** for clearly, and portably letting R know where these are. This practice is referred to as **good file path hygiene**.
 
 But we need to define a few of these terms: files, directories, and paths.
 
+## Files, Directories, Paths
+
+Below we show some examples of a folder structure, of directories, and files
+
+```
+Users --------------------------------------------->> Directory/
+  `-- njtierney ----------------------------------->> Directory/
+      `-- Desktop --------------------------------->> Directory/
+          `-- analysis-2026 ----------------------->> Directory/
+              |-- analysis-2026.Rproj -----< File
+              |-- data ---------------------------->> Directory/
+              |   `-- penguins.csv -------< File
+              `-- exploratory-analysis ------------>> Directory/
+              |   |-- explore.R ----------< File
+              |   `-- eda-document.docx --< File
+              |   `-- eda-document.qmd ---< File
+              |   `-- graph.png ----------< File
+              `-- README.md --------------< File
+```
+
+We can refer to a given location with a "path" - which we refer to as a "file path" or a "directory path" depending on which we are navigating to. Here are some examples of paths for two directories, and two files.
+
+- `Users/njtierney/Desktop/analysis-2026/` - directory path of "analysis-2026"
+- `Users/njtierney/Desktop/analysis-2026/README.md` - file path of "README.md"
+- `Users/njtierney/Desktop/analysis-2026/data` - directory path of "data"
+- `Users/njtierney/Desktop/analysis-2026/data/penguins.csv` - file path of "penguins.csv"
+
+Let's talk a bit more about files, directories and paths.
+
 ### Files 📄
 
-- Something I can open. Examples are: R script, "example.R", a word doc, "report.docx", an image "puppy.png", a README, "README.md". 
-- Files have "file extensions, which are the last characters, which tell us what kind of file they are. ".R" is an R script, ".png" is an image file - standing for "portable network graphics", ".md" is a**m**ark**d**own text file.
-
-<!-- TODO Screenshot of files -->
+- Files are something I can open.
+- These are all files: "explore.R", "eda-document.docx", "graph.png", "README.md", "penguins.csv"
+- Files have "file extensions", which are the last characters after a `.`, and they tell us what kind of file they are:
+  - "explore.R" ends with **.R**, it is an R script
+  - "eda-document.docx" is a Microsoft Word Document, ".doc" is an older format
+  - "graph.png" is an image (specifically, a ["PNG"](https://en.wikipedia.org/wiki/PNG))
+  - "README.md" is a is a**m**ark**d**own text file.
+  - "penguins.csv" is a "comma separated values" file
 
 ### Directories 📁
 
@@ -58,14 +188,12 @@ But we need to define a few of these terms: files, directories, and paths.
 - A directory contains files
 - A directory can also contain directories
 
-<!-- TODO: screenshot of directories -->
-
 ### Paths 🛣️
 
 A path, or "file path", or "directory path" is the machine-readable directions to where files on your computer live. Kind of like a street address. "Machine readable" just means your computer can read it easily:
 
-- Machine readable: "1811 Macquarie Street, Hobart, Tasmania"
-- Not-quite machine readable: "The big white building on the corner with the pine tree in town"
+- Machine readable: `/Users/njtierney/Desktop/analysis-2026/data/penguins.csv`
+- Not-quite machine readable: "The folder on my desktop named analysis 2026"
 
 So, the **file path**:
 
@@ -73,43 +201,38 @@ So, the **file path**:
 /Users/njtierney/Desktop/analysis-2026/data/penguins.csv
 ```
 
-Describes the location, (the address) of `penguins.csv`. 
+Describes the location of `penguins.csv`
 
 It might be easier to see this as a tree, or how this file might look in a file explorer on your computer:
 
-:::{.panel-tabset}
-
-## tree
-
-```
-Users
-  `-- njtierney
-      `-- Desktop
-          `-- analysis-2026
-              |-- analysis-2026.Rproj
-              |-- data
-              |   `-- penguins.csv   << THE FILE IS HERE
-              `-- exploratory-analysis
-                  |-- eda-script.R
-                  `-- eda-document.qmd
-```
-
-## file explorer
-
 ![](figs/project-org-file-explorer.png){fig-alt="Example of file and folder structure"}
 
-*Example of file and folder structure*
 
-:::
+## Reading files
 
-
-Each level is a folder inside the one above it. To read that data file, you might write:
+So to read CSV in R, you can put the path of penguins.csv in `read_csv()`:
 
 ```r
 penguins <- read_csv("/Users/njtierney/Desktop/analysis-2026/data/penguins.csv")
 ```
 
-So in the above, the "path" is `"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"`.
+In our diagram, that is this file:
+
+```
+Users
+  `-- njtierney 
+      `-- Desktop 
+          `-- analysis-2026 
+              |-- analysis-2026.Rproj 
+              |-- data 
+              |   `-- penguins.csv -------<< This file is being read in
+              `-- exploratory-analysis
+              |   |-- explore.R 
+              |   `-- eda-document.qmd 
+              |   `-- eda-document.docx 
+              |   `-- graph.png 
+              `-- README.md 
+```
 
 You might also note that sometimes in your work, you don't write down this full path - it is very long! You might do something like:
 
@@ -122,36 +245,33 @@ And this brings us to an important concept - these are two kinds of path:
 - **absolute paths** starts from the root of your computer. 
 - **relative paths** starts from wherever you currently are.
 
-To continue our directions analogy:
-
-- **absolute paths** - the full driving directions to take you from Hobart to Cradle Mountain
-- **relative paths** - the directions from where you are (which might be just down the road!) to Cradle Mountain.
-
-So, the code below is using an absolute path:
+So, the code below is using an **absolute** path:
 
 ```r
 penguins <- read_csv("/Users/njtierney/Desktop/analysis-2026/data/penguins.csv")
 ```
 
-The code below is using a relative path:
+![](figs/org-absolute-path-pen.png)
+
+
+The code below is using a **relative** path:
 
 ```r
 penguins <- read_csv("data/penguins.csv")
 ```
 
-Of the two, the relative path might look nice, because it is shorter. And that's sort of true. 
+![](figs/org-relative-path-pen.png)
 
-But the absolute path will work from anywhere on your machine. Every time. Now.
+- The relative path looks nice and shorter. But it requires context - it needs to know from where you are reading.
+- The absolute path will work from anywhere on your machine. It reads from the lowest folder on your machine.
 
-But will it work on your colleagues machine? On your machine in two weeks, next month, next year?
-
-My absolute path will not work on your machine, because your computer (almost certainly) doesn't have a `/Users/njtierney/` folder. It won't work on your own machine after you reorganise your folders when you spring clean. It won't work on the cloud. 
+But, will the absolute work on your colleagues machine? On your machine in two weeks, next month, next year? No. My absolute path will not work on your machine. Your computer (almost certainly) doesn't have a `/Users/njtierney/` folder. It won't work on your own machine after you reorganise your folders when you spring clean. It won't work on the cloud.
 
 ::: {.callout-note title="Your Turn"}
 
 1. Imagine you see the path `/Users/miles/etc1010/week1/data/health.csv`. What are the folders above the file `health.csv`?
 2. Run `getwd()`. Where are you?
-3. Look at your most recent analysis script. Find every file path in it. How many are absolute?
+3. Look at your most recent analysis script. Find every file path in it. How many are absolute? How many are relative?
 
 :::
 
@@ -215,9 +335,9 @@ This is the heart of the famous line from Jenny Bryan, from her brilliant articl
 >
 > I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.
 
-## Is there an answer to the madness?
+Let's talk about using projects
 
-Yes.
+# Project oriented workflow
 
 When you start on a new idea, a new project, a new paper - anything new - it should start its life as a **project**. In RStudio that is an `.Rproj` file; in Positron it is a **workspace folder**.
 
@@ -241,10 +361,13 @@ And finally, the big one:
 
 **Projects resolve file path problems**, because they automatically set the working directory to the location of the project.
 
-This means you get two habits from this:
+:::{.callout-note title="Your Turn"}
 
-1. **One project, one folder, one `.Rproj` file.** Open the project by double-clicking the `.Rproj` file, not by opening R and navigating around.
-2. **Use relative paths only.** You never call `setwd()` again.
+1. Run `here::here()`. Is it where you expected?
+2. Open another rstudio project. Take one absolute path from your most recent script and rewrite it with `here()`.
+3. What would have to be true about your working directory for the old version to work?
+
+:::
 
 ::: {.callout-caution title="Aside: creating a project" collapse="true"}
 
@@ -347,13 +470,6 @@ penguins <- read_csv(here("data", "penguins.csv"))
 
 works whether the code is called from the top of the project, from inside `analysis/`, or from a Quarto document being rendered in a subfolder - all places where a plain relative path can quietly mean something different.
 
-::: {.callout-note title="Your Turn"}
-
-1. Open a project of your own, and run `here::here()`. Is it where you expected?
-2. Take one absolute path from your most recent script and rewrite it with `here()`.
-3. What would have to be true about your working directory for the old version to work?
-
-:::
 
 ::: {.callout-note title="Your Turn"}
 
@@ -373,7 +489,7 @@ There are no wrong answers! I want to have a discussion, and learn what wins, wh
 
 :::
 
-## Why organise your project?
+# Organise your project with a README
 
 When you are working on a project, you are almost certainly going to be returning to it, at some point. When you do, you might look at the code, and wonder:
 
@@ -383,20 +499,18 @@ And then you realise that indeed, **it was you** that wrote this.
 
 I think it is worthwhile internalising this saying:
 
-> You are always collaborating with your future self.^[I swear I heard ot from someone else, but I cannot find the source]
+> You are always collaborating with your future self.^[I swear I heard it from someone else, but I cannot find the source]
 
-You want to have notes that keep you organised, and help you return to work smoothly. I think the "Who what when where why how" of story telling can be really useful here:
+I think a really easy win here is to have a README file, which is a plain text file that helps answer:
 
 - **Who** did it: Was it just you? Were there many people?
-- **What** you did: what was run
+- **What** you did: What was run
 - **When** you did it: Last year, last month? 
-- **Where** you did it: on your computer? the cloud? 
+- **Where** you did it: On your computer? The cloud? 
 - **Why** you did it: what was the goal
 - **How** you did it: What was the order you ran things? Which file should I look at first?
 
 If you can't answer these questions about a project, how much harder would it be for you to return to it?
-
-It is like making sure your house is tidy, and the dishes are done. It is _technically_ optional, sure. But, it does make your life easier when things are tidy, and always in the same spot. 
 
 I like to think of this as some self-care for your future self. 
 
@@ -408,12 +522,65 @@ A well organised project does not guarantee reproducibility. But, if you can't t
 
 The point is not to tidy your project just so it is tidy. The point is having a tidy project that is well organised makes it easier to check, run later, and understand.
 
-<!-- Note: I think I'd like to very quickly just give people a win here and show them that this part of the lesson is just: write a README, folks. And then some additional motivation -->
+A README does not need to be long. Mine are often ten lines. Here is a complete, entirely adequate README:
 
-<!-- Note: I need a preamble link into the next section, or consider moving these sections around. -->
+```markdown
+# Penguin body mass analysis
+
+Fits a model of penguin body mass against flipper length and species,
+for the 2026 report to the department.
+
+## How to run
+
+Open `penguins.Rproj`, then run the scripts in `analysis/` in order:
+
+1. `01-clean-data.R`
+2. `02-fit-model.R`
+3. `03-make-figures.R`
+
+Figures are written to `output/figures/`.
+
+## Data
+
+`data/penguins.csv` is from the {palmerpenguins} package, saved on
+2026-03-14. Do not edit this file.
+```
+
+Write the README first, if you can, and return to it often.
+
+You can have **more than one README**. A short one inside `data-raw/` explaining where those files came from is often the most valuable file in the whole project.
+
+And it's worth recording **when you obtained the data, and what versions of software you used**, so that someone later, including you, can reconstruct similar conditions.
+
+::: {.callout-note title="Your Turn"}
+
+Write a README for the project you sketched above. Ten lines. Answer the three questions.
+
+Do it now, before you write any code - you will find it clarifies what you are actually about to do.
+
+:::
 
 
-## Pitfalls of organisation
+::: {.callout-tip title="This pays off when the project becomes a paper" collapse="true"}
+
+Everything in this lesson is framed around your future self. But the same structure is what makes your work usable by *anyone* else, and that matters most at publication.
+
+Karthik Ram and I wrote about this in [Common sense approaches to sharing tabular data alongside publication](https://www.cell.com/patterns/fulltext/S2666-3899(21)00230-0) (*Patterns*, 2021). The argument, in short is depositing data doesn't make it reusable, the reusable part is mundane and structural:
+
+- A README that says who, what, when, where and how.
+- **Both** the raw data and the analysis-ready data, each in its own folder.
+- The cleaning script that turns one into the other, kept with the raw data.
+- Metadata describing each variable: its name, what it means, and its type. Enough to stop someone reading a gene sequence as a date.
+- A licence. We recommend CC0.
+
+If you organise your project this way from the start, you don't have to do anything special at submission. You're already most of the way there.
+
+That's the real payoff, and it's why I'd rather you set this up now than tidy it up later.
+
+:::
+
+
+# Pitfalls of organisation
 
 There are so many ways to organise a project. And there is no one correct. And organising a project well is hard. While there isn't a **right** way, there are definitely **better** and **worse** ways. Circling back to the start of the lesson, one of the takeaways from today I want you to remember is:
 
@@ -421,11 +588,11 @@ There are so many ways to organise a project. And there is no one correct. And o
 
 There are a few patterns that I think appear in projects. I am guilty of all of these, so know that I am not judging you if these are how you work now. What I am saying is that it is OK, and that there are some ways you can improve.
 
-I have put most of these patterns together into one repository, which you can see at:
+You can see these patterns in the course exercises repository: <https://github.com/njtierney/rbp-exercises>
 
-https://github.com/njtierney/rbp-materials
+We will quickly move through these now.
 
-### Everything in one folder
+## Everything in one folder
 
 ```
 01-everything-in-one-folder/
@@ -441,7 +608,7 @@ https://github.com/njtierney/rbp-materials
 └── results.csv
 ```
 
-Notice that the R scripts, the data, the figures, a Word document, a screenshot, and `Untitled1.R`, are all _flat_ - they are in the same folder. This works until there are more than about fifteen files, at which point finding anything becomes a search problem. 
+Notice the R scripts, the data, the figures, a Word document, a screenshot, and `Untitled1.R`, are all _flat_ - they are in the same folder. This works until there are more than about fifteen files, at which point finding anything becomes a search problem. 
 
 I think about this as like a grocery list: If my shopping list is only 5 items long, it might not impact me when I go to the shops:
 
@@ -481,6 +648,11 @@ But if I'm buying a bunch of food for the week, some meal prep, and a few other 
 
 ## Ordered
 
+
+::::: { .columns }
+
+::: { .column width="24%" }
+
 - **Produce**
   - Bananas
   - Ginger
@@ -492,14 +664,26 @@ But if I'm buying a bunch of food for the week, some meal prep, and a few other 
   - Eggplants
   - Red capsicum
   - Snow peas
+  
+:::
+
+::: { .column width="24%" }
 
 - **Dairy**
   - Milk
   - Yoghurt
+  
+:::
+
+::: { .column width="24%" }
 
 - **Meat**
   - Chicken thighs
   - 500g beef mince
+  
+:::
+
+::: { .column width="24%" }
 
 - **Pantry**
   - Muesli
@@ -508,13 +692,63 @@ But if I'm buying a bunch of food for the week, some meal prep, and a few other 
   - Coconut milk
   - Tomato paste
   - Onion powder
+  
+:::
+
+:::::
 
 :::
 
-- The problem: Flat directory structure can make it hard to group things to understand how they are related.
-- The (partial) solution: Put similar things into folders (directories) that give them structure.
+In this instance, I would recommend grouping the files into folders
 
-### No clear entry point
+::: {.panel-tabset}
+
+## Problem
+
+Flat directory structure can make it hard to group things to understand how they are related.
+
+
+```
+01-everything-in-one-folder/
+├── Rplot.png
+├── Screen Shot 2026-03-14 at 10.23.45 am.png
+├── Untitled1.R
+├── analysis.R
+├── figure1.png
+├── notes.txt
+├── penguins.csv
+├── plot_stuff.R
+├── report draft.docx
+└── results.csv
+```
+
+## Better
+
+Put similar things into folders (directories) that give them structure.
+
+```
+01-everything-in-one-folder/
+├── internals/
+|   |-- notes.txt
+├── plots/
+|   |-- Rplot.png
+|   |-- Screen Shot 2026-03-14 at 10.23.45 am.png
+|   |-- figure1.png
+|   scripts/
+|   |-- Untitled1.R
+|   |-- analysis.R
+|   |-- plot_stuff.R
+|   data/
+|   |--  penguins.csv
+|   outputs/
+|   |-- results.csv
+|   report draft.docx
+```
+
+:::
+
+
+## No clear entry point
 
 ```
 02-no-clear-entry-point/
@@ -534,8 +768,56 @@ But if I'm buying a bunch of food for the week, some meal prep, and a few other 
 
 There are eleven `.R` files and no way to tell which one runs first. If the only way to know the order they are run in, is only in your head, the project is not reproducible. It is a performance that only you can give.
 
-- The problem: When task order is required, but it is not written down, you cannot reproduce the task.
-- The outcome: Encode the task order in another file, such as "make-project.R", and/or put the files in order.
+::: {.panel-tabset}
+
+## Problem
+
+When task order is required, but it is not written down, you cannot reproduce the task.
+
+<details>
+<summary>showing the above file preview</summary>
+
+```
+02-no-clear-entry-point/
+├── analysis.R
+├── clean.R
+├── data.csv
+├── do_it.R
+├── final.R
+├── helpers.R
+├── main.R
+├── model.R
+├── plots.R
+├── run.R
+├── script.R
+└── tests.R
+```
+
+</details>
+
+## Improvement
+
+Encode the task order in another file, such as "00-run-first.R" - adding numbers to th start of the file will mean they sort the files in order. If files aren't useful anymore, you can delete them, or you can put them in an "attic" folder, if you aren't ready to let them go.
+
+```
+02-no-clear-entry-point/
+├── 00-run-first.R
+├── 01-helpers.R
+├── 02-clean.R
+├── 03-analysis.R
+├── 04-model.R
+├── 05-plots.R
+├── 06-tests.R
+├── 07-final.R
+└── data/
+    └── data.csv
+└── attic/
+    ├── xx-main.R
+    ├── xx-do_it.R
+    └── xx-script.R
+```
+
+:::
 
 ## File names encode history, not content
 
@@ -553,15 +835,59 @@ There are eleven `.R` files and no way to tell which one runs first. If the only
 
 The _names_ of these files tell a story: the analysis progressed, things changed, and there were concerns about knowing which version worked, and being able to go back and change things. You can think of this as using "track changes" in a word document. This is a kind of version control. But naming the files in order to track versions creates problems, and it is better solved with specific version control software, such as git. I cover this in another course, ["Introduction to git and github"](https://gentle-git.njtierney.com/).
 
-- The problem: There are multiples of the same file with names that tell you their version, rather than their task.
-- The solution: Name the files for what they do, not when you made them. Use a version control system like [git]()
+
+::: {.panel-tabset}
+
+## Problem
+
+There are multiples of the same file with names that tell you their version, rather than their task.
+
+<details>
+<summary>showing the above file preview</summary>
+
+```
+04-names-encode-history/
+├── analysis.R
+├── analysis2.R
+├── analysis_final.R
+├── analysis_final_USE_THIS_ONE.R
+├── analysis_final_USE_THIS_ONE_v2 (nick edits).R
+├── analysis_final_USE_THIS_ONE_v2.R
+├── analysis_final_v2.R
+└── penguins.csv
+```
+
+</details>
+
+## solution
+
+Name the files for what they do, not when you made them^[Ideally, you would use a version control system like [git](https://en.wikipedia.org/wiki/Git). Out of scope for this course.]. If you aren't ready to let them go, use the "attic" folder.
+
+```
+04-names-encode-history/
+├── analysis.R
+└── data/
+    └── penguins.csv
+└── attic
+    ├── analysis2.R
+    ├── analysis_final.R
+    ├── analysis_final_USE_THIS_ONE.R
+    ├── analysis_final_USE_THIS_ONE_v2 (nick edits).R
+    ├── analysis_final_USE_THIS_ONE_v2.R
+    └── analysis_final_v2.R
+```
+
+:::
+
 
 ## Editing raw data in place
+
+<!-- note - TODO - show a directoy with .xlsx raw data -->
 
 You might have some data provided for analysis and there might be instructions to go through by hand to fix typos, or add new data. You should not make hand edits to the file, as this changes the history and increases the chances of a non-repeatable change. You can make a critical error by accidentally hitting the wrong key. From experience, having accidentally sorted a single column in an excel sheet and not realising this, I essentially turned a meaningful data source into random noise.
 
 - The problem: Hand editing raw data
-- The solution: raw data should be read-only, and changes that happen to it happen with code, and are saved to separate outputs.
+- The solution: Raw data should be read-only, and changes that happen to it happen with code, and are saved to separate outputs.
 
 ## Outputs mixed in with inputs
 
@@ -592,23 +918,9 @@ Open a project you worked on more than six months ago.
 
 :::
 
-## Common project structures
+# "Good enough" project organisation
 
-There is no single correct structure, but there is a common shape that most working structures converge on:
-
-![The same structure, grouped by what each thing *is* rather than what it is called. Raw data is read only, code in `R/` gets used, scripts in `analysis/` get run in order, and everything in `output/` can be deleted and regenerated.](figs/project-structure-kinds.png){fig-alt="A project folder called my-project, drawn as six rows, one for each kind of thing it holds. Row one: my-project.Rproj and README.md, labelled start here - open the .Rproj, read the README. Row two: data-raw/ containing penguins-raw.csv and clean-penguins.R, labelled read only - never edited by hand, nothing writes here. Row three: data/ containing penguins.csv, labelled made by code - written by data-raw/clean-penguins.R. Row four: R/ containing functions.R, labelled used, not run - functions you call from the scripts below. Row five: analysis/ containing 01-clean-data.R, 02-fit-model.R and 03-make-figures.R, labelled run in order, with an arrow running down the three numbered scripts. Row six: output/ containing figures/ and models/, labelled safe to delete - regenerated by re-running analysis/. Underneath, the test: could I delete this folder and get it back by running my code? Yes for data/ and output/, no for data-raw/, which is why that is the folder you back up." width=100%}
-
-The parts worth noticing:
-
-- **`data-raw/` holds the raw data, exactly as you received it**, along with the script that cleans it. Raw data is read-only, so nothing ever writes here, and you never edit it by hand. Keeping the cleaning script next to the raw data means the two never drift apart.
-- **`data/` holds the analysis-ready data** that the cleaning script produces. This is the version your analysis actually reads.
-- **`R/` holds functions.** Code that gets *used*, not code that gets *run*. We will spend a whole lesson on this.
-- **`analysis/` holds scripts that get run**, in order. The numbering is doing real work: it tells your future self the entry point without needing a README.
-- **`output/` holds things you can delete.** Anything in here can be regenerated by re-running the analysis.
-
-If your project is small, collapse this. Three files in a flat folder with a README is a perfectly good project structure. The point is not to have folders. It is to have *a place where each kind of thing goes*, and to be consistent about it.
-
-::: {.callout-tip title="The same structure as text, if you want to copy it" collapse="true"}
+There is no single correct structure, but there is a common shape that I think gives you a great starting place:
 
 ```
 my-project/
@@ -617,6 +929,7 @@ my-project/
 |-- data-raw/
 |   |-- penguins-raw.csv
 |   `-- clean-penguins.R
+|   `-- README.md
 |-- data/
 |   `-- penguins.csv
 |-- R/
@@ -630,35 +943,15 @@ my-project/
     `-- models/
 ```
 
-:::
+- **README** - as discussed at the start - this guides the reader through just what this is.
+- **`data-raw/` holds the raw data, exactly as you received it**, along with the script that cleans it. Raw data is read-only, so nothing ever writes here, and you never edit it by hand. Keeping the cleaning script next to the raw data means the two never drift apart. Note that there is a README.md in data-raw/ to tell you a bit more about the data. You can have more than one README.
+- **`data/` holds the analysis-ready data** that the cleaning script produces. This is the version your analysis actually reads.
+- **`R/` holds functions.** Code that gets *used*, not code that gets *run*. We will spend a whole lesson on this.
+- **`analysis/` holds scripts that get run**, in order. The numbering is doing real work: it tells your future self the entry point without needing a README.
+- **`output/` holds things you can delete.** Anything in here can be regenerated by re-running the analysis.
 
-### Naming the files themselves
+If your project is small, collapse this. Three files in a flat folder with a README is a perfectly good project structure. The point is not to have folders. It is to have *a place where each kind of thing goes*, and to be consistent about it.
 
-Naming is hard. We will come back to this throughout the course.
-
-This structure tells you **where** things go, but it does not tell you what to **name** them.
-
-The [files chapter of the Tidyverse style guide](https://style.tidyverse.org/files.html) is short, and it is worth your time reading. I also really enjoy Jenny Bryan's talk, ["How to name files like a normie"](https://github.com/jennybc/how-to-name-files):
-
-Some especially good pieces of advice:
-
-- **Machine readable.** No spaces, no punctuation beyond `-` and `_`, and stick to one case. `01-clean-data.R`, not `01 Clean Data (final).R`.
-- **Human readable.** The name should say what the file does. `clean-penguins.R` tells you something. `script2.R` does not.
-- **Sorts sensibly.** Numbers at the front, zero padded, so `01`, `02`, `10` stay in order. Dates as `YYYY-MM-DD`, which sorts correctly for free.
-
-That last one is the sneaky one. If your file names sort properly, your file explorer does your project organisation for you, and you get the running order without needing a README.
-
-You still need the README, of course.
-
-::: {.callout-note title="Your Turn"}
-
-Look at the file names in your most recent project.
-
-1. How many have spaces in them?
-2. If you sorted them alphabetically, would the order mean anything?
-3. Pick the worst named file and give it a better name.
-
-:::
 
 ::: {.callout-note title="Your Turn"}
 
@@ -670,9 +963,62 @@ Sketch the folder structure for a project you are working on right now. Don't cr
 
 :::
 
-## "Good enough" common sense principles of project organisation
+# How to name files
 
-I want to be clear that the goal here is *good enough*, not perfect. This phrasing comes from a paper I recommend to everyone, ["Good enough practices in scientific computing"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510) by Wilson and colleagues. It is aimed at people who have real work to do and no appetite for ceremony.
+Naming is hard. We will come back to this throughout the course. I wasn't quite sure where to put this section, as there is a lot to discuss here.
+
+Having this "good enough" folder structure tells you **where** things go:
+
+
+```
+my-project/
+|-- my-project.Rproj
+|-- README.md
+|-- data-raw/
+|   |-- penguins-raw.csv
+|   `-- clean-penguins.R
+|   `-- README.md
+|-- data/
+|   `-- penguins.csv
+|-- R/
+|   `-- functions.R
+|-- analysis/
+|   |-- 01-clean-data.R
+|   |-- 02-fit-model.R
+|   `-- 03-make-figures.R
+`-- output/
+    |-- figures/
+    `-- models/
+```
+
+but it does not tell you what to **name** them. So let's talk about that.
+
+Some especially good pieces of advice:
+
+- **Machine readable.** No spaces, no punctuation beyond `-` and `_`, and stick to one case. `01-clean-data.R`, not `01 Clean Data (final).R`.
+- **Human readable.** The name should say what the file does. `clean-penguins.R` tells you something. `script2.R` does not.
+- **Sorts sensibly.** Numbers at the front, zero padded, so `01`, `02`, `10` stay in order. Dates as `YYYY-MM-DD`, which sorts correctly for free.
+
+That last one is the sneaky one. If your file names sort properly, your file explorer does your project organisation for you, and you get the running order without needing a README.
+
+If you want to read more about this, I suggest:
+
+- [The files chapter of the Tidyverse style guide](https://style.tidyverse.org/files.html). It is short, and it is worth your time reading. 
+- Jenny Bryan's talk, ["How to name files like a normie"](https://github.com/jennybc/how-to-name-files)
+
+::: {.callout-note title="Your Turn"}
+
+Look at the file names in your most recent project.
+
+1. How many have spaces in them?
+2. If you sorted them alphabetically, would the order mean anything?
+3. Pick the worst named file and give it a better name.
+
+:::
+
+# Make your project "good enough"
+
+I want to be clear that the goal here is *good enough*, not perfect. This phrasing comes from a paper I recommend to everyone, ["Good enough practices in scientific computing"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510) by Wilson et al.
 
 The principles I would hold you to:
 
@@ -697,150 +1043,6 @@ Apply this to your *next* project. Retrofitting a large existing project is a bi
 Go through the seven principles above and score your most recent project out of seven.
 
 Pick the single one that would have saved you the most time, and write down what you would have to change to fix it.
-
-:::
-
-## Always have a README
-
-A README is a plain text file at the top of your project that answers three questions:
-
-1. **What is this?**
-2. **How do I run it?**
-3. **Where does the data come from?**
-
-That's it. It does not need to be long. Mine are often ten lines. Here is a complete, entirely adequate README:
-
-```markdown
-# Penguin body mass analysis
-
-Fits a model of penguin body mass against flipper length and species,
-for the 2026 report to the department.
-
-## How to run
-
-Open `penguins.Rproj`, then run the scripts in `analysis/` in order:
-
-1. `01-clean-data.R`
-2. `02-fit-model.R`
-3. `03-make-figures.R`
-
-Figures are written to `output/figures/`.
-
-## Data
-
-`data/penguins.csv` is from the {palmerpenguins} package, saved on
-2026-03-14. Do not edit this file.
-```
-
-The reason I insist on this is that the README is the only part of your project that explains *intent*. Code tells you what happens. The README tells you what you were trying to do, and that is the thing you will have forgotten.
-
-Write it first, if you can. A README written before the analysis is a plan. A README written after the analysis is an archaeology report.
-
-Two refinements worth knowing.
-
-You can have **more than one README**. A short one inside `data-raw/` explaining where those files came from is often the most valuable file in the whole project.
-
-And it's worth recording **when you obtained the data, and what versions of software you used**, so that someone later, including you, can reconstruct similar conditions.
-
-::: {.callout-tip title="This pays off when the project becomes a paper"}
-
-Everything in this lesson is framed around your future self. But the same structure is what makes your work usable by *anyone* else, and that matters most at publication.
-
-Karthik Ram and I wrote about this in [Common sense approaches to sharing tabular data alongside publication](https://www.cell.com/patterns/fulltext/S2666-3899(21)00230-0) (*Patterns*, 2021). The argument, in short: depositing data doesn't make it reusable. What makes it reusable is mundane and structural.
-
-- A README that says who, what, when, where and how.
-- **Both** the raw data and the analysis-ready data, each in its own folder.
-- The cleaning script that turns one into the other, kept with the raw data.
-- Metadata describing each variable: its name, what it means, and its type. Enough to stop someone reading a gene sequence as a date.
-- A licence. We recommend CC0.
-
-If you organise your project this way from the start, you don't have to do anything special at submission. You're already most of the way there.
-
-That's the real payoff, and it's why I'd rather you set this up now than tidy it up later.
-
-:::
-
-::: {.callout-note title="Your Turn"}
-
-Write a README for the project you sketched above. Ten lines. Answer the three questions.
-
-Do it now, before you write any code - you will find it clarifies what you are actually about to do.
-
-:::
-
-## RStudio and Positron set up
-
-There are two settings that matter more than all the others, and both are about making sure your R session starts empty every time.
-
-By default, R offers to save your workspace when you quit, and reload it when you start. This sounds helpful. It is not. It means your analysis works because of an object you created three weeks ago and can no longer remember making. When you eventually restart cleanly, the code breaks, and you have no idea why.
-
-::: {.panel-tabset}
-
-## RStudio
-
-Tools → Global Options (or `Cmd + ,` on macOS) → General.
-
-Under **Workspace**:
-
-- Uncheck **Restore .RData into workspace at startup**
-- Set **Save workspace to .RData on exit** to **Never**
-
-Under **History**:
-
-- Uncheck **Always save history (even when not saving .RData)**
-- Uncheck **Remove duplicate entries in history**
-
-![](figs/rstudio-remove-data.png){fig-alt="Setting the options so you neither restore nor save your previous session's work." width=70%}
-
-*Setting the options so you neither restore nor save your previous session's work.*
-
-## Positron
-
-The same settings live under Settings → Extensions → R. The equivalent
-behaviour is off by default, so there is usually nothing to change - but it is
-worth looking, so you know where it is.
-
-<!-- SCREENSHOT NEEDED: Positron settings, Extensions > R, showing the
-     workspace/restore options. -->
-
-:::
-
-This matters for two reasons:
-
-1. **Reproducibility.** You don't want objects from last week cluttering your session, and you don't want an analysis that only works because of one of them.
-2. **Privacy.** You don't want private data written into a `.RData` file on disk as a side effect of quitting. You want to read data in, deliberately, every time.
-
-Your history is the list of commands you have typed. Not saving it means you won't come to rely on something you typed in a previous session - which is a good habit to build.
-
-You can also do this from code:
-
-```r
-usethis::use_blank_slate()
-```
-
-With that set, restarting R gives you a genuinely clean session. The keyboard shortcut is worth memorising:
-
-- **Restart R**: `Cmd/Ctrl + Shift + F10`
-
-The habit that goes with it: **restart R often, and re-run your script from the top.** If it works from a clean session, it works. If it only works in your current session, you have a bug that hasn't happened yet.
-
-This is also the single cheapest check that your project is portable.
-
-Running your scripts in a clean environment is how you find out whether the code quietly depends on something that only exists on your machine. An object you made by hand, a package you loaded and forgot, or your own folder layout.
-
-Nobody else has any of those.
-
-While you are in the settings, two more worth turning on:
-
-- **Show line numbers** - you cannot discuss code you cannot point at.
-- **Rainbow parentheses** - cheap insurance against a very common class of error.
-
-::: {.callout-note title="Your Turn"}
-
-1. Turn off workspace saving using the settings above, or run `usethis::use_blank_slate()`.
-2. Restart R with `Cmd/Ctrl + Shift + F10`.
-3. Open your most recent analysis script and run it from the top in the clean session.
-4. Did it work? If not - and it very often does not - that gap is exactly what the rest of this course is about.
 
 :::
 

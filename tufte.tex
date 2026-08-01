@@ -43,11 +43,119 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+% --- Fix: Quarto's margin packages vs tufte's own --------------------------
+%
+% Quarto emits, near the end of its preamble:
+%
+%   \@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
+%   \@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
+%
+% Both abort the build on this class, because tufte-common.def has already
+% defined \sidenote and \marginnote itself:
+%
+%   "Command \marginnote already defined."
+%   "Command '\sidenote' already defined."
+%
+% Those two packages give an ordinary class the margin apparatus that
+% tufte-book is built around, so here they are redundant - and nothing in
+% the book calls either command. Declaring them already loaded makes Quarto
+% take the empty branch and leaves tufte's versions in place. This has to
+% come before Quarto's block, which it does: include-in-header lands earlier
+% in the preamble.
+\makeatletter
+\@namedef{ver@sidenotes.sty}{9999/01/01}
+\@namedef{ver@marginnote.sty}{9999/01/01}
+\makeatother
+
+% --- Every image runs the full width of its column ------------------------
+%
+% Images arrive here three ways, and only the first is already full width:
+%
+%   1. `width=100%` in the .qmd  -> \includegraphics[width=1\linewidth]
+%   2. `width=70%`  in the .qmd  -> \includegraphics[width=0.7\linewidth]
+%   3. no width at all           -> \pandocbounded{\includegraphics{...}},
+%      which only ever *shrinks* an image to fit, never grows it, so a small
+%      PNG stays small.
+%
+% Rather than edit every image in the source - which would also change the
+% HTML, where the 70% sizing is wanted - force the width here. This file is
+% only loaded by the PDF format, so HTML is untouched.
+%
+% The passed options `#1` are kept and our width is appended *after* them:
+% graphicx uses the last value given for a key, so this beats an explicit
+% `width=0.7\linewidth` while preserving `alt=`, which carries the fig-alt
+% text into the tagged PDF.
+\usepackage{letltxmacro}
+\LetLtxMacro{\rbporigincludegraphics}{\includegraphics}
+\renewcommand{\includegraphics}[2][]{%
+  \rbporigincludegraphics[#1,width=\linewidth,height=\maxdimen,keepaspectratio]{#2}%
+}
+
 % Code blocks are wider than tufte's narrow text column, so allow a little
 % overflow into the margin rather than letting lines run off the page.
-% (Wrapping Shaded in `fullwidth` does not work: Shaded contains snugshade,
-% and the environments do not nest.)
 \usepackage{fvextra}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{
   breaklines, breaknonspaceingroup, breakanywhere, commandchars=\\\{\}
 }
+
+% --- Code blocks run out into the margin -----------------------------------
+%
+% Quarto sets code as `Shaded` (from `framed`) wrapping `Highlighting`, and
+% `Shaded` takes its width from \hsize, which in tufte is the narrow text
+% column. That squeezes pipelines onto wrapped lines.
+%
+% Wrapping Shaded in tufte's `fullwidth` does not work: `fullwidth` is a
+% `changepage` list environment, and `framed` cannot survive inside a list.
+% It fails with "\begin{snugshade} ended by \end{list}".
+%
+% So widen the measure rather than moving the block: add tufte's own
+% \@tufte@overhang to \hsize before `framed` reads it. `framed` keeps its
+% page-breaking, which a \parbox-based box would lose, and long code blocks
+% here do break across pages.
+%
+% The \ifdim guard keeps this to top-level code only: widening code set
+% inside a callout would push it out through the side of the box.
+%
+% The comparison has to be against a saved copy of the body width, not
+% against \textwidth. Quarto sets callouts as tcolorbox, and tcolorbox
+% re-points \textwidth at the box's inner width along with \linewidth and
+% \hsize - so `\ifdim\linewidth=\textwidth` is true inside a callout too,
+% and every code block gets widened. \rbpbodywidth is set once, at the top
+% level, where it records the real measure.
+\makeatletter
+\newdimen\rbpbodywidth
+\AtBeginDocument{\rbpbodywidth=\textwidth}
+\let\rbporigShaded\Shaded
+\let\rbporigendShaded\endShaded
+\renewenvironment{Shaded}{%
+  \begingroup
+  \ifdim\linewidth=\rbpbodywidth
+    \advance\linewidth by \@tufte@overhang
+    \advance\hsize by \@tufte@overhang
+    \advance\columnwidth by \@tufte@overhang
+  \fi
+  \rbporigShaded
+}{%
+  \rbporigendShaded
+  \endgroup
+}
+\makeatother
+
+% --- Figures span the text column and the margin ---------------------------
+%
+% A plain `figure` in tufte-book is only as wide as the narrow text column,
+% which leaves the diagrams in this book too small to read. tufte-book's
+% `figure*` is its fullwidth float: it spans the text column, the gutter and
+% the margin column, and still sets the caption in the margin.
+%
+% Quarto always emits `\begin{figure}`, and there is no format option that
+% changes that on this class - `fig-column` only affects the HTML. So alias
+% the environment: every figure becomes a fullwidth one. Combined with the
+% \includegraphics width above, `\linewidth` inside the float is now the
+% full measure, so the image fills it.
+\makeatletter
+\AtBeginDocument{%
+  \expandafter\let\expandafter\figure\csname figure*\endcsname
+  \expandafter\let\expandafter\endfigure\csname endfigure*\endcsname
+}
+\makeatother
