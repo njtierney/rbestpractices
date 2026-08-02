@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Writing readable code – R Best Practices</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./code-style-and-readability.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7002e898bdb3cc4fe1c43d944ce9f4e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./writing-readable-code.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Best Practices</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/njtierney/rbestpractices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project-organisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-style-and-readability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-readable-code.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">3.1</span> Overview</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions"><span class="header-section-number">3.2</span> Questions</a></li>
+  <li><a href="#where-we-are-up-to" id="toc-where-we-are-up-to" class="nav-link" data-scroll-target="#where-we-are-up-to"><span class="header-section-number">3.3</span> Where we are up to</a></li>
+  <li><a href="#good-vs-bad-variable-names" id="toc-good-vs-bad-variable-names" class="nav-link" data-scroll-target="#good-vs-bad-variable-names"><span class="header-section-number">3.4</span> Good vs bad variable names</a></li>
+  <li><a href="#de-chunking-code" id="toc-de-chunking-code" class="nav-link" data-scroll-target="#de-chunking-code"><span class="header-section-number">3.5</span> De-chunking code</a></li>
+  <li><a href="#what-to-look-for" id="toc-what-to-look-for" class="nav-link" data-scroll-target="#what-to-look-for"><span class="header-section-number">3.6</span> What to look for</a>
+  <ul class="collapse">
+  <li><a href="#code-smells" id="toc-code-smells" class="nav-link" data-scroll-target="#code-smells"><span class="header-section-number">3.6.1</span> Code smells</a></li>
+  <li><a href="#inputs-and-outputs" id="toc-inputs-and-outputs" class="nav-link" data-scroll-target="#inputs-and-outputs"><span class="header-section-number">3.6.2</span> Inputs and outputs</a></li>
+  <li><a href="#complexity-that-has-a-simpler-form" id="toc-complexity-that-has-a-simpler-form" class="nav-link" data-scroll-target="#complexity-that-has-a-simpler-form"><span class="header-section-number">3.6.3</span> Complexity that has a simpler form</a></li>
+  <li><a href="#refactoring" id="toc-refactoring" class="nav-link" data-scroll-target="#refactoring"><span class="header-section-number">3.6.4</span> Refactoring</a></li>
+  </ul></li>
+  <li><a href="#a-process-for-reviewing-code" id="toc-a-process-for-reviewing-code" class="nav-link" data-scroll-target="#a-process-for-reviewing-code"><span class="header-section-number">3.7</span> A process for reviewing code</a>
+  <ul class="collapse">
+  <li><a href="#run-the-automated-checks-first" id="toc-run-the-automated-checks-first" class="nav-link" data-scroll-target="#run-the-automated-checks-first"><span class="header-section-number">3.7.1</span> 1. Run the automated checks first</a></li>
+  <li><a href="#read-it-top-to-bottom-and-dont-edit-anything" id="toc-read-it-top-to-bottom-and-dont-edit-anything" class="nav-link" data-scroll-target="#read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.7.2</span> 2. Read it top to bottom, and don’t edit anything</a></li>
+  <li><a href="#chunk-it-up" id="toc-chunk-it-up" class="nav-link" data-scroll-target="#chunk-it-up"><span class="header-section-number">3.7.3</span> 3. Chunk it up</a></li>
+  <li><a href="#expression-can-you-follow-it" id="toc-expression-can-you-follow-it" class="nav-link" data-scroll-target="#expression-can-you-follow-it"><span class="header-section-number">3.7.4</span> 4. Expression: can you follow it?</a></li>
+  <li><a href="#re-expression-can-you-say-it-more-simply" id="toc-re-expression-can-you-say-it-more-simply" class="nav-link" data-scroll-target="#re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.7.5</span> 5. Re-expression: can you say it more simply?</a></li>
+  </ul></li>
+  <li><a href="#reviewing-someone-elses-code" id="toc-reviewing-someone-elses-code" class="nav-link" data-scroll-target="#reviewing-someone-elses-code"><span class="header-section-number">3.8</span> Reviewing someone else’s code</a>
+  <ul class="collapse">
+  <li><a href="#start-by-asking-what-they-want" id="toc-start-by-asking-what-they-want" class="nav-link" data-scroll-target="#start-by-asking-what-they-want"><span class="header-section-number">3.8.1</span> Start by asking what they want</a></li>
+  <li><a href="#non-adversarial-on-purpose" id="toc-non-adversarial-on-purpose" class="nav-link" data-scroll-target="#non-adversarial-on-purpose"><span class="header-section-number">3.8.2</span> Non-adversarial, on purpose</a></li>
+  <li><a href="#exercise-the-code-dont-just-read-it" id="toc-exercise-the-code-dont-just-read-it" class="nav-link" data-scroll-target="#exercise-the-code-dont-just-read-it"><span class="header-section-number">3.8.3</span> Exercise the code, don’t just read it</a></li>
+  <li><a href="#it-will-be-slow-at-first" id="toc-it-will-be-slow-at-first" class="nav-link" data-scroll-target="#it-will-be-slow-at-first"><span class="header-section-number">3.8.4</span> It will be slow at first</a></li>
+  </ul></li>
+  <li><a href="#clean-as-you-go" id="toc-clean-as-you-go" class="nav-link" data-scroll-target="#clean-as-you-go"><span class="header-section-number">3.9</span> Clean as you go</a></li>
+  <li>Links</li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/writing-readable-code.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-writing-readable-code" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>We have focussed on a lot of structural things, that I would class as “easy wins” - but we haven’t necessarily talked about how to read the code properly. In this section we go over what you are looking for when you read code, some ideas on a process for reviewing your code, or anothers code.</p>
+<section id="overview" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">3.1</span> Overview</h2>
+<ul>
+<li><strong>Duration</strong> 45 minutes</li>
+</ul>
+</section>
+<section id="questions" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="questions"><span class="header-section-number">3.2</span> Questions</h2>
+<ul>
+<li>Where does readable code start, once the tools have done their bit?</li>
+<li>What makes a variable name good enough?</li>
+<li>How do I break a wall of code into readable pieces?</li>
+<li>What am I actually looking for when I read code?</li>
+<li>How do I review code, including my own?</li>
+</ul>
+</section>
+<section id="where-we-are-up-to" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="where-we-are-up-to"><span class="header-section-number">3.3</span> Where we are up to</h2>
+<p><a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a> was about where things live. A project that opens, paths that work on someone else’s machine, a README that says what the thing is.</p>
+<p><a href="code-style-and-readability.html" class="quarto-xref">Code style and readability&nbsp;<span>2</span></a> was about how the code looks. Pick a naming convention. Let <code>air</code> or {styler} handle the layout. Let a linter like {jarl} or {flir} tell you about the rest.</p>
+<p>Organising your project is putting your notes and drafts in sensible folders. Running <code>air</code> is spell check, and running a linter is the automatic grammar check that tells you a sentence has no verb.</p>
+<p>In this chapter, we go through how to review code and ask whether a person can follow it.</p>
+</section>
+<section id="good-vs-bad-variable-names" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="good-vs-bad-variable-names"><span class="header-section-number">3.4</span> Good vs bad variable names</h2>
+<p>There is a quote attributed to <a href="https://www.karlton.org/">Phil Karlton</a>:</p>
+<blockquote class="blockquote">
+<p>There are only two hard things in computer science: cache invalidation and naming things.</p>
+</blockquote>
+<p>Read Yihui Xie’s blog post to learn about cache invalidation.</p>
+<p>The point is, naming things well is genuinely hard. One way through this, is to lower the bar a bit:</p>
+<blockquote class="blockquote">
+<p><strong>giving things an OK name is much easier than giving things a great name.</strong></p>
+</blockquote>
+<p>As you practice giving OK names to things, you’ll get more practice at naming, and get better. But don’t put too much into it.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Some history: where the quote comes from">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Some history: where the quote comes from
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Phil Karlton was a principal developer at Xerox PARC, DEC, Silicon Graphics and Netscape. <a href="https://martinfowler.com/bliki/TwoHardThings.html">Martin Fowler has written up the provenance of the quote</a>, which is more interesting than you’d expect. Nobody has ever found where Karlton first said it, and it seems to have travelled by word of mouth from about 1996.</p>
+</div>
+</div>
+</div>
+<p>In <a href="code-style-and-readability.html" class="quarto-xref">Code style and readability&nbsp;<span>2</span></a> we talked about naming <em>conventions</em>. Pick one, stick to it, and get tab complete for free.</p>
+<p>This is the other half. A name can follow your convention perfectly and still tell you nothing.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"survey.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>df2 <span class="ot">&lt;-</span> df1[df1<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2024</span>, ]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>df3 <span class="ot">&lt;-</span> df2[df2<span class="sc">$</span>site <span class="sc">==</span> <span class="st">"north"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That is consistent, it is <code>air</code>-clean, and a linter has no complaint about it. But if I meet <code>df3</code> two hundred lines later I have to go back and reconstruct what it is.</p>
+<p>Compare:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>survey_raw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"survey.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>survey_2024 <span class="ot">&lt;-</span> survey_raw[survey_raw<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2024</span>, ]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>survey_north <span class="ot">&lt;-</span> survey_2024[survey_2024<span class="sc">$</span>site <span class="sc">==</span> <span class="st">"north"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Same code, and now the name carries the history of what happened to the data.</p>
+<p>There is a small counter-example. Inside very short functions, <code>x</code> is often the right name, precisely because the function is small enough that you can see everything at once. But that is the exception, and you will know when you are in it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Open <code>07-needs-review/analysis.R</code> from the messy project repo. Find every object whose name tells you nothing about what it holds.</li>
+<li>Rename three of them. Don’t try to do all of them, and don’t aim for perfect names. Aim for OK.</li>
+<li>Did renaming change how long it took you to work out what the next section does?</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="de-chunking-code" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="de-chunking-code"><span class="header-section-number">3.5</span> De-chunking code</h2>
+<p>Here is a phone number:</p>
+<pre><code>1-8-0-0-1-3-1-0-8-6</code></pre>
+<p>Ten digits. Try to hold them in your head. Now try this:</p>
+<pre><code>1800 131 086</code></pre>
+<p>Same ten digits, and suddenly it’s easy.</p>
+<p>Nothing about the information changed. Only the <strong>chunking</strong> did.</p>
+<p>This is not a party trick. Our working memory holds roughly <strong>seven, plus or minus two</strong> chunks at once, a finding from George Miller’s 1956 paper <a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">“The magical number seven, plus or minus two”</a>. Crucially, memory isn’t limited by the amount of information. It’s limited by the <em>number of chunks</em>.</p>
+<p>So make bigger chunks and you hold more.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/chunking-working-memory.png" class="img-fluid figure-img" style="width:100.0%" alt="Ten pink boxes each holding one digit of 1800131086, labelled 10 chunks, beyond your limit. Below, the same digits in three green boxes reading 1800, 131 and 086, labelled 3 chunks, well within it. Underneath, a box filled with twenty-six anonymous grey lines labelled 50 lines, an arrow pointing right, and a box holding five named green bars: read the data, clean the names, fit the model, build the table, save the figure."></p>
+<figcaption>Ten loose digits are ten chunks. Grouped as a phone number they are three, and code works the same way.</figcaption>
+</figure>
+</div>
+<p>Code is the same. The question to keep asking is:</p>
+<blockquote class="blockquote">
+<p>How do I take all this complexity and break it into smaller pieces, each of which I can reason about, each of which I can hold in my head?</p>
+</blockquote>
+<p>So when you look at a long script:</p>
+<ul>
+<li><strong>50 lines of code is not 50 ideas.</strong> It is usually four or five ideas, written out longhand.</li>
+<li><strong>Chunk the code into ideas.</strong> Where does one thing end and the next begin?</li>
+<li><strong>Reason with them.</strong> Can you say what each chunk does in a sentence?</li>
+<li><strong>Find the complexity</strong>, and <strong>abstract it</strong>, often into a function with a name that says what the chunk was for.</li>
+</ul>
+<p>That last step is what the functions lesson is about. But the chunking comes first, and you can do it with nothing more than a blank line and a comment.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>In <code>07-needs-review/analysis.R</code>, mark where one idea ends and the next begins. A blank line and a comment is enough.</li>
+<li>How many ideas are in there? Write the number down before you count the lines.</li>
+<li>Are any two of those chunks doing the same thing to different data?</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="what-to-look-for" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="what-to-look-for"><span class="header-section-number">3.6</span> What to look for</h2>
+<p>Once the tools have done their bit, what are you actually reading <em>for</em>?</p>
+<p>Here are four things worth having names for:</p>
+<ol type="1">
+<li>Code Smells</li>
+<li>Inputs &amp; outputs</li>
+<li>Complexity that has a simpler form</li>
+<li>Refactoring</li>
+</ol>
+<section id="code-smells" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="code-smells"><span class="header-section-number">3.6.1</span> Code smells</h3>
+<p>A code smell is a bit of code that isn’t wrong, but that makes you uneasy.</p>
+<p>The word is deliberate, because it is the feeling of opening the fridge and knowing something in there has gone off before you have worked out what.</p>
+<p>Smells are useful precisely because they are cheap, and you do not have to prove anything to act on one. You notice that a function is doing three things, or that a block has been copied twice with one number changed, and you make a note.</p>
+<p>For a great introduction to this, watch <a href="https://www.youtube.com/watch?v=7oyiPBjLAWY">Jenny Bryan’s “Code smells and feels”</a>.</p>
+</section>
+<section id="inputs-and-outputs" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="inputs-and-outputs"><span class="header-section-number">3.6.2</span> Inputs and outputs</h3>
+<p>For any section of code, two questions:</p>
+<p><strong>What does this need in order to run?</strong> and <strong>what does it leave behind?</strong></p>
+<p>If a chunk needs six objects that were made in four different places, that’s the finding. You’ve found something that can’t be moved, can’t be tested, and can’t be understood on its own.</p>
+<p>The same goes the other way. A chunk that creates nine objects, seven of which are never used again, is a chunk that hasn’t decided what it’s for.</p>
+<p>Long sections with many inputs and many outputs are the ones worth your attention. They’re almost always several ideas wearing one coat.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/chunk-inputs-outputs.png" class="img-fluid figure-img" style="width:100.0%" alt="Two chunks compared. The first is fed by six pink arrows leaving four boxes labelled line 12, line 40, line 88 and line 130, and emits nine arrows: two green ones reach a box marked used later, and seven orange ones stop dead at a dashed wall marked never used again. The second chunk takes one green arrow in from survey_2024 and sends one green arrow out to survey_north."></p>
+<figcaption>Count the arrows going in and the arrows coming out. That count is the finding.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Open <code>08-curly-code/penguin-report.R</code> and find the longest stretch of code between two blank lines.</p>
+<ol type="1">
+<li>List what it needs in order to run. Where was each of those things made?</li>
+<li>List what it leaves behind. How many of them are ever used again?</li>
+<li>Is that one idea, or several wearing one coat?</li>
+</ol>
+<p>You do not have to fix anything. Counting the arrows is the exercise.</p>
+</div>
+</div>
+</section>
+<section id="complexity-that-has-a-simpler-form" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="complexity-that-has-a-simpler-form"><span class="header-section-number">3.6.3</span> Complexity that has a simpler form</h3>
+<p>Sometimes code is doing something perfectly reasonable in a roundabout way, and R already has the direct version.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">sapply</span>(my_list, <span class="cf">function</span>(i) <span class="fu">length</span>(i))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That works, but R already has:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="fu">lengths</span>(my_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Same answer, and now the line says what it means rather than how it is done.</p>
+<p>You cannot spot these unless you happen to know the shortcut, which is a bit unfair. So do not go hunting for them. Just notice when a line feels like more machinery than the idea deserves, and have a look.</p>
+</section>
+<section id="refactoring" class="level3" data-number="3.6.4">
+<h3 data-number="3.6.4" class="anchored" data-anchor-id="refactoring"><span class="header-section-number">3.6.4</span> Refactoring</h3>
+<p><strong>Refactoring</strong> means changing code while keeping its behaviour the same.</p>
+<p>It is like giving a car a service, or replacing parts that have worn out. The car still drives the same, it just does so more reliably.</p>
+<p>This is the move you make once you have found a smell. The behaviour is fine, and the expression of it is not.</p>
+</section>
+</section>
+<section id="a-process-for-reviewing-code" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="a-process-for-reviewing-code"><span class="header-section-number">3.7</span> A process for reviewing code</h2>
+<p>Here is the process I actually use, and it works on my own code as well as on other people’s.</p>
+<p>The principle underneath it is this: <strong>let the machine review the mechanics, so that people can review the thinking.</strong></p>
+<p>If a human reviewer spends their attention on spacing, on a misspelled word in a comment, or on <code>any(is.na(x))</code>, that attention is gone and it was worth almost nothing. Those are all things a tool does perfectly, instantly, every time.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/review-process-machine-then-person.png" class="img-fluid figure-img" style="width:100.0%" alt="Two stacked bands. The upper grey band holds step 1, run the automated checks first, with pills for air format, jarl check, spelling colon colon spell underscore check underscore files, and restart R run from the top; it is labelled done by a machine, in seconds. An arrow crosses the gap saying only then is it worth a person's time. The lower purple band holds steps 2 to 5 - read it top to bottom and edit nothing, chunk it up, expression, and re-expression - labelled only a person can do these."></p>
+<figcaption>One of these five steps is a machine’s job. The other four are the review.</figcaption>
+</figure>
+</div>
+<section id="run-the-automated-checks-first" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="run-the-automated-checks-first"><span class="header-section-number">3.7.1</span> 1. Run the automated checks first</h3>
+<p>Before anyone reads it:</p>
+<ul>
+<li><strong>Format it.</strong> <code>air format .</code></li>
+<li><strong>Lint it.</strong> <code>jarl check .</code> or <code>lintr::lint_dir()</code></li>
+<li><strong>Spell check it.</strong> <code>spelling::spell_check_files()</code></li>
+<li><strong>Run it from a clean session.</strong> Restart R, run from the top. If it doesn’t run, nothing else matters yet.</li>
+</ul>
+<p>Only then is it worth a person’s time.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Go deeper: if what you are reviewing is a package">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Go deeper: if what you are reviewing is a package
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Everything above works on a folder of scripts. If you are reviewing an R package, there is a tool that checks the habits a package is supposed to have:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>goodpractice<span class="sc">::</span><span class="fu">gp</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It runs <code>R CMD check</code>, a set of linters, and a pile of structural checks - whether there is a README, whether the DESCRIPTION is well formed, whether functions are too long or too complex, whether there are tests.</p>
+<p>The reason it is down here rather than in the list above is that most of what it checks only exists in a package. Pointed at an analysis project, the great majority of its checks have nothing to look at.</p>
+<p>So: excellent tool, wrong shape for the code most of us are reviewing day to day. Worth knowing it exists for the day you write a package.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="read-it-top-to-bottom-and-dont-edit-anything" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.7.2</span> 2. Read it top to bottom, and don’t edit anything</h3>
+<p>This one is harder than it sounds, because the urge to fix the first thing you see is strong.</p>
+<p>Resist it, because on this pass you are only getting the shape of the thing.</p>
+<p>What you are collecting is a list of the places where the code caught you. The bits where it did not quite make sense, or where something was not clear, or where you had to read a line twice.</p>
+<p>Those moments are the data, so mark them and keep going.</p>
+</section>
+<section id="chunk-it-up" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="chunk-it-up"><span class="header-section-number">3.7.3</span> 3. Chunk it up</h3>
+<p>Now put similar things together.</p>
+<ul>
+<li>All <code>library()</code> calls at the top, in alphabetical order.</li>
+<li>All function definitions together.</li>
+<li>If a variable is defined at line 10 and isn’t used until line 150, move them closer to each other.</li>
+<li>Sections of code that do similar things should sit near each other.</li>
+<li>Add commented section headers so you can see where a new area starts.</li>
+<li>If one of those sections gets long, should it be its own script?</li>
+</ul>
+<p>None of this changes what the code does, and all of it changes how much you have to hold in your head to read it.</p>
+</section>
+<section id="expression-can-you-follow-it" class="level3" data-number="3.7.4">
+<h3 data-number="3.7.4" class="anchored" data-anchor-id="expression-can-you-follow-it"><span class="header-section-number">3.7.4</span> 4. Expression: can you follow it?</h3>
+<p>Now go back to the places that caught you in step 2.</p>
+<p>For each one: <strong>do you understand what the code is doing when you read it?</strong></p>
+<p>Not what it does line by line. What it’s <em>for</em>. If you can’t say it in a sentence, that’s the finding.</p>
+</section>
+<section id="re-expression-can-you-say-it-more-simply" class="level3" data-number="3.7.5">
+<h3 data-number="3.7.5" class="anchored" data-anchor-id="re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.7.5</span> 5. Re-expression: can you say it more simply?</h3>
+<p>The last question is the useful one.</p>
+<p><strong>Can you re-express the intention of the code, and keep the output the same?</strong></p>
+<p>That is refactoring, and it is where the smells you noticed earlier get cashed in. The copied block becomes a function, the nine objects become one, and the <code>sapply</code> becomes <code>lengths</code>.</p>
+<p>Then you run it again and check that the output did not move.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Some questions worth asking as you go">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Some questions worth asking as you go
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Can I tell what this is for?</strong> If you cannot say it in a sentence, that is the finding.</p>
+<p><strong>Is the running order obvious?</strong> Could a stranger tell what to run first?</p>
+<p><strong>Are the names consistent, and do they mean anything?</strong> <code>get.data()</code> versus <code>getData()</code> versus <code>get_data()</code> in one project is a real cost, paid every time someone has to remember which.</p>
+<p><strong>Can I reason about each piece separately?</strong> Or do I have to hold the whole thing in my head at once? This is the chunking question from earlier, asked about someone else’s code.</p>
+<p><strong>What would break if the data changed slightly?</strong> Extra column, a new <code>NA</code>, a factor level nobody expected.</p>
+<p><strong>Is anything here that I could regenerate?</strong> Or, conversely, is anything precious sitting somewhere disposable?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Run steps 1 to 3 on <code>07-needs-review/analysis.R</code>. Actually run <code>air</code> and the linter. Don’t just read them.</li>
+<li>The code still isn’t easy to follow. Write down three places where it caught you.</li>
+<li>Pick one and do step 5. Re-express it, then check the output hasn’t changed.</li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="reviewing-someone-elses-code" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="reviewing-someone-elses-code"><span class="header-section-number">3.8</span> Reviewing someone else’s code</h2>
+<p>Everything above works on your own code. Doing it to someone else’s is a different skill, and most of the difference is social rather than technical.</p>
+<ol type="1">
+<li>Start by asking what they want</li>
+<li>Non-adversarial</li>
+<li>Run the code, don’t just read it</li>
+<li>It will be slow, at first</li>
+<li></li>
+</ol>
+<section id="start-by-asking-what-they-want" class="level3" data-number="3.8.1">
+<h3 data-number="3.8.1" class="anchored" data-anchor-id="start-by-asking-what-they-want"><span class="header-section-number">3.8.1</span> Start by asking what they want</h3>
+<p>The most useful question you can ask before reading a single line is: <strong>what kind of feedback are you looking for?</strong></p>
+<p>Someone who wants to know whether the statistics are right does not want thirty comments about variable names.</p>
+<p>And the second question: <strong>what is this code meant to do?</strong></p>
+<p>Find the intention before you review the implementation. Half of what looks like a mistake turns out to be a decision you didn’t have the context for.</p>
+</section>
+<section id="non-adversarial-on-purpose" class="level3" data-number="3.8.2">
+<h3 data-number="3.8.2" class="anchored" data-anchor-id="non-adversarial-on-purpose"><span class="header-section-number">3.8.2</span> Non-adversarial, on purpose</h3>
+<p>Review is not a verdict. The goal is better code, not a judgement about whether the code passed.</p>
+<p>That sounds obvious written down, and it is surprisingly easy to lose once you are twenty comments deep.</p>
+<p>Two things that keep it on track.</p>
+<p><strong>Review the code, not the person.</strong> “This function is doing three things” is useful. “You always overcomplicate things” isn’t.</p>
+<p><strong>Say what’s good, specifically.</strong> This is not politeness. If you only ever name problems, people learn what to avoid but never what to aim for.</p>
+</section>
+<section id="exercise-the-code-dont-just-read-it" class="level3" data-number="3.8.3">
+<h3 data-number="3.8.3" class="anchored" data-anchor-id="exercise-the-code-dont-just-read-it"><span class="header-section-number">3.8.3</span> Exercise the code, don’t just read it</h3>
+<p>Don’t review from reading alone. Run it.</p>
+<p>Then run it on something slightly different from what the author ran it on. Your data, an extra column, a year that isn’t in their file.</p>
+<p>Reading tells you whether code is comprehensible. Running it on something unfamiliar is what surfaces the assumptions the author didn’t know they were making.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="When it breaks and you cannot see why">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>When it breaks and you cannot see why
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cut it down. Take the failing thing and remove everything that is not needed to make it fail, one piece at a time, until what is left is small enough to see through.</p>
+<p>That is a review technique, and it is also exactly how you make a <strong>reprex</strong> - a small self-contained example someone else can run. We come back to it properly later in the course. For now the useful habit is the same either way: make it smaller until it is obvious.</p>
+</div>
+</div>
+</section>
+<section id="it-will-be-slow-at-first" class="level3" data-number="3.8.4">
+<h3 data-number="3.8.4" class="anchored" data-anchor-id="it-will-be-slow-at-first"><span class="header-section-number">3.8.4</span> It will be slow at first</h3>
+<p>Your first few reviews will take ages, and you will finish them feeling like you did not have much to say.</p>
+<p>That is normal, and it is what reviewing is like at the start.</p>
+<p>Reviewing is a skill like any other, and it gets faster with practice. The people who seem to spot things instantly have simply read a lot of code.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="If you want to see this done at full scale">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>If you want to see this done at full scale
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Open software peer review is the most developed version of this practice, and it is all public. <a href="https://devguide.ropensci.org/softwarereview_reviewer.html">rOpenSci’s reviewer guide</a> sets out what a reviewer is asked to look at, and their <a href="https://devguide.ropensci.org/reviewtemplate.html">review template</a> is the checklist itself. Reviews happen in the open on GitHub and are signed, so you can read hundreds of real ones.</p>
+<p>Two things there are worth stealing even for a small analysis project: reviews are explicitly <strong>non-adversarial</strong>, because the goal is better software rather than a verdict. And reviewers are asked to comment on things a checklist can’t capture, such as whether the argument names read well and autocomplete sensibly.</p>
+<p>That last one should sound familiar from the naming lesson.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Pair up. Swap the version of <code>analysis.R</code> you tidied earlier.</li>
+<li>Before you read it, ask your partner the two questions: what feedback do they want, and what is the code meant to do?</li>
+<li>Give three pieces of feedback. At least one of them should be something that’s working well.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="If you want a longer one">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>If you want a longer one
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>08-curly-code/penguin-report.R</code> in the exercises repo is the same idea at greater length. It runs, it produces a report, and a linter finds 55 things in it across 23 rules before you get to anything a person has to see.</p>
+<p>Work the five steps on it end to end. The automated pass takes about a second, and everything interesting happens after that.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="clean-as-you-go" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="clean-as-you-go"><span class="header-section-number">3.9</span> Clean as you go</h2>
+<p>Get into the habit of going back over your code briefly to tidy it up, as you go.</p>
+<p>A kitchen analogy is useful here. Professional kitchens clean as they go, because a tidy workspace keeps your mind clear and because the alternative is an unusable bench by service. The same is true of code.</p>
+<p>I rarely write my best code on the first pass. It gets better with iteration.</p>
+<p>So iterate briefly, as you go:</p>
+<ul>
+<li>Clean up the random comments that no longer mean anything.</li>
+<li>Remove the wilted lettuce. These are the commented-out chunks of code you <em>might just come back to</em>. You probably won’t. If one really is important, write a comment explaining why it might be relevant, rather than leaving it lying there.</li>
+<li>Fix the style.</li>
+<li>Check the names.</li>
+<li>Consider tidying up the implementation, refactoring it.</li>
+</ul>
+<p>You might not have time to do all of these, or to do them thoroughly. Doing <em>some</em> of them will still leave you with better code, and you get better at doing them the more you practise.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="If we can see your code, we can trust it">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>If we can see your code, we can trust it
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Version control isn’t part of this course. It has its own.</p>
+<p>But it’s worth saying plainly that the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history.</p>
+<p>Review is much easier when the reviewer can see not just what the code is, but how it got that way.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Open a script of your own. One you wrote at least a month ago.</li>
+<li>Give it ten minutes of clean-as-you-go. Comments, wilted lettuce, style, names.</li>
+<li>Ten minutes only. What did you get done, and what would you do next?</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Read more">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Read more
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Parts of this chapter are adapted from my blog post, <a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a>.</p>
+</div>
+</div>
+
+
+</section>
+<section class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
+<ul>
+<li><a href="https://www.karlton.org/">Phil Karlton</a></li>
+<li><a href="https://martinfowler.com/bliki/TwoHardThings.html">Martin Fowler has written up the provenance of the quote</a></li>
+<li><a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">“The magical number seven, plus or minus two”</a></li>
+<li><a href="https://www.youtube.com/watch?v=7oyiPBjLAWY">Jenny Bryan’s “Code smells and feels”</a></li>
+<li><a href="https://devguide.ropensci.org/softwarereview_reviewer.html">rOpenSci’s reviewer guide</a></li>
+<li><a href="https://devguide.ropensci.org/reviewtemplate.html">review template</a></li>
+<li><a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a></li>
+</ul>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r-best-practices\.njtierney\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./code-style-and-readability.html" class="pagination-link" aria-label="Code style and readability">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, Nicholas Tierney</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/writing-readable-code.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

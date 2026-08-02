@@ -71,6 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./code-style-and-readability.html" rel="next">
 <link href="./setup.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -140,7 +141,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <a href="./">R Best Practices</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/njtierney/rbestpractices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="./R-Best-Practices.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -169,6 +169,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-style-and-readability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-readable-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -179,34 +191,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1.1</span> Overview</a></li>
-  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions"><span class="header-section-number">1.2</span> Questions</a></li>
-  <li><a href="#a-common-problem-file-paths" id="toc-a-common-problem-file-paths" class="nav-link" data-scroll-target="#a-common-problem-file-paths"><span class="header-section-number">1.3</span> A common problem: file paths</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up"><span class="header-section-number">1.1</span> Set up</a>
   <ul class="collapse">
-  <li><a href="#files" id="toc-files" class="nav-link" data-scroll-target="#files"><span class="header-section-number">1.3.1</span> Files 📄</a></li>
-  <li><a href="#directories" id="toc-directories" class="nav-link" data-scroll-target="#directories"><span class="header-section-number">1.3.2</span> Directories 📁</a></li>
-  <li><a href="#paths" id="toc-paths" class="nav-link" data-scroll-target="#paths"><span class="header-section-number">1.3.3</span> Paths 🛣️</a></li>
+  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio"><span class="header-section-number">1.1.1</span> RStudio</a></li>
+  <li><a href="#positron" id="toc-positron" class="nav-link" data-scroll-target="#positron"><span class="header-section-number">1.1.2</span> Positron</a></li>
   </ul></li>
-  <li><a href="#what-does-setwd-do" id="toc-what-does-setwd-do" class="nav-link" data-scroll-target="#what-does-setwd-do"><span class="header-section-number">1.4</span> What does <code>setwd()</code> do?</a></li>
-  <li><a href="#is-there-an-answer-to-the-madness" id="toc-is-there-an-answer-to-the-madness" class="nav-link" data-scroll-target="#is-there-an-answer-to-the-madness"><span class="header-section-number">1.5</span> Is there an answer to the madness?</a></li>
-  <li><a href="#the-here-package" id="toc-the-here-package" class="nav-link" data-scroll-target="#the-here-package"><span class="header-section-number">1.6</span> The {here} package</a></li>
-  <li><a href="#why-organise-your-project" id="toc-why-organise-your-project" class="nav-link" data-scroll-target="#why-organise-your-project"><span class="header-section-number">1.7</span> Why organise your project?</a></li>
-  <li><a href="#pitfalls-of-organisation" id="toc-pitfalls-of-organisation" class="nav-link" data-scroll-target="#pitfalls-of-organisation"><span class="header-section-number">1.8</span> Pitfalls of organisation</a>
+  <li><a href="#a-common-problem-file-paths" id="toc-a-common-problem-file-paths" class="nav-link" data-scroll-target="#a-common-problem-file-paths"><span class="header-section-number">1.2</span> A common problem: file paths</a>
   <ul class="collapse">
-  <li><a href="#everything-in-one-folder" id="toc-everything-in-one-folder" class="nav-link" data-scroll-target="#everything-in-one-folder"><span class="header-section-number">1.8.1</span> Everything in one folder</a></li>
-  <li><a href="#no-clear-entry-point" id="toc-no-clear-entry-point" class="nav-link" data-scroll-target="#no-clear-entry-point"><span class="header-section-number">1.8.2</span> No clear entry point</a></li>
+  <li><a href="#files-directories-paths" id="toc-files-directories-paths" class="nav-link" data-scroll-target="#files-directories-paths"><span class="header-section-number">1.2.1</span> Files, directories, paths</a></li>
+  <li><a href="#reading-files" id="toc-reading-files" class="nav-link" data-scroll-target="#reading-files"><span class="header-section-number">1.2.2</span> Reading files</a></li>
+  <li><a href="#what-does-setwd-do" id="toc-what-does-setwd-do" class="nav-link" data-scroll-target="#what-does-setwd-do"><span class="header-section-number">1.2.3</span> What does <code>setwd()</code> do?</a></li>
   </ul></li>
-  <li><a href="#file-names-encode-history-not-content" id="toc-file-names-encode-history-not-content" class="nav-link" data-scroll-target="#file-names-encode-history-not-content"><span class="header-section-number">1.9</span> File names encode history, not content</a></li>
-  <li><a href="#editing-raw-data-in-place" id="toc-editing-raw-data-in-place" class="nav-link" data-scroll-target="#editing-raw-data-in-place"><span class="header-section-number">1.10</span> Editing raw data in place</a></li>
-  <li><a href="#outputs-mixed-in-with-inputs" id="toc-outputs-mixed-in-with-inputs" class="nav-link" data-scroll-target="#outputs-mixed-in-with-inputs"><span class="header-section-number">1.11</span> Outputs mixed in with inputs</a></li>
-  <li><a href="#common-project-structures" id="toc-common-project-structures" class="nav-link" data-scroll-target="#common-project-structures"><span class="header-section-number">1.12</span> Common project structures</a>
+  <li><a href="#project-oriented-workflow" id="toc-project-oriented-workflow" class="nav-link" data-scroll-target="#project-oriented-workflow"><span class="header-section-number">1.3</span> Project oriented workflow</a></li>
+  <li><a href="#sec-rbp-exercises-ch1" id="toc-sec-rbp-exercises-ch1" class="nav-link" data-scroll-target="#sec-rbp-exercises-ch1"><span class="header-section-number">1.4</span> Get course exercise materials on your machine</a></li>
+  <li><a href="#the-here-package" id="toc-the-here-package" class="nav-link" data-scroll-target="#the-here-package"><span class="header-section-number">1.5</span> The {here} package</a></li>
+  <li><a href="#organise-your-project-with-a-readme" id="toc-organise-your-project-with-a-readme" class="nav-link" data-scroll-target="#organise-your-project-with-a-readme"><span class="header-section-number">1.6</span> Organise your project with a README</a></li>
+  <li><a href="#pitfalls-of-organisation" id="toc-pitfalls-of-organisation" class="nav-link" data-scroll-target="#pitfalls-of-organisation"><span class="header-section-number">1.7</span> Pitfalls of organisation</a>
   <ul class="collapse">
-  <li><a href="#naming-the-files-themselves" id="toc-naming-the-files-themselves" class="nav-link" data-scroll-target="#naming-the-files-themselves"><span class="header-section-number">1.12.1</span> Naming the files themselves</a></li>
+  <li><a href="#everything-in-one-folder" id="toc-everything-in-one-folder" class="nav-link" data-scroll-target="#everything-in-one-folder"><span class="header-section-number">1.7.1</span> Everything in one folder</a></li>
+  <li><a href="#no-clear-entry-point" id="toc-no-clear-entry-point" class="nav-link" data-scroll-target="#no-clear-entry-point"><span class="header-section-number">1.7.2</span> No clear entry point</a></li>
+  <li><a href="#file-names-encode-history-not-content" id="toc-file-names-encode-history-not-content" class="nav-link" data-scroll-target="#file-names-encode-history-not-content"><span class="header-section-number">1.7.3</span> File names encode history, not content</a></li>
+  <li><a href="#editing-raw-data-in-place" id="toc-editing-raw-data-in-place" class="nav-link" data-scroll-target="#editing-raw-data-in-place"><span class="header-section-number">1.7.4</span> Editing raw data in place</a></li>
+  <li><a href="#outputs-mixed-in-with-inputs" id="toc-outputs-mixed-in-with-inputs" class="nav-link" data-scroll-target="#outputs-mixed-in-with-inputs"><span class="header-section-number">1.7.5</span> Outputs mixed in with inputs</a></li>
   </ul></li>
-  <li><a href="#good-enough-common-sense-principles-of-project-organisation" id="toc-good-enough-common-sense-principles-of-project-organisation" class="nav-link" data-scroll-target="#good-enough-common-sense-principles-of-project-organisation"><span class="header-section-number">1.13</span> “Good enough” common sense principles of project organisation</a></li>
-  <li><a href="#always-have-a-readme" id="toc-always-have-a-readme" class="nav-link" data-scroll-target="#always-have-a-readme"><span class="header-section-number">1.14</span> Always have a README</a></li>
-  <li><a href="#rstudio-and-positron-set-up" id="toc-rstudio-and-positron-set-up" class="nav-link" data-scroll-target="#rstudio-and-positron-set-up"><span class="header-section-number">1.15</span> RStudio and Positron set up</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.16</span> Summary</a></li>
+  <li><a href="#good-enough-project-organisation" id="toc-good-enough-project-organisation" class="nav-link" data-scroll-target="#good-enough-project-organisation"><span class="header-section-number">1.8</span> “Good enough” project organisation</a></li>
+  <li><a href="#how-to-name-files" id="toc-how-to-name-files" class="nav-link" data-scroll-target="#how-to-name-files"><span class="header-section-number">1.9</span> How to name files</a></li>
+  <li><a href="#make-your-project-good-enough" id="toc-make-your-project-good-enough" class="nav-link" data-scroll-target="#make-your-project-good-enough"><span class="header-section-number">1.10</span> Make your project “good enough”</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li>Links</li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/project-organisation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -215,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></h1>
+<h1 class="title"><span id="sec-project-organisation" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></h1>
 </div>
 
 
@@ -235,19 +248,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>“Remember, you are always collaborating with your future self.”</p>
 </blockquote>
-<p>This course is all about best practices in R. I want you to know the principles, and have practice at writing clear, maintainable, and reproducible R code.</p>
-<p>To build these practices, you need a good base. A good place to work from here is to have a clean workspace. If you have a clean, and tidy and repeatable way of organising your projects, you will have a clearer sense of how to run the code when you come back to it.</p>
-<p>It doesn’t have to be perfect, but the goal is that by the end of this, you will know how to make your projects just a little better each time.</p>
-<section id="overview" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.1</span> Overview</h2>
+<p>This course is all about best practices in R. At its foundation, I think this begins with a well organised project that is clean and tidy. We start by talking about basic “hygiene” for your projects and files, before moving on to how to organise your project, and some potential pitfalls.</p>
+<p>Remember: your project doesn’t have to be perfectly organised. Instead, we focus on making the next project a little better, each time.</p>
+<p>It is worth noting that this section draws from <a href="https://qmd4sci.njtierney.com/workflow.html">“Workflow”</a> and <a href="https://qmd4sci.njtierney.com/rstudio.html">RStudio, what and why</a> from my course: <a href="https://qmd4sci.njtierney.com">“quarto for scientists”</a>.</p>
+<section id="overview" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
 <ul>
 <li><strong>Duration</strong> 60 minutes</li>
 </ul>
-</section>
-<section id="questions" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="questions"><span class="header-section-number">1.2</span> Questions</h2>
 <!-- Note: ensure these questions all map onto the concepts here and are answered by them, in order. -->
 <ul>
+<li><strong>Questions</strong>
+<ul>
+<li>How to set up RStudio or Positron</li>
 <li>What is a file path?</li>
 <li>What is a project, anyway?</li>
 <li>Why organise your project?</li>
@@ -255,280 +268,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>How do you organise your work?</li>
 <li>What are “good enough” common sense principles of project organisation</li>
 <li>Why should every project have a README?</li>
-<li>How to set up RStudio or Positron</li>
+</ul></li>
 </ul>
-<p>Before we get into projects, and organising them, I really think it is worthwhile spending a bit of time talking about <strong>file paths</strong>.</p>
 </section>
-<section id="a-common-problem-file-paths" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="a-common-problem-file-paths"><span class="header-section-number">1.3</span> A common problem: file paths<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></h2>
-<p>Have you ever run into this problem?</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">read.csv</span>(<span class="st">"my-very-important-data-file-somewhere.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in file(file, "rt"): cannot open file
-'my-very-important-data-file-somewhere.csv': No such file or directory</code></pre>
-</div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in `file()`:
-! cannot open the connection</code></pre>
-</div>
-</div>
-<p>This error is R saying: I do not know where “my-very-important-data-file-somewhere.csv” is.</p>
-<p>Practising <em>good file storage hygiene</em> will help maintain an order to <strong>files</strong>, <strong>paths</strong>, and <strong>directories</strong>. Having an order there means fewer errors like the above.</p>
-<p>Fewer errors means less time fighting strange errors and more time doing the task. It will make you more productive.</p>
-<p>But we need to define a few of these terms: files, directories, and paths.</p>
-<section id="files" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="files"><span class="header-section-number">1.3.1</span> Files 📄</h3>
-<ul>
-<li>Something I can open. Examples are: R script, “example.R”, a word doc, “report.docx”, an image “puppy.png”, a README, “README.md”.</li>
-<li>Files have “file extensions, which are the last characters, which tell us what kind of file they are.”.R” is an R script, “.png” is an image file - standing for “portable network graphics”, “.md” is a<strong>m</strong>ark<strong>d</strong>own text file.</li>
-</ul>
-<!-- TODO Screenshot of files -->
-</section>
-<section id="directories" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="directories"><span class="header-section-number">1.3.2</span> Directories 📁</h3>
-<ul>
-<li>Also known as folders. This comes from the image analogy of putting pieces of paper inside a folder.</li>
-<li>A directory contains files</li>
-<li>A directory can also contain directories</li>
-</ul>
-<!-- TODO: screenshot of directories -->
-</section>
-<section id="paths" class="level3" data-number="1.3.3">
-<h3 data-number="1.3.3" class="anchored" data-anchor-id="paths"><span class="header-section-number">1.3.3</span> Paths 🛣️</h3>
-<p>A path, or “file path”, or “directory path” is the machine-readable directions to where files on your computer live. Kind of like a street address. “Machine readable” just means your computer can read it easily:</p>
-<ul>
-<li>Machine readable: “1811 Macquarie Street, Hobart, Tasmania”</li>
-<li>Not-quite machine readable: “The big white building on the corner with the pine tree in town”</li>
-</ul>
-<p>So, the <strong>file path</strong>:</p>
-<pre><code>/Users/njtierney/Desktop/analysis-2026/data/penguins.csv</code></pre>
-<p>Describes the location, (the address) of <code>penguins.csv</code>.</p>
-<p>It might be easier to see this as a tree, or how this file might look in a file explorer on your computer:</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">tree</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">file explorer</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<pre><code>Users
-  `-- njtierney
-      `-- Desktop
-          `-- analysis-2026
-              |-- analysis-2026.Rproj
-              |-- data
-              |   `-- penguins.csv   &lt;&lt; THE FILE IS HERE
-              `-- exploratory-analysis
-                  |-- eda-script.R
-                  `-- eda-document.qmd</code></pre>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p><img src="figs/project-org-file-explorer.png" class="img-fluid" alt="Example of file and folder structure"></p>
-<p><em>Example of file and folder structure</em></p>
-</div>
-</div>
-</div>
-<p>Each level is a folder inside the one above it. To read that data file, you might write:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>So in the above, the “path” is <code>"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</code>.</p>
-<p>You might also note that sometimes in your work, you don’t write down this full path - it is very long! You might do something like:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>And this brings us to an important concept - these are two kinds of path:</p>
-<ul>
-<li><strong>absolute paths</strong> starts from the root of your computer.</li>
-<li><strong>relative paths</strong> starts from wherever you currently are.</li>
-</ul>
-<p>To continue our directions analogy:</p>
-<ul>
-<li><strong>absolute paths</strong> - the full driving directions to take you from Hobart to Cradle Mountain</li>
-<li><strong>relative paths</strong> - the directions from where you are (which might be just down the road!) to Cradle Mountain.</li>
-</ul>
-<p>So, the code below is using an absolute path:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The code below is using a relative path:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Of the two, the relative path might look nice, because it is shorter. And that’s sort of true.</p>
-<p>But the absolute path will work from anywhere on your machine. Every time. Now.</p>
-<p>But will it work on your colleagues machine? On your machine in two weeks, next month, next year?</p>
-<p>My absolute path will not work on your machine, because your computer (almost certainly) doesn’t have a <code>/Users/njtierney/</code> folder. It won’t work on your own machine after you reorganise your folders when you spring clean. It won’t work on the cloud.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Imagine you see the path <code>/Users/miles/etc1010/week1/data/health.csv</code>. What are the folders above the file <code>health.csv</code>?</li>
-<li>Run <code>getwd()</code>. Where are you?</li>
-<li>Look at your most recent analysis script. Find every file path in it. How many are absolute?</li>
-</ol>
-</div>
-</div>
-<p>A common answer to this is that people will often use relative paths, along with a function <code>setwd()</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a><span class="fu">setwd</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Let’s talk about why this is <strong>not a good idea</strong>.</p>
-</section>
-</section>
-<section id="what-does-setwd-do" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="what-does-setwd-do"><span class="header-section-number">1.4</span> What does <code>setwd()</code> do?</h2>
-<p>Sometimes the first line of a script looks like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="fu">setwd</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This says:</p>
-<blockquote class="blockquote">
-<p>Set my working directory to this specific directory, “analysis-2026”, which is in the folders, Users/njtierney/Desktop.</p>
-</blockquote>
-<p>It means you can then read data using the <strong>relative paths</strong> we discussed above:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>instead of using the <strong>absolute path</strong>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>So it does have the effect of <strong>making the file paths work in your file</strong>.</p>
-<p>But, it is still a problem, because using <code>setwd()</code> like this creates the same problem you had when you used the <strong>absolute path</strong>:</p>
-<ul>
-<li>0% chance of working on someone else’s machine - <strong>and this could include you, in six months</strong>.</li>
-<li>Means your file is not self-contained or portable. What happens if this folder moves to <code>/Downloads</code>, or onto another machine?</li>
-</ul>
-<p>I used to send files to people like this, and you might have come across this yourself - where an R file comes to you and your colleague says:</p>
-<blockquote class="blockquote">
-<p>Yup, all you need to do is <strong>change the <code>setwd("/Users/njtierney/Desktop/analysis-2026")</code> to point at where you are, then run it</strong></p>
-</blockquote>
-<p>So, to get it working, you have to hand-edit the file path for every machine it lands on.</p>
-<p>This is painful. And when you do it all the time, it gets old, fast. There is a better way!</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/setwd-one-machine.png" class="img-fluid figure-img" style="width:100.0%" alt="A script whose first line is setwd to /Users/njtierney/Desktop/analysis-2026, shown running in three places. On your own machine today the project really is under /Users/njtierney/Desktop, and the script works. On a colleague's machine the project sits under /home/sam/projects, and the script fails. On your own machine six months later, the folder has moved to /Users/njtierney/Downloads, and the script fails again. That path is a fact about one machine on one day, not part of the project."></p>
-<figcaption>The path inside <code>setwd()</code> names a folder that only one machine has, and will not work in future places.</figcaption>
-</figure>
-</div>
-<p>This is the heart of the famous line from Jenny Bryan, from her brilliant article, <a href="https://tidyverse.org/blog/2017/12/workflow-vs-script/">“Project-oriented workflow”</a>- you should read it:</p>
-<blockquote class="blockquote">
-<p>If the first line of your R script is</p>
-<pre><code>setwd("C:\Users\jenny\path\that\only\I\have")</code></pre>
-<p>I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
-</blockquote>
-</section>
-<section id="is-there-an-answer-to-the-madness" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="is-there-an-answer-to-the-madness"><span class="header-section-number">1.5</span> Is there an answer to the madness?</h2>
-<p>Yes.</p>
-<p>When you start on a new idea, a new project, a new paper - anything new - it should start its life as a <strong>project</strong>. In RStudio that is an <code>.Rproj</code> file; in Positron it is a <strong>workspace folder</strong>.</p>
-<p>A project keeps related work together in the same place. They also do the following:</p>
-<ul>
-<li>Keep all your files together.</li>
-<li>Set the working directory to the project directory.</li>
-<li>Start a new session of R.</li>
-<li>Restore previously edited files into your editor tabs.</li>
-<li>Restore other editor settings.</li>
-<li>Let you have several projects open at once.</li>
-</ul>
-<p>This helps keep you sane, because:</p>
-<ul>
-<li>Your projects are each independent.</li>
-<li>You can work on different projects at the same time.</li>
-<li>Objects and functions you create in one project won’t affect another.</li>
-<li>You can refer to your data in a consistent way.</li>
-</ul>
-<p>And finally, the big one:</p>
-<p><strong>Projects resolve file path problems</strong>, because they automatically set the working directory to the location of the project.</p>
-<p>This means you get two habits from this:</p>
-<ol type="1">
-<li><strong>One project, one folder, one <code>.Rproj</code> file.</strong> Open the project by double-clicking the <code>.Rproj</code> file, not by opening R and navigating around.</li>
-<li><strong>Use relative paths only.</strong> You never call <code>setwd()</code> again.</li>
-</ol>
-<div class="callout callout-style-default callout-caution callout-titled" title="Aside: creating a project">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Caution</span>Aside: creating a project
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">RStudio</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Positron</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p>Either use the button in the top right corner, or go:</p>
-<p>File → New Project → New Directory → New Project → name your project → Create Project</p>
-<p><img src="figs/rstudio-create-proj-1.png" class="img-fluid" style="width:70.0%" alt="Starting a new project in RStudio."></p>
-<p><em>Starting a new project in RStudio.</em></p>
-<p>Then choose <strong>New Directory</strong> if this is a new folder. If you already have a folder you want to turn into a project, choose <strong>Existing Directory</strong> instead.</p>
-<p><img src="figs/rstudio-create-proj-2.png" class="img-fluid" style="width:70.0%" alt="Choosing a new or existing directory."></p>
-<p><em>Choosing a new or existing directory.</em></p>
-<p>Then <strong>New Project</strong>.</p>
-<p><img src="figs/rstudio-create-proj-3.png" class="img-fluid" style="width:70.0%" alt="Choosing the project type."></p>
-<p><em>Choosing the project type.</em></p>
-<p>Then name it, and click <strong>Create Project</strong>.</p>
-<p><img src="figs/rstudio-create-proj-4.png" class="img-fluid" style="width:70.0%" alt="Naming the project."></p>
-<p><em>Naming the project.</em></p>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<p>Positron doesn’t use .Rproj files - that is an RStudio specific file.</p>
-<p>The posit team talk about this in their docs: <a href="https://positron.posit.co/migrate-rstudio-rproj.html">“The R Proj File”</a>.</p>
-<p>The gist of this is that Positron does not have Rproj files - you essentially just open a folder and Positron will treat it as a “workspace”.</p>
-<p>You can open a folder as a workspace: File -&gt; Open Folder.</p>
-<p>If you also want the project to work in RStudio, add an <code>.Rproj</code> file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_rstudio</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<!-- SCREENSHOT NEEDED: Positron, File > Open Folder, showing the workspace
-     opened with the file explorer on the left. -->
-</div>
-</div>
-</div>
-<p>Either way, it is worth spending a couple of minutes on the name. Even a few minutes can make a difference. You want to:</p>
-<ul>
-<li>Keep it short.</li>
-<li>Use no spaces.</li>
-<li>Combine words.</li>
-</ul>
-<p>For example, I had a project looking at bat calls, so I called it <code>screech</code>, because bats make a screech-y noise. If you are doing global health analysis, maybe it is <code>world-health</code>.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="the-here-package" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="the-here-package"><span class="header-section-number">1.6</span> The {here} package</h2>
-<p>Although projects resolve most file path problems, in some cases you might have many nested folders. To navigate them reliably you can use the <a href="https://here.r-lib.org/">{here}</a> package, which builds the full path from the project root, compactly.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a><span class="co">#&gt; [1] "/Users/njtierney/github/njtierney/analysis-2026/data"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>and</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a>here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"penguins.csv"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-label="2"></a><span class="co">#&gt; [1] "/Users/njtierney/github/njtierney/analysis-2026/data/penguins.csv"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Note that these absolute paths will be different on my computer compared to yours - which is exactly the point.</p>
-<p>You can read that <code>here</code> code as:</p>
-<blockquote class="blockquote">
-<p>In the folder <code>data</code>, there is a file called <code>penguins.csv</code>. Can you please give me the full path to that file?</p>
-</blockquote>
-<p>This is handy for a few reasons:</p>
-<ol type="1">
-<li>It makes things <em>completely</em> portable.</li>
-<li>Quarto documents have their own way of looking for files, and this eliminates a whole class of file path pain.</li>
-<li>If you decide not to use projects, you still have code that works on <em>any</em> machine.</li>
-</ol>
-<p>So in practice:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="fu">library</span>(here)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-label="2"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"penguins.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>works whether the code is called from the top of the project, from inside <code>analysis/</code>, or from a Quarto document being rendered in a subfolder - all places where a plain relative path can quietly mean something different.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Open a project of your own, and run <code>here::here()</code>. Is it where you expected?</li>
-<li>Take one absolute path from your most recent script and rewrite it with <code>here()</code>.</li>
-<li>What would have to be true about your working directory for the old version to work?</li>
-</ol>
-</div>
-</div>
+<section id="set-up" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="set-up"><span class="header-section-number">1.1</span> Set up</h2>
+<p>Go to <a href="./setup.html#sec-rbp-exercises">course exercises</a> and follow instructions to download course materials.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -554,50 +299,622 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>There are no wrong answers! I want to have a discussion, and learn what wins, what makes it hard, what makes it OK.</p>
 </div>
 </div>
+<p>Let’s talk about some easy-wins in how you set up RStudio and Positron, to make it easier to make things reproducible.</p>
+<section id="rstudio" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="rstudio"><span class="header-section-number">1.1.1</span> RStudio</h3>
+<p>We want to go to global options, like so:</p>
+<p>Tools → Global Options (or <code>Cmd + ,</code> on macOS) → General.</p>
+<p>Under <strong>Workspace</strong>:</p>
+<ul>
+<li>Uncheck <strong>Restore .RData into workspace at startup</strong></li>
+<li>Set <strong>Save workspace to .RData on exit</strong> to <strong>Never</strong></li>
+</ul>
+<p>Under <strong>History</strong>:</p>
+<ul>
+<li>Uncheck <strong>Always save history (even when not saving .RData)</strong></li>
+<li>Uncheck <strong>Remove duplicate entries in history</strong></li>
+</ul>
+<p><img src="figs/rstudio-remove-data.png" class="img-fluid" style="width:70.0%" alt="Setting the options so you neither restore nor save your previous session's work."></p>
+<p><em>Setting the options so you neither restore nor save your previous session’s work.</em></p>
+<p>This matters for two reasons:</p>
+<ol type="1">
+<li><strong>Reproducibility.</strong> You don’t want old objects from your last analysis cluttering your session - and you also don’t want to depend on them, accidentally.</li>
+<li><strong>Privacy.</strong> You really do not want private data written into a <code>.RData</code> file on disk. You want to read data in, deliberately, every time.</li>
+</ol>
+<p>Your history is the list of commands you have typed. Not saving it means you won’t come to rely on something you typed in a previous session - which is a good habit to build.</p>
+<p>You can also do establish these settings via the <code>{usethis}</code> package:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_blank_slate</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- NOTE: - question for the class - understanding Interactive vs things in a script -->
+<p>While you are in the settings, two more worth turning on:</p>
+<ul>
+<li><strong>Show line numbers</strong> - Easier to say: “The code on line 54”</li>
+<li><strong>Rainbow parentheses</strong> - Catch those missing brackets</li>
+<li><strong>Rainbow indentations</strong> - Fun indentation markers</li>
+</ul>
+<p><img src="figs/rstudio-setting-rainbow.png" class="img-fluid" alt="RStudio's Options window, on the Code section and the Display tab. Three settings are highlighted: Show line numbers, ticked; Indentation guides, set to Rainbow lines; and Use rainbow parentheses, ticked."></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Make a habit">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Make a habit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can restart R with a keyboard shortcut:</p>
+<ul>
+<li><p><strong>Restart R</strong>: <code>Cmd/Ctrl + Shift + F10</code></p></li>
+<li><p>Your R session will always start from scratch now.</p></li>
+<li><p>Make a habit of restarting R and starting from scratch.</p></li>
+<li><p>If your code works from a fresh session, that is a great standard</p></li>
+<li><p>If it errors on a fresh session, you’ve got a problem to solve (which is overall a good thing to identify!)</p></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is a really neat feature in RStudio called the “Command Pallete” - it’s kind of like “spotlight” or “search” for any setting in RStudio.</p>
+<p>Try opening it using the keyboard shortcut:</p>
+<ul>
+<li>Windows: <code>Ctrl + Shift + P</code></li>
+<li>Mac: <code>Cmd + Shift + P</code></li>
+</ul>
+<p>And search for “rainbow”, “rename”, “new”, and just explore!</p>
+<p><img src="figs/rstudio-show-cmd-palette.png" class="img-fluid" alt="The RStudio command palette open over the editor, with rai typed into the search box. The matching results include Toggle Rainbow Parentheses Mode and Toggle Rainbow Fenced Divs Mode, along with the settings themselves, each showing an On toggle. You never had to know which options page they lived on."></p>
+<p>Read more at <a href="https://docs.posit.co/ide/user/ide/guide/ui/command-palette.html">Posit’s RStudio guide to the Command Palette</a></p>
+</div>
+</div>
 </section>
-<section id="why-organise-your-project" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="why-organise-your-project"><span class="header-section-number">1.7</span> Why organise your project?</h2>
+<section id="positron" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="positron"><span class="header-section-number">1.1.2</span> Positron</h3>
+<p>The same settings live under Settings → Extensions → R. The equivalent behaviour is off by default, so there is usually nothing to change - but it is worth looking, so you know where it is.</p>
+<p>Positron also has the command palette! The same command as RStudio.</p>
+<ul>
+<li>Windows: <code>Ctrl + Shift + P</code></li>
+<li>Mac: <code>Cmd + Shift + P</code></li>
+</ul>
+<!-- NOTE - screenshot Positron settings, Extensions > R, showing the
+     workspace/restore options. -->
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Turn off workspace saving using the settings above, or run <code>usethis::use_blank_slate()</code>.</li>
+<li>Restart R with <code>Cmd/Ctrl + Shift + F10</code>.</li>
+<li>Open your most recent analysis script and run it from the top in the clean session.</li>
+<li>Discuss why your work did/did not work</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="RStudio vs Positron?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>RStudio vs Positron?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Worth saying upfront - RStudio isn’t going away.</p>
+<ul>
+<li>RStudio
+<ul>
+<li>created in 2011.</li>
+<li>Focus on R, but allows you to write in Python.</li>
+<li>Supports other languages like C, C++.</li>
+<li>It has 15 years of design for use in data analysis. It just works.</li>
+</ul></li>
+<li>Positron
+<ul>
+<li>Created in 2024.</li>
+<li>A fork of <a href="https://github.com/microsoft/vscode">“Visual Studio Code - Open Source”</a></li>
+<li>Comes with many (most?) of the features of VS Code</li>
+<li>Rich marketplace of extensions</li>
+<li>“polyglot” - works with many languages, not just R</li>
+</ul></li>
+</ul>
+<p>Which to choose? Here are my opinions:</p>
+<ul>
+<li>New to R –&gt; RStudio</li>
+<li>Just using R –&gt; RStudio</li>
+<li>Mostly using R, occasional other language –&gt; RStudio</li>
+<li>Sometimes R, mostly other language –&gt; Positron</li>
+<li>R + frequently other other languages (Python, Rust, C) –&gt; Positron</li>
+<li>Experienced in R and want full control of every setting –&gt; Positron</li>
+</ul>
+<p>If you want to read more about the features of Positron and RStudio, see <a href="https://positron.posit.co/migrate-rstudio-compare.html">Posit’s article on the topic</a>.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="a-common-problem-file-paths" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="a-common-problem-file-paths"><span class="header-section-number">1.2</span> A common problem: file paths</h2>
+<p>Before we get into projects, and organising them, I really think it is worthwhile spending a bit of time talking about <strong>file paths</strong>.</p>
+<p>I can almost guarantee that you have run into this problem:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="fu">read.csv</span>(<span class="st">"my-very-important-data-file-somewhere.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in file(file, "rt"): cannot open file
+'my-very-important-data-file-somewhere.csv': No such file or directory</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `file()`:
+! cannot open the connection</code></pre>
+</div>
+</div>
+<p>This error is R saying:</p>
+<blockquote class="blockquote">
+<p>I do not know where “my-very-important-data-file-somewhere.csv” is.</p>
+</blockquote>
+<p>There are lots of reasons that R doesn’t know where that file could be!</p>
+<p>Chances are <strong>you</strong> know exactly where the file is, and now you need to get into the mind of R, to understand <strong>why it cannot find the file</strong>.</p>
+<p>We can resolve these errors if we keep our <strong>files</strong>, <strong>paths</strong>, and <strong>directories</strong> ordered. This goes together with a <strong>workflow</strong> for clearly, and portably letting R know where these are. This practice is sometimes referred to as <strong>good file path hygiene</strong>.</p>
+<p>Let’s define a few of these terms: files, directories, and paths.</p>
+<section id="files-directories-paths" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="files-directories-paths"><span class="header-section-number">1.2.1</span> Files, directories, paths</h3>
+<p>Below we show some examples of a folder structure, of directories, and files</p>
+<pre><code>Users/                                  ← Directory
+└── njtierney/                          ← Directory
+    └── Desktop/                        ← Directory
+        └── analysis-2026/              ← Directory
+            ├── analysis-2026.Rproj     ← File
+            ├── data/                   ← Directory
+            │   └── penguins.csv        ← File
+            ├── exploratory-analysis/   ← Directory
+            │   ├── explore.R           ← File
+            │   ├── eda-document.qmd    ← File
+            │   ├── eda-document.docx   ← File
+            │   └── graph.png           ← File
+            └── README.md               ← File</code></pre>
+<p>We can refer to a given location with a “path” - which we refer to as a “file path” or a “directory path” depending on which we are navigating to. Here are some examples of paths for two directories, and two files.</p>
+<ul>
+<li><code>Users/njtierney/Desktop/analysis-2026/</code>
+<ul>
+<li><strong>Directory</strong> path of “analysis-2026”</li>
+</ul></li>
+<li><code>Users/njtierney/Desktop/analysis-2026/README.md</code>
+<ul>
+<li><strong>File</strong> path of “README.md”</li>
+</ul></li>
+<li><code>Users/njtierney/Desktop/analysis-2026/data</code>
+<ul>
+<li><strong>Directory</strong> path of “data”</li>
+</ul></li>
+<li><code>Users/njtierney/Desktop/analysis-2026/data/penguins.csv</code>
+<ul>
+<li><strong>File</strong> path of “penguins.csv”</li>
+</ul></li>
+</ul>
+<p>A path is just the folders you walk through to get there, joined up with <code>/</code>. Here is that last one again, with every step of it marked:</p>
+<pre><code>Users/                          ●
+└── njtierney/                  ●
+    └── Desktop/                ●
+        └── analysis-2026/      ●
+            ├── analysis-2026.Rproj
+            ├── data/           ●
+            │   └── penguins.csv●
+            ├── exploratory-analysis/
+            │   ├── explore.R
+            │   ├── eda-document.qmd
+            │   ├── eda-document.docx
+            │   └── graph.png
+            └── README.md</code></pre>
+<p>Read the marked lines top to bottom and you have written the path:</p>
+<pre><code>/Users/njtierney/Desktop/analysis-2026/data/penguins.csv</code></pre>
+<p>Nothing else in the tree is part of it. That is the whole idea - a path names one route down through the folders, and ignores everything it walks past.</p>
+<p>Let’s talk a bit more about files, directories and paths.</p>
+<section id="files" class="level4" data-number="1.2.1.1">
+<h4 data-number="1.2.1.1" class="anchored" data-anchor-id="files"><span class="header-section-number">1.2.1.1</span> Files 📄</h4>
+<ul>
+<li>Files are something I can open.</li>
+<li>These are all files: “explore.R”, “eda-document.docx”, “graph.png”, “README.md”, “penguins.csv”</li>
+<li>Files have “file extensions”, which are the last characters after a <code>.</code>, and they tell us what kind of file they are:
+<ul>
+<li>“explore.R” ends with <strong>.R</strong>, it is an R script</li>
+<li>“eda-document.docx” is a Microsoft Word Document</li>
+<li>“graph.png” is an image (specifically, a <a href="https://en.wikipedia.org/wiki/PNG">“PNG”</a>)</li>
+<li>“README.md” is a <strong>m</strong>ark<strong>d</strong>own text file.</li>
+<li>“penguins.csv” is a “comma separated values” file</li>
+</ul></li>
+</ul>
+</section>
+<section id="directories" class="level4" data-number="1.2.1.2">
+<h4 data-number="1.2.1.2" class="anchored" data-anchor-id="directories"><span class="header-section-number">1.2.1.2</span> Directories 📁</h4>
+<ul>
+<li>Also known as folders (files inside a folder)</li>
+<li>A directory contains files</li>
+<li>A directory can also contain directories</li>
+</ul>
+</section>
+<section id="paths" class="level4" data-number="1.2.1.3">
+<h4 data-number="1.2.1.3" class="anchored" data-anchor-id="paths"><span class="header-section-number">1.2.1.3</span> Paths 🛣️</h4>
+<p>A path, or “file path”, or “directory path” is the machine-readable directions to where files on your computer live. Kind of like a street address. “Machine readable” just means your computer can read it easily:</p>
+<ul>
+<li>Machine readable:
+<ul>
+<li><code>/Users/njtierney/Desktop/analysis-2026/data/penguins.csv</code></li>
+</ul></li>
+<li>Not-quite machine readable:
+<ul>
+<li>“The folder on my desktop named analysis 2026”</li>
+</ul></li>
+</ul>
+<p>So, the <strong>file path</strong>:</p>
+<pre><code>/Users/njtierney/Desktop/analysis-2026/data/penguins.csv</code></pre>
+<p>Describes the location of <code>penguins.csv</code></p>
+<p>It might be easier to see this as a tree, or how this file might look in a file explorer on your computer:</p>
+<p><img src="figs/project-org-file-explorer.png" class="img-fluid" alt="Example of file and folder structure"></p>
+</section>
+</section>
+<section id="reading-files" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="reading-files"><span class="header-section-number">1.2.2</span> Reading files</h3>
+<p>So to read CSV in R, you can put the path of penguins.csv in <code>read_csv()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In our diagram, that is this file:</p>
+<pre><code>Users/
+└── njtierney/
+    └── Desktop/
+        └── analysis-2026/
+            ├── analysis-2026.Rproj
+            ├── data/
+            │   └── penguins.csv        ← this is the file being read in
+            ├── exploratory-analysis/
+            │   ├── explore.R
+            │   ├── eda-document.qmd
+            │   ├── eda-document.docx
+            │   └── graph.png
+            └── README.md</code></pre>
+<p>You might also note that sometimes in your work, you don’t write down this full path - it is very long! You might do something like:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>And this brings us to an important concept - these are two kinds of path:</p>
+<ul>
+<li><strong>absolute paths</strong> starts from the root of your computer.</li>
+<li><strong>relative paths</strong> starts from wherever you currently are.</li>
+</ul>
+<p>So, the code below is using an <strong>absolute</strong> path:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><img src="figs/org-absolute-path-pen.png" class="img-fluid" alt="A file explorer tree with the whole chain of folders highlighted, starting at the user folder njtierney, then Desktop, then analysis-2026, then data, and ending at the file penguins.csv. An absolute path has to name every one of those steps, starting from the top of one particular machine."></p>
+<p>The code below is using a <strong>relative</strong> path:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><img src="figs/org-relative-path-pen.png" class="img-fluid" alt="The same tree, but starting at the analysis-2026 project folder, with the folders above it gone. Only data and penguins.csv are highlighted. That short highlighted stretch is the whole of the relative path, because it starts from where you already are."></p>
+<ul>
+<li>The relative path looks nice and shorter. But it requires context - it needs to know from where you are reading.</li>
+<li>The absolute path will work from anywhere on your machine. It reads from the lowest folder on your machine.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ul>
+<p>But, will the absolute work on your colleagues machine? On your machine in two weeks, next month, next year? No.&nbsp;My absolute path will not work on your machine. Your computer (almost certainly) doesn’t have a <code>/Users/njtierney/</code> folder. It won’t work on your own machine after you reorganise your folders when you spring clean. It won’t work on the cloud.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Imagine you see the path <code>/Users/miles/etc1010/week1/data/health.csv</code>. What are the folders above the file <code>health.csv</code>?</li>
+<li>Run <code>getwd()</code>. Where are you?</li>
+<li>Look at your most recent analysis script. Find every file path in it. How many are absolute? How many are relative?</li>
+</ol>
+</div>
+</div>
+<p>A common answer to this is that people will often use relative paths, along with a function <code>setwd()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a><span class="fu">setwd</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Let’s talk about why this is <strong>not a good idea</strong>.</p>
+</section>
+<section id="what-does-setwd-do" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="what-does-setwd-do"><span class="header-section-number">1.2.3</span> What does <code>setwd()</code> do?</h3>
+<p>Sometimes the first line of a script looks like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="fu">setwd</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This says:</p>
+<blockquote class="blockquote">
+<p>Set my working directory to this specific directory, “analysis-2026”, which is in the folders, Users/njtierney/Desktop.</p>
+</blockquote>
+<p>It means you can then read data using the <strong>relative paths</strong> we discussed above:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>instead of using the <strong>absolute path</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>So it does have the effect of <strong>making the file paths work in your file</strong>.</p>
+<p>But, it is still a problem, because using <code>setwd()</code> like this creates the same problem you had when you used the <strong>absolute path</strong>:</p>
+<ul>
+<li>0% chance of working on someone else’s machine - <strong>and this could include you, in six months</strong>.</li>
+<li>Means your file is not self-contained or portable. What happens if this folder moves to <code>/Downloads</code>, or onto another machine?</li>
+</ul>
+<p>I used to send files to people like this, and you might have come across this yourself - where an R file comes to you and your colleague says:</p>
+<blockquote class="blockquote">
+<p>Yup, all you need to do is <strong>change the <code>setwd("/Users/njtierney/Desktop/analysis-2026")</code> to point at where you are, then run it</strong></p>
+</blockquote>
+<p>So, to get it working, you have to hand-edit the file path for every machine it lands on.</p>
+<p>This is painful. And when you do it all the time, it gets old, fast. There is a better way!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/setwd-one-machine.png" class="img-fluid figure-img" style="width:100.0%" alt="A script whose first line is setwd to /Users/njtierney/Desktop/analysis-2026, shown running in three places. On your own machine today the project really is under /Users/njtierney/Desktop, and the script works. On a colleague's machine the project sits under /home/sam/projects, and the script fails. On your own machine six months later, the folder has moved to /Users/njtierney/Downloads, and the script fails again. That path is a fact about one machine on one day, not part of the project."></p>
+<figcaption>The path inside <code>setwd()</code> names a folder that only one machine has, and will not work in future places.</figcaption>
+</figure>
+</div>
+<p>This is the heart of the famous line from Jenny Bryan, from her brilliant article, <a href="https://tidyverse.org/blog/2017/12/workflow-vs-script/">“Project-oriented workflow”</a>- you should read it:</p>
+<blockquote class="blockquote">
+<p>If the first line of your R script is</p>
+<pre><code>setwd("C:\Users\jenny\path\that\only\I\have")</code></pre>
+<p>I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
+</blockquote>
+<p>Let’s talk about using projects</p>
+</section>
+</section>
+<section id="project-oriented-workflow" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="project-oriented-workflow"><span class="header-section-number">1.3</span> Project oriented workflow</h2>
+<p>When you start on a new idea, a new project, a new paper - anything new - it should start its life as a <strong>project</strong>. In RStudio that is an <code>.Rproj</code> file; in Positron it is a <strong>workspace folder</strong>.</p>
+<p>A project keeps related work together in the same place. They also do the following:</p>
+<ul>
+<li>Set the working directory to the project directory.</li>
+<li>Start a new session of R.</li>
+<li>Restore previously edited files into your editor tabs.</li>
+<li>Let you have several projects open at once.</li>
+</ul>
+<p>This helps keep you sane, because:</p>
+<ul>
+<li>Your projects are independent.</li>
+<li>You can work on different projects at the same time.</li>
+<li>Objects and functions you create in one project won’t affect another.</li>
+</ul>
+<p><strong>Projects resolve file path problems</strong>, because they automatically set the working directory to the location of the project.</p>
+</section>
+<section id="sec-rbp-exercises-ch1" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-rbp-exercises-ch1"><span class="header-section-number">1.4</span> Get course exercise materials on your machine</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s download the course exercise - try running this code:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="fu">use_course</span>(<span class="st">"njtierney/rbp-exercises"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Which will prompt you to download the repository, <a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a>, and then open it in an RStudio project.</p>
+<p><img src="gifs/demo-use-course.gif" class="img-fluid" alt="An animation of use_course running in RStudio. It asks permission to download the exercises, unpacks them into a folder on the Desktop, and opens that folder as a new RStudio project in a fresh session, with the numbered exercise folders listed in the Files pane."></p>
+<p>If you have troubles with this (sometimes firewalls can stop you) you can download it from the github page <a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a> like so:</p>
+<p><img src="figs/rstudio-download-rbp-exercises.png" class="img-fluid" alt="The rbp-exercises repository on GitHub, showing the numbered exercise folders. The green Code button has been clicked and its dropdown is open, with Download ZIP highlighted at the bottom of the list."></p>
+<p>Then, unzip that, and click on the rbp-exercises.Rproj file:</p>
+<p><img src="figs/rstudio-show-rbp-rpoj.png" class="img-fluid" alt="The unzipped rbp-exercises folder in a file browser, listing the numbered exercise folders. rbp-exercises.Rproj is highlighted, with README.md underneath it. That .Rproj file is the one to open."></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled" title="Aside: creating a project">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Aside: creating a project
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">RStudio</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Positron</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Either use the button in the top right corner, or go:</p>
+<p>File → New Project → New Directory → New Project → name your project → Create Project</p>
+<p><img src="figs/rstudio-create-proj-1.png" class="img-fluid" style="width:70.0%" alt="Starting a new project in RStudio."></p>
+<p><em>Starting a new project in RStudio.</em></p>
+<p>Then choose <strong>New Directory</strong> if this is a new folder. If you already have a folder you want to turn into a project, choose <strong>Existing Directory</strong> instead.</p>
+<p><img src="figs/rstudio-create-proj-2.png" class="img-fluid" style="width:70.0%" alt="Choosing a new or existing directory."></p>
+<p><em>Choosing a new or existing directory.</em></p>
+<p>Then <strong>New Project</strong>.</p>
+<p><img src="figs/rstudio-create-proj-3.png" class="img-fluid" style="width:70.0%" alt="Choosing the project type."></p>
+<p><em>Choosing the project type.</em></p>
+<p>Then name it, and click <strong>Create Project</strong>.</p>
+<p><img src="figs/rstudio-create-proj-4.png" class="img-fluid" style="width:70.0%" alt="Naming the project."></p>
+<p><em>Naming the project.</em></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Positron doesn’t use .Rproj files - that is an RStudio specific file.</p>
+<p>The posit team talk about this in their docs: <a href="https://positron.posit.co/migrate-rstudio-rproj.html">“The R Proj File”</a>.</p>
+<p>The gist of this is that Positron does not have Rproj files - you essentially just open a folder and Positron will treat it as a “workspace”.</p>
+<p>You can open a folder as a workspace: File -&gt; Open Folder.</p>
+<p>If you also want the project to work in RStudio, add an <code>.Rproj</code> file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_rstudio</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!-- SCREENSHOT NEEDED: Positron, File > Open Folder, showing the workspace
+     opened with the file explorer on the left. -->
+</div>
+</div>
+</div>
+<p>Either way, it is worth spending a couple of minutes on the name. Even a few minutes can make a difference. You want to:</p>
+<ul>
+<li>Keep it short.</li>
+<li>Use no spaces.</li>
+<li>Combine words.</li>
+</ul>
+<p>For example, I had a project looking at bat calls, so I called it <code>screech</code>, because bats make a screech-y noise. If you are doing global health analysis, maybe it is <code>world-health</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-here-package" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="the-here-package"><span class="header-section-number">1.5</span> The {here} package</h2>
+<p>Although projects resolve most file path problems, in some cases you might have many nested folders. To navigate them reliably you can use the <a href="https://here.r-lib.org/">{here}</a> package, which builds the full path from the project root, compactly.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a><span class="co">#&gt; [1] "/Users/njtierney/github/njtierney/analysis-2026/data"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a>here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"penguins.csv"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-label="2"></a><span class="co">#&gt; [1] "/Users/njtierney/github/njtierney/analysis-2026/data/penguins.csv"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Note that these absolute paths will be different on my computer compared to yours - which is exactly the point.</p>
+<p>You can read that <code>here</code> code as:</p>
+<blockquote class="blockquote">
+<p>In the folder <code>data</code>, there is a file called <code>penguins.csv</code>. Can you please give me the full path to that file?</p>
+</blockquote>
+<p>This is handy for a few reasons:</p>
+<ol type="1">
+<li>It makes things <em>completely</em> portable.</li>
+<li>Quarto documents have their own way of looking for files, and this eliminates a whole class of file path pain.</li>
+<li>If you decide not to use projects, you still have code that works on <em>any</em> machine.</li>
+</ol>
+<p>So in practice:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a><span class="fu">library</span>(here)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"penguins.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>works whether the code is called from the top of the project, from inside <code>analysis/</code>, or from a Quarto document being rendered in a subfolder - all places where a plain relative path can quietly mean something different.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Run <code>here::here()</code>. Is it where you expected?</li>
+<li>Open another rstudio project. Take one absolute path from your most recent script and rewrite it with <code>here()</code>.</li>
+<li>What would have to be true about your working directory for the old version to work?</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="organise-your-project-with-a-readme" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="organise-your-project-with-a-readme"><span class="header-section-number">1.6</span> Organise your project with a README</h2>
 <p>When you are working on a project, you are almost certainly going to be returning to it, at some point. When you do, you might look at the code, and wonder:</p>
 <blockquote class="blockquote">
 <p>Who wrote this, and are they insane?</p>
 </blockquote>
-<p>And then you realise that indeed, <strong>it was you</strong> that wrote this.</p>
+<p>And then you realise that <strong>you wrote this</strong>.</p>
 <p>I think it is worthwhile internalising this saying:</p>
 <blockquote class="blockquote">
 <p>You are always collaborating with your future self.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </blockquote>
-<p>You want to have notes that keep you organised, and help you return to work smoothly. I think the “Who what when where why how” of story telling can be really useful here:</p>
+<p>I think a really easy win here is to have a README file, which is a plain text file that helps answer:</p>
 <ul>
-<li><strong>Who</strong> did it: Was it just you? Were there many people?</li>
-<li><strong>What</strong> you did: what was run</li>
-<li><strong>When</strong> you did it: Last year, last month?</li>
-<li><strong>Where</strong> you did it: on your computer? the cloud?</li>
 <li><strong>Why</strong> you did it: what was the goal</li>
+<li><strong>When</strong> you did it: Last year, last month?</li>
+<li><strong>What</strong> you did: What was run</li>
 <li><strong>How</strong> you did it: What was the order you ran things? Which file should I look at first?</li>
+<li><strong>Who</strong> did it: Was it just you? Were there many people?</li>
+<li><strong>Where</strong> you did it: On your computer? The cloud?</li>
 </ul>
 <p>If you can’t answer these questions about a project, how much harder would it be for you to return to it?</p>
-<p>It is like making sure your house is tidy, and the dishes are done. It is <em>technically</em> optional, sure. But, it does make your life easier when things are tidy, and always in the same spot.</p>
 <p>I like to think of this as some self-care for your future self.</p>
 <p>What I am getting at here is:</p>
 <blockquote class="blockquote">
 <p><strong>A project that is organised is a project that’s more likely to re-run.</strong></p>
 </blockquote>
 <p>A well organised project does not guarantee reproducibility. But, if you can’t tell me which script to run first, then we cannot reproduce an analysis.</p>
-<p>The point is not to tidy your project just so it is tidy. The point is having a tidy project that is well organised makes it easier to check, run later, and understand.</p>
-<!-- Note: I think I'd like to very quickly just give people a win here and show them that this part of the lesson is just: write a README, folks. And then some additional motivation -->
-<!-- Note: I need a preamble link into the next section, or consider moving these sections around. -->
+<p>A well organised project makes it easier to check, run later, and understand.</p>
+<p>A README does not need to be long. Mine are often ten lines. It just has to answer those six questions.</p>
+<p>Here is a complete, entirely adequate README, with the question each part is answering marked in the margin:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu"># Penguin body mass analysis                        ← WHAT</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-label="3"></a>Fits a model of penguin body mass against flipper</span>
+<span id="cb24-4"><a href="#cb24-4" aria-label="4"></a>length and species, for the 2026 report to the</span>
+<span id="cb24-5"><a href="#cb24-5" aria-label="5"></a>department.                                         ← WHY</span>
+<span id="cb24-6"><a href="#cb24-6" aria-label="6"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-label="7"></a>Run by Nick Tierney. Last run 2026-03-14, on my</span>
+<span id="cb24-8"><a href="#cb24-8" aria-label="8"></a>laptop, with R 4.5.0.                               ← WHO, WHEN, WHERE</span>
+<span id="cb24-9"><a href="#cb24-9" aria-label="9"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-label="10"></a><span class="fu">## How to run                                       ← HOW</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-label="11"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-label="12"></a>Open <span class="in">`penguins.Rproj`</span>, then run the scripts in</span>
+<span id="cb24-13"><a href="#cb24-13" aria-label="13"></a><span class="in">`analysis/`</span> in order:</span>
+<span id="cb24-14"><a href="#cb24-14" aria-label="14"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-label="15"></a><span class="ss">1. </span><span class="in">`01-clean-data.R`</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-label="16"></a><span class="ss">2. </span><span class="in">`02-fit-model.R`</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-label="17"></a><span class="ss">3. </span><span class="in">`03-make-figures.R`</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-label="18"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-label="19"></a>Figures are written to <span class="in">`output/figures/`</span>.</span>
+<span id="cb24-20"><a href="#cb24-20" aria-label="20"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-label="21"></a><span class="fu">## Data</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-label="22"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-label="23"></a><span class="in">`data/penguins.csv`</span> is from the {palmerpenguins}</span>
+<span id="cb24-24"><a href="#cb24-24" aria-label="24"></a>package, saved on 2026-03-14. Do not edit this file.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The arrows are not part of the file. They are there to show you that a short README is not a summary of the project - it is six answers, in whatever order suits you.</p>
+<p>If you are staring at an empty <code>README.md</code> and do not know where to start, write the six words down the page and fill them in.</p>
+<p>Write the README first, if you can, and return to it often.</p>
+<p>You can have <strong>more than one README</strong>. A short one inside <code>data-raw/</code> explaining where those files came from is often the most valuable file in the whole project.</p>
+<p>And it’s worth recording <strong>when you obtained the data</strong> - just noting the data, and also <strong>what versions of software you used</strong>, so that someone later, including you, can reconstruct similar conditions.</p>
+<p>You can get the dependencies in an R project with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>renv<span class="sc">::</span><span class="fu">dependencies</span>(<span class="st">"path/to/directory"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write a README for the project you sketched above. Answer the questions. Start it with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_readme_md</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Do it now, before you write any code - you will find it clarifies what you are actually about to do.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="This pays off when the project becomes a paper">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>This pays off when the project becomes a paper
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Everything in this lesson is framed around your future self. But the same structure is what makes your work usable by <em>anyone</em> else, and that matters most at publication.</p>
+<p>Karthik Ram and I wrote about this in <a href="https://www.cell.com/patterns/fulltext/S2666-3899(21)00230-0">Common sense approaches to sharing tabular data alongside publication</a> (<em>Patterns</em>, 2021). The argument, in short, is that depositing data doesn’t make it reusable. The reusable part is mundane and structural:</p>
+<ul>
+<li>A README that says who, what, when, where and how.</li>
+<li><strong>Both</strong> the raw data and the analysis-ready data, each in its own folder.</li>
+<li>The cleaning script that turns one into the other, kept with the raw data.</li>
+<li>Metadata describing each variable: its name, what it means, and its type. Enough to stop someone reading a gene sequence as a date.</li>
+<li>A licence. We recommend CC0.</li>
+</ul>
+<p>If you organise your project this way from the start, you don’t have to do anything special at submission. You’re already most of the way there.</p>
+<p>That’s the real payoff, and it’s why I’d rather you set this up now than tidy it up later.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="pitfalls-of-organisation" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="pitfalls-of-organisation"><span class="header-section-number">1.8</span> Pitfalls of organisation</h2>
-<p>There are so many ways to organise a project. And there is no one correct. And organising a project well is hard. While there isn’t a <strong>right</strong> way, there are definitely <strong>better</strong> and <strong>worse</strong> ways. Circling back to the start of the lesson, one of the takeaways from today I want you to remember is:</p>
+<section id="pitfalls-of-organisation" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="pitfalls-of-organisation"><span class="header-section-number">1.7</span> Pitfalls of organisation</h2>
+<p>There are so many ways to organise a project. While there isn’t a single <strong>right</strong> way, there are definitely <strong>better</strong> and <strong>worse</strong> ways. A key takeaway from today I want you to remember is:</p>
 <blockquote class="blockquote">
 <p>Your project might not be perfectly organised, but it should be possible for someone to understand how it is structured, and what to run first.</p>
 </blockquote>
-<p>There are a few patterns that I think appear in projects. I am guilty of all of these, so know that I am not judging you if these are how you work now. What I am saying is that it is OK, and that there are some ways you can improve.</p>
-<p>I have put most of these patterns together into one repository, which you can see at:</p>
-<p>https://github.com/njtierney/rbp-materials</p>
-<section id="everything-in-one-folder" class="level3" data-number="1.8.1">
-<h3 data-number="1.8.1" class="anchored" data-anchor-id="everything-in-one-folder"><span class="header-section-number">1.8.1</span> Everything in one folder</h3>
+<p>There are a few patterns that make picking up a new project hard. I am guilty of all of these. I am not judging you if these are how you work now. What I am saying is there are some ways you can improve.</p>
+<p>You can see these patterns in the course exercises you downloaded earlier: <a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a></p>
+<p>We will quickly move through these now.</p>
+<section id="everything-in-one-folder" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="everything-in-one-folder"><span class="header-section-number">1.7.1</span> Everything in one folder</h3>
 <pre><code>01-everything-in-one-folder/
 ├── Rplot.png
 ├── Screen Shot 2026-03-14 at 10.23.45 am.png
@@ -609,7 +926,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ├── plot_stuff.R
 ├── report draft.docx
 └── results.csv</code></pre>
-<p>Notice that the R scripts, the data, the figures, a Word document, a screenshot, and <code>Untitled1.R</code>, are all <em>flat</em> - they are in the same folder. This works until there are more than about fifteen files, at which point finding anything becomes a search problem.</p>
+<p>Notice the R scripts, the data, the figures, a Word document, a screenshot, and <code>Untitled1.R</code>, are all <em>flat</em> - they are in the same folder. This works until there are more than about fifteen files, at which point finding anything becomes a search problem.</p>
 <p>I think about this as like a grocery list: If my shopping list is only 5 items long, it might not impact me when I go to the shops:</p>
 <ul>
 <li>Milk</li>
@@ -619,10 +936,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Muesli bars</li>
 </ul>
 <p>But if I’m buying a bunch of food for the week, some meal prep, and a few other bits and pieces, if I don’t order the shopping list, and group the similar parts together, I am creating work for myself.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="The two shopping lists">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>The two shopping lists
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Unordered</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Ordered</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Unordered</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Ordered</a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <ul>
 <li>Milk</li>
 <li>Onion powder</li>
@@ -646,7 +975,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Basmati rice</li>
 </ul>
 </div>
-<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="columns">
+<div class="column" style="width:24%;">
 <ul>
 <li><strong>Produce</strong>
 <ul>
@@ -661,16 +992,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Red capsicum</li>
 <li>Snow peas</li>
 </ul></li>
+</ul>
+</div><div class="column" style="width:24%;">
+<ul>
 <li><strong>Dairy</strong>
 <ul>
 <li>Milk</li>
 <li>Yoghurt</li>
 </ul></li>
+</ul>
+</div><div class="column" style="width:24%;">
+<ul>
 <li><strong>Meat</strong>
 <ul>
 <li>Chicken thighs</li>
 <li>500g beef mince</li>
 </ul></li>
+</ul>
+</div><div class="column" style="width:24%;">
+<ul>
 <li><strong>Pantry</strong>
 <ul>
 <li>Muesli</li>
@@ -684,13 +1024,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<ul>
-<li>The problem: Flat directory structure can make it hard to group things to understand how they are related.</li>
-<li>The (partial) solution: Put similar things into folders (directories) that give them structure.</li>
-</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>In this instance, I would recommend grouping the files into folders</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Problem</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Better</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>Flat directory structure can make it hard to group things to understand how they are related.</p>
+<pre><code>01-everything-in-one-folder/
+├── Rplot.png
+├── Screen Shot 2026-03-14 at 10.23.45 am.png
+├── Untitled1.R
+├── analysis.R
+├── figure1.png
+├── notes.txt
+├── penguins.csv
+├── plot_stuff.R
+├── report draft.docx
+└── results.csv</code></pre>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>Put similar things into folders (directories) that give them structure.</p>
+<pre><code>01-everything-in-one-folder/
+├── internals/
+│   └── notes.txt
+├── plots/
+│   ├── Rplot.png
+│   ├── Screen Shot 2026-03-14 at 10.23.45 am.png
+│   └── figure1.png
+├── scripts/
+│   ├── Untitled1.R
+│   ├── analysis.R
+│   └── plot_stuff.R
+├── data/
+│   └── penguins.csv
+└── outputs/
+    ├── report draft.docx
+    └── results.csv</code></pre>
+</div>
+</div>
+</div>
 </section>
-<section id="no-clear-entry-point" class="level3" data-number="1.8.2">
-<h3 data-number="1.8.2" class="anchored" data-anchor-id="no-clear-entry-point"><span class="header-section-number">1.8.2</span> No clear entry point</h3>
+<section id="no-clear-entry-point" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" class="anchored" data-anchor-id="no-clear-entry-point"><span class="header-section-number">1.7.2</span> No clear entry point</h3>
 <pre><code>02-no-clear-entry-point/
 ├── analysis.R
 ├── clean.R
@@ -705,14 +1085,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ├── script.R
 └── tests.R</code></pre>
 <p>There are eleven <code>.R</code> files and no way to tell which one runs first. If the only way to know the order they are run in, is only in your head, the project is not reproducible. It is a performance that only you can give.</p>
-<ul>
-<li>The problem: When task order is required, but it is not written down, you cannot reproduce the task.</li>
-<li>The outcome: Encode the task order in another file, such as “make-project.R”, and/or put the files in order.</li>
-</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Problem</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Improvement</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<p>When task order is required, but it is not written down, you cannot reproduce the task.</p>
+<details>
+<summary>
+showing the above file preview
+</summary>
+<pre><code>02-no-clear-entry-point/
+├── analysis.R
+├── clean.R
+├── data.csv
+├── do_it.R
+├── final.R
+├── helpers.R
+├── main.R
+├── model.R
+├── plots.R
+├── run.R
+├── script.R
+└── tests.R</code></pre>
+</details>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p>Encode the task order in another file, such as “00-run-first.R” - adding numbers to the start of the file will mean they sort the files in order. If files aren’t useful anymore, you can delete them, or you can put them in an “attic” folder, if you aren’t ready to let them go.</p>
+<pre><code>02-no-clear-entry-point/
+├── 00-run-first.R
+├── 01-helpers.R
+├── 02-clean.R
+├── 03-analysis.R
+├── 04-model.R
+├── 05-plots.R
+├── 06-tests.R
+├── 07-final.R
+└── data/
+    └── data.csv
+└── attic/
+    ├── xx-main.R
+    ├── xx-do_it.R
+    └── xx-script.R</code></pre>
+</div>
+</div>
+</div>
 </section>
-</section>
-<section id="file-names-encode-history-not-content" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="file-names-encode-history-not-content"><span class="header-section-number">1.9</span> File names encode history, not content</h2>
+<section id="file-names-encode-history-not-content" class="level3" data-number="1.7.3">
+<h3 data-number="1.7.3" class="anchored" data-anchor-id="file-names-encode-history-not-content"><span class="header-section-number">1.7.3</span> File names encode history, not content</h3>
 <pre><code>04-names-encode-history/
 ├── analysis.R
 ├── analysis2.R
@@ -723,21 +1142,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ├── analysis_final_v2.R
 └── penguins.csv</code></pre>
 <p>The <em>names</em> of these files tell a story: the analysis progressed, things changed, and there were concerns about knowing which version worked, and being able to go back and change things. You can think of this as using “track changes” in a word document. This is a kind of version control. But naming the files in order to track versions creates problems, and it is better solved with specific version control software, such as git. I cover this in another course, <a href="https://gentle-git.njtierney.com/">“Introduction to git and github”</a>.</p>
-<ul>
-<li>The problem: There are multiples of the same file with names that tell you their version, rather than their task.</li>
-<li>The solution: Name the files for what they do, not when you made them. Use a version control system like <a href="">git</a></li>
-</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Problem</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<p>There are multiples of the same file with names that tell you their version, rather than their task.</p>
+<details>
+<summary>
+showing the above file preview
+</summary>
+<pre><code>04-names-encode-history/
+├── analysis.R
+├── analysis2.R
+├── analysis_final.R
+├── analysis_final_USE_THIS_ONE.R
+├── analysis_final_USE_THIS_ONE_v2 (nick edits).R
+├── analysis_final_USE_THIS_ONE_v2.R
+├── analysis_final_v2.R
+└── penguins.csv</code></pre>
+</details>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<p>Name the files for what they do, not when you made them<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. If you aren’t ready to let them go, use the “attic” folder.</p>
+<pre><code>04-names-encode-history/
+├── analysis.R
+└── data/
+    └── penguins.csv
+└── attic
+    ├── analysis2.R
+    ├── analysis_final.R
+    ├── analysis_final_USE_THIS_ONE.R
+    ├── analysis_final_USE_THIS_ONE_v2 (nick edits).R
+    ├── analysis_final_USE_THIS_ONE_v2.R
+    └── analysis_final_v2.R</code></pre>
+</div>
+</div>
+</div>
 </section>
-<section id="editing-raw-data-in-place" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="editing-raw-data-in-place"><span class="header-section-number">1.10</span> Editing raw data in place</h2>
+<section id="editing-raw-data-in-place" class="level3" data-number="1.7.4">
+<h3 data-number="1.7.4" class="anchored" data-anchor-id="editing-raw-data-in-place"><span class="header-section-number">1.7.4</span> Editing raw data in place</h3>
+<!-- note - TODO - show a directory with .xlsx raw data -->
 <p>You might have some data provided for analysis and there might be instructions to go through by hand to fix typos, or add new data. You should not make hand edits to the file, as this changes the history and increases the chances of a non-repeatable change. You can make a critical error by accidentally hitting the wrong key. From experience, having accidentally sorted a single column in an excel sheet and not realising this, I essentially turned a meaningful data source into random noise.</p>
 <ul>
 <li>The problem: Hand editing raw data</li>
-<li>The solution: raw data should be read-only, and changes that happen to it happen with code, and are saved to separate outputs.</li>
+<li>The solution: Raw data should be read-only, and changes that happen to it happen with code, and are saved to separate outputs.</li>
 </ul>
+<p>The way you actually enforce that is with two folders. <code>data-raw/</code> holds the file exactly as it arrived and nothing ever writes to it. <code>data/</code> holds the version your analysis reads, and it is produced by a script.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Problem</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Better</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<p>One file, edited by hand, and no way to tell what you changed or when.</p>
+<pre><code>04-editing-raw-data/
+├── analysis.R
+└── penguin-survey.xlsx     ← opened in Excel, typos fixed by hand</code></pre>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<pre><code>04-editing-raw-data/
+├── data-raw/
+│   ├── penguin-survey.xlsx  ← exactly as it arrived. Read only.
+│   ├── clean-penguins.R     ← every fix you would have made by hand
+│   └── README.md            ← where it came from, and when
+├── data/
+│   └── penguins.csv         ← written by clean-penguins.R
+└── analysis.R               ← reads data/, never the xlsx</code></pre>
+</div>
+</div>
+</div>
+<p>Every correction is now a line of code. You can read it, re-run it, and disagree with it in six months. The typo fix that used to be a keystroke nobody saw is now <code>mutate(species = if_else(species == "Adelei", "Adelie", species))</code>, sitting in a script with the raw file beside it.</p>
+<p>And it survives the thing that hand editing cannot: the data arriving again next year, slightly different. Re-run the script.</p>
 </section>
-<section id="outputs-mixed-in-with-inputs" class="level2" data-number="1.11">
-<h2 data-number="1.11" class="anchored" data-anchor-id="outputs-mixed-in-with-inputs"><span class="header-section-number">1.11</span> Outputs mixed in with inputs</h2>
+<section id="outputs-mixed-in-with-inputs" class="level3" data-number="1.7.5">
+<h3 data-number="1.7.5" class="anchored" data-anchor-id="outputs-mixed-in-with-inputs"><span class="header-section-number">1.7.5</span> Outputs mixed in with inputs</h3>
 <pre><code>03-outputs-mixed-with-inputs/
 ├── 01-clean.R
 ├── 02-model.R
@@ -747,7 +1223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ├── model_fit.rds
 ├── penguins.csv
 └── raw survey data.xlsx</code></pre>
-<p>In this case, figures, model outputs, and cleaned data sit in the same folder as your raw data and scripts. This mean that you cannot tell at a glance what is necessary for your analysis, and what is produced as output by your analysis. If you cannot tell what is input, and what is output, it means you don’t have a clear sense of how to reproduce files, or where edits can be safely made. A good test: <em>could I delete this folder entirely and regenerate it by running my code?</em> If yes, it is an output, and it should live somewhere that says so.</p>
+<p>In this case, figures, model outputs, and cleaned data sit in the same folder as your raw data and scripts. You cannot tell at a glance what is necessary for your analysis, and what is produced as output by your analysis. This means you don’t have a clear sense of how to reproduce files, or where edits can be safely made. A good test: <em>could I delete this folder entirely and regenerate it by running my code?</em> If yes, it is an output, and it should live somewhere that says so.</p>
 <ul>
 <li>The problem: Not knowing what is inputs vs outputs impacts reproducibility.</li>
 <li>The solution: Clearly label inputs and outputs - potentially put your outputs in an “outputs” folder. Or have a file that describes the inputs and outputs, such as a README, or an analysis script.</li>
@@ -771,42 +1247,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="common-project-structures" class="level2" data-number="1.12">
-<h2 data-number="1.12" class="anchored" data-anchor-id="common-project-structures"><span class="header-section-number">1.12</span> Common project structures</h2>
-<p>There is no single correct structure, but there is a common shape that most working structures converge on:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/project-structure-kinds.png" class="img-fluid figure-img" style="width:100.0%" alt="A project folder called my-project, drawn as six rows, one for each kind of thing it holds. Row one: my-project.Rproj and README.md, labelled start here - open the .Rproj, read the README. Row two: data-raw/ containing penguins-raw.csv and clean-penguins.R, labelled read only - never edited by hand, nothing writes here. Row three: data/ containing penguins.csv, labelled made by code - written by data-raw/clean-penguins.R. Row four: R/ containing functions.R, labelled used, not run - functions you call from the scripts below. Row five: analysis/ containing 01-clean-data.R, 02-fit-model.R and 03-make-figures.R, labelled run in order, with an arrow running down the three numbered scripts. Row six: output/ containing figures/ and models/, labelled safe to delete - regenerated by re-running analysis/. Underneath, the test: could I delete this folder and get it back by running my code? Yes for data/ and output/, no for data-raw/, which is why that is the folder you back up."></p>
-<figcaption>The same structure, grouped by what each thing <em>is</em> rather than what it is called. Raw data is read only, code in <code>R/</code> gets used, scripts in <code>analysis/</code> get run in order, and everything in <code>output/</code> can be deleted and regenerated.</figcaption>
-</figure>
-</div>
-<p>The parts worth noticing:</p>
-<ul>
-<li><strong><code>data-raw/</code> holds the raw data, exactly as you received it</strong>, along with the script that cleans it. Raw data is read-only, so nothing ever writes here, and you never edit it by hand. Keeping the cleaning script next to the raw data means the two never drift apart.</li>
-<li><strong><code>data/</code> holds the analysis-ready data</strong> that the cleaning script produces. This is the version your analysis actually reads.</li>
-<li><strong><code>R/</code> holds functions.</strong> Code that gets <em>used</em>, not code that gets <em>run</em>. We will spend a whole lesson on this.</li>
-<li><strong><code>analysis/</code> holds scripts that get run</strong>, in order. The numbering is doing real work: it tells your future self the entry point without needing a README.</li>
-<li><strong><code>output/</code> holds things you can delete.</strong> Anything in here can be regenerated by re-running the analysis.</li>
-</ul>
-<p>If your project is small, collapse this. Three files in a flat folder with a README is a perfectly good project structure. The point is not to have folders. It is to have <em>a place where each kind of thing goes</em>, and to be consistent about it.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="The same structure as text, if you want to copy it">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>The same structure as text, if you want to copy it
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
+</section>
+<section id="good-enough-project-organisation" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="good-enough-project-organisation"><span class="header-section-number">1.8</span> “Good enough” project organisation</h2>
+<p>There is no single correct structure, but there is a common shape that I think gives you a great starting place:</p>
 <pre><code>my-project/
 |-- my-project.Rproj
 |-- README.md
 |-- data-raw/
 |   |-- penguins-raw.csv
 |   `-- clean-penguins.R
+|   `-- README.md
 |-- data/
 |   `-- penguins.csv
 |-- R/
@@ -818,40 +1269,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 `-- output/
     |-- figures/
     `-- models/</code></pre>
-</div>
-</div>
-</div>
-<section id="naming-the-files-themselves" class="level3" data-number="1.12.1">
-<h3 data-number="1.12.1" class="anchored" data-anchor-id="naming-the-files-themselves"><span class="header-section-number">1.12.1</span> Naming the files themselves</h3>
-<p>Naming is hard. We will come back to this throughout the course.</p>
-<p>This structure tells you <strong>where</strong> things go, but it does not tell you what to <strong>name</strong> them.</p>
-<p>The <a href="https://style.tidyverse.org/files.html">files chapter of the Tidyverse style guide</a> is short, and it is worth your time reading. I also really enjoy Jenny Bryan’s talk, <a href="https://github.com/jennybc/how-to-name-files">“How to name files like a normie”</a>:</p>
-<p>Some especially good pieces of advice:</p>
 <ul>
-<li><strong>Machine readable.</strong> No spaces, no punctuation beyond <code>-</code> and <code>_</code>, and stick to one case. <code>01-clean-data.R</code>, not <code>01 Clean Data (final).R</code>.</li>
-<li><strong>Human readable.</strong> The name should say what the file does. <code>clean-penguins.R</code> tells you something. <code>script2.R</code> does not.</li>
-<li><strong>Sorts sensibly.</strong> Numbers at the front, zero padded, so <code>01</code>, <code>02</code>, <code>10</code> stay in order. Dates as <code>YYYY-MM-DD</code>, which sorts correctly for free.</li>
+<li><strong>README</strong> - as discussed at the start - this guides the reader through just what this is.</li>
+<li><strong><code>data-raw/</code> holds the raw data, exactly as you received it</strong>, along with the script that cleans it. Raw data is read-only, so nothing ever writes here, and you never edit it by hand. Keeping the cleaning script next to the raw data means the two never drift apart. Note that there is a README.md in data-raw/ to tell you a bit more about the data. You can have more than one README.</li>
+<li><strong><code>data/</code> holds the analysis-ready data</strong> that the cleaning script produces. This is the version your analysis actually reads.</li>
+<li><strong><code>R/</code> holds functions.</strong> Code that gets <em>used</em>, not code that gets <em>run</em>. We will spend a whole lesson on this.</li>
+<li><strong><code>analysis/</code> holds scripts that get run</strong>, in order. The numbering is doing real work: it tells your future self the entry point without needing a README.</li>
+<li><strong><code>output/</code> holds things you can delete.</strong> Anything in here can be regenerated by re-running the analysis.</li>
 </ul>
-<p>That last one is the sneaky one. If your file names sort properly, your file explorer does your project organisation for you, and you get the running order without needing a README.</p>
-<p>You still need the README, of course.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Look at the file names in your most recent project.</p>
-<ol type="1">
-<li>How many have spaces in them?</li>
-<li>If you sorted them alphabetically, would the order mean anything?</li>
-<li>Pick the worst named file and give it a better name.</li>
-</ol>
-</div>
-</div>
+<p>If your project is small, collapse this. Three files in a flat folder with a README is a perfectly good project structure. The point is not to have folders. It is to have <em>a place where each kind of thing goes</em>, and to be consistent about it.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -871,10 +1297,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+<section id="how-to-name-files" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="how-to-name-files"><span class="header-section-number">1.9</span> How to name files</h2>
+<p>Naming is hard. We will come back to this throughout the course.</p>
+<p>Having this “good enough” folder structure tells you <strong>where</strong> things go, but it does not tell you what to <strong>name</strong> them. So let’s talk about that.</p>
+<p>Some especially good pieces of advice:</p>
+<ul>
+<li><strong>Machine readable.</strong> No spaces, no punctuation beyond <code>-</code> and <code>_</code>, and stick to one case. <code>01-clean-data.R</code>, not <code>01 Clean Data (final).R</code>.</li>
+<li><strong>Human readable.</strong> The name should say what the file does. <code>clean-penguins.R</code> tells you something. <code>script2.R</code> does not.</li>
+<li><strong>Sorts sensibly.</strong> Numbers at the front, zero padded, so <code>01</code>, <code>02</code>, <code>10</code> stay in order. Dates as <code>YYYY-MM-DD</code>, which sorts correctly for free.</li>
+</ul>
+<p>That last one is the sneaky one. If your file names sort properly, your file explorer does your project organisation for you, and you get the running order without needing a README.</p>
+<p>If you want to read more about this, I suggest:</p>
+<ul>
+<li><a href="https://style.tidyverse.org/files.html">The files chapter of the Tidyverse style guide</a>. It is short, and it is worth your time reading.</li>
+<li>Jenny Bryan’s talk, <a href="https://github.com/jennybc/how-to-name-files">“How to name files like a normie”</a></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Look at the file names in your most recent project.</p>
+<ol type="1">
+<li>How many have spaces in them?</li>
+<li>If you sorted them alphabetically, would the order mean anything?</li>
+<li>Pick the worst named file and give it a better name.</li>
+</ol>
+</div>
+</div>
 </section>
-<section id="good-enough-common-sense-principles-of-project-organisation" class="level2" data-number="1.13">
-<h2 data-number="1.13" class="anchored" data-anchor-id="good-enough-common-sense-principles-of-project-organisation"><span class="header-section-number">1.13</span> “Good enough” common sense principles of project organisation</h2>
-<p>I want to be clear that the goal here is <em>good enough</em>, not perfect. This phrasing comes from a paper I recommend to everyone, <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510">“Good enough practices in scientific computing”</a> by Wilson and colleagues. It is aimed at people who have real work to do and no appetite for ceremony.</p>
+<section id="make-your-project-good-enough" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="make-your-project-good-enough"><span class="header-section-number">1.10</span> Make your project “good enough”</h2>
+<p>I want to be clear that the goal here is <em>good enough</em>, not perfect. This phrasing comes from a paper I recommend to everyone, <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510">“Good enough practices in scientific computing”</a> by Wilson et al.</p>
 <p>The principles I would hold you to:</p>
 <ol type="1">
 <li><strong>Put each project in its own folder, with its own <code>.Rproj</code> file.</strong></li>
@@ -886,11 +1346,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Write a README.</strong></li>
 </ol>
 <p>That is the whole list. If you do those seven things, you are organised enough, and the remaining effort is better spent on the analysis itself.</p>
-<p>One more principle, which is really about attitude:</p>
+<p>One more thing:</p>
 <blockquote class="blockquote">
 <p>Don’t reorganise everything tonight.</p>
 </blockquote>
-<p>Apply this to your <em>next</em> project. Retrofitting a large existing project is a big job with a small payoff, and it is a very effective way to talk yourself out of the whole idea. Start clean, once, and let the habit build.</p>
+<p>Apply this to your <em>next</em> project. Retrofitting a large existing project is a big job, and can be a very effective way to talk yourself out of the whole idea. Start clean, once, and let the habit build.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -906,148 +1366,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="always-have-a-readme" class="level2" data-number="1.14">
-<h2 data-number="1.14" class="anchored" data-anchor-id="always-have-a-readme"><span class="header-section-number">1.14</span> Always have a README</h2>
-<p>A README is a plain text file at the top of your project that answers three questions:</p>
-<ol type="1">
-<li><strong>What is this?</strong></li>
-<li><strong>How do I run it?</strong></li>
-<li><strong>Where does the data come from?</strong></li>
-</ol>
-<p>That’s it. It does not need to be long. Mine are often ten lines. Here is a complete, entirely adequate README:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu"># Penguin body mass analysis</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-label="3"></a>Fits a model of penguin body mass against flipper length and species,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-label="4"></a>for the 2026 report to the department.</span>
-<span id="cb24-5"><a href="#cb24-5" aria-label="5"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-label="6"></a><span class="fu">## How to run</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-label="7"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-label="8"></a>Open <span class="in">`penguins.Rproj`</span>, then run the scripts in <span class="in">`analysis/`</span> in order:</span>
-<span id="cb24-9"><a href="#cb24-9" aria-label="9"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-label="10"></a><span class="ss">1. </span><span class="in">`01-clean-data.R`</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-label="11"></a><span class="ss">2. </span><span class="in">`02-fit-model.R`</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-label="12"></a><span class="ss">3. </span><span class="in">`03-make-figures.R`</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-label="13"></a></span>
-<span id="cb24-14"><a href="#cb24-14" aria-label="14"></a>Figures are written to <span class="in">`output/figures/`</span>.</span>
-<span id="cb24-15"><a href="#cb24-15" aria-label="15"></a></span>
-<span id="cb24-16"><a href="#cb24-16" aria-label="16"></a><span class="fu">## Data</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-label="17"></a></span>
-<span id="cb24-18"><a href="#cb24-18" aria-label="18"></a><span class="in">`data/penguins.csv`</span> is from the {palmerpenguins} package, saved on</span>
-<span id="cb24-19"><a href="#cb24-19" aria-label="19"></a>2026-03-14. Do not edit this file.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The reason I insist on this is that the README is the only part of your project that explains <em>intent</em>. Code tells you what happens. The README tells you what you were trying to do, and that is the thing you will have forgotten.</p>
-<p>Write it first, if you can. A README written before the analysis is a plan. A README written after the analysis is an archaeology report.</p>
-<p>Two refinements worth knowing.</p>
-<p>You can have <strong>more than one README</strong>. A short one inside <code>data-raw/</code> explaining where those files came from is often the most valuable file in the whole project.</p>
-<p>And it’s worth recording <strong>when you obtained the data, and what versions of software you used</strong>, so that someone later, including you, can reconstruct similar conditions.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="This pays off when the project becomes a paper">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>This pays off when the project becomes a paper
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Everything in this lesson is framed around your future self. But the same structure is what makes your work usable by <em>anyone</em> else, and that matters most at publication.</p>
-<p>Karthik Ram and I wrote about this in <a href="https://www.cell.com/patterns/fulltext/S2666-3899(21)00230-0">Common sense approaches to sharing tabular data alongside publication</a> (<em>Patterns</em>, 2021). The argument, in short: depositing data doesn’t make it reusable. What makes it reusable is mundane and structural.</p>
-<ul>
-<li>A README that says who, what, when, where and how.</li>
-<li><strong>Both</strong> the raw data and the analysis-ready data, each in its own folder.</li>
-<li>The cleaning script that turns one into the other, kept with the raw data.</li>
-<li>Metadata describing each variable: its name, what it means, and its type. Enough to stop someone reading a gene sequence as a date.</li>
-<li>A licence. We recommend CC0.</li>
-</ul>
-<p>If you organise your project this way from the start, you don’t have to do anything special at submission. You’re already most of the way there.</p>
-<p>That’s the real payoff, and it’s why I’d rather you set this up now than tidy it up later.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Write a README for the project you sketched above. Ten lines. Answer the three questions.</p>
-<p>Do it now, before you write any code - you will find it clarifies what you are actually about to do.</p>
-</div>
-</div>
-</section>
-<section id="rstudio-and-positron-set-up" class="level2" data-number="1.15">
-<h2 data-number="1.15" class="anchored" data-anchor-id="rstudio-and-positron-set-up"><span class="header-section-number">1.15</span> RStudio and Positron set up</h2>
-<p>There are two settings that matter more than all the others, and both are about making sure your R session starts empty every time.</p>
-<p>By default, R offers to save your workspace when you quit, and reload it when you start. This sounds helpful. It is not. It means your analysis works because of an object you created three weeks ago and can no longer remember making. When you eventually restart cleanly, the code breaks, and you have no idea why.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">RStudio</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Positron</a></li></ul>
-<div class="tab-content">
-<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<p>Tools → Global Options (or <code>Cmd + ,</code> on macOS) → General.</p>
-<p>Under <strong>Workspace</strong>:</p>
-<ul>
-<li>Uncheck <strong>Restore .RData into workspace at startup</strong></li>
-<li>Set <strong>Save workspace to .RData on exit</strong> to <strong>Never</strong></li>
-</ul>
-<p>Under <strong>History</strong>:</p>
-<ul>
-<li>Uncheck <strong>Always save history (even when not saving .RData)</strong></li>
-<li>Uncheck <strong>Remove duplicate entries in history</strong></li>
-</ul>
-<p><img src="figs/rstudio-remove-data.png" class="img-fluid" style="width:70.0%" alt="Setting the options so you neither restore nor save your previous session's work."></p>
-<p><em>Setting the options so you neither restore nor save your previous session’s work.</em></p>
-</div>
-<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<p>The same settings live under Settings → Extensions → R. The equivalent behaviour is off by default, so there is usually nothing to change - but it is worth looking, so you know where it is.</p>
-<!-- SCREENSHOT NEEDED: Positron settings, Extensions > R, showing the
-     workspace/restore options. -->
-</div>
-</div>
-</div>
-<p>This matters for two reasons:</p>
-<ol type="1">
-<li><strong>Reproducibility.</strong> You don’t want objects from last week cluttering your session, and you don’t want an analysis that only works because of one of them.</li>
-<li><strong>Privacy.</strong> You don’t want private data written into a <code>.RData</code> file on disk as a side effect of quitting. You want to read data in, deliberately, every time.</li>
-</ol>
-<p>Your history is the list of commands you have typed. Not saving it means you won’t come to rely on something you typed in a previous session - which is a good habit to build.</p>
-<p>You can also do this from code:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_blank_slate</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>With that set, restarting R gives you a genuinely clean session. The keyboard shortcut is worth memorising:</p>
-<ul>
-<li><strong>Restart R</strong>: <code>Cmd/Ctrl + Shift + F10</code></li>
-</ul>
-<p>The habit that goes with it: <strong>restart R often, and re-run your script from the top.</strong> If it works from a clean session, it works. If it only works in your current session, you have a bug that hasn’t happened yet.</p>
-<p>This is also the single cheapest check that your project is portable.</p>
-<p>Running your scripts in a clean environment is how you find out whether the code quietly depends on something that only exists on your machine. An object you made by hand, a package you loaded and forgot, or your own folder layout.</p>
-<p>Nobody else has any of those.</p>
-<p>While you are in the settings, two more worth turning on:</p>
-<ul>
-<li><strong>Show line numbers</strong> - you cannot discuss code you cannot point at.</li>
-<li><strong>Rainbow parentheses</strong> - cheap insurance against a very common class of error.</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Turn off workspace saving using the settings above, or run <code>usethis::use_blank_slate()</code>.</li>
-<li>Restart R with <code>Cmd/Ctrl + Shift + F10</code>.</li>
-<li>Open your most recent analysis script and run it from the top in the clean session.</li>
-<li>Did it work? If not - and it very often does not - that gap is exactly what the rest of this course is about.</li>
-</ol>
-</div>
-</div>
-</section>
-<section id="summary" class="level2" data-number="1.16">
-<h2 data-number="1.16" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.16</span> Summary</h2>
+<section id="summary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
 <ul>
 <li>You are always collaborating with your future self.</li>
 <li>A file path is the address of a file; absolute paths only work on one machine.</li>
@@ -1062,11 +1382,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </section>
+<section class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
+<ul>
+<li><a href="https://qmd4sci.njtierney.com/workflow.html">“Workflow”</a></li>
+<li><a href="https://qmd4sci.njtierney.com/rstudio.html">RStudio, what and why</a></li>
+<li><a href="https://qmd4sci.njtierney.com">“quarto for scientists”</a></li>
+<li><a href="./setup.html#sec-rbp-exercises">course exercises</a></li>
+<li><a href="https://docs.posit.co/ide/user/ide/guide/ui/command-palette.html">Posit’s RStudio guide to the Command Palette</a></li>
+<li><a href="https://github.com/microsoft/vscode">“Visual Studio Code - Open Source”</a></li>
+<li><a href="https://positron.posit.co/migrate-rstudio-compare.html">Posit’s article on the topic</a></li>
+<li><a href="https://en.wikipedia.org/wiki/PNG">“PNG”</a></li>
+<li><a href="https://tidyverse.org/blog/2017/12/workflow-vs-script/">“Project-oriented workflow”</a></li>
+<li><a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a></li>
+<li><a href="https://positron.posit.co/migrate-rstudio-rproj.html">“The R Proj File”</a></li>
+<li><a href="https://here.r-lib.org/">{here}</a></li>
+<li><a href="https://www.cell.com/patterns/fulltext/S2666-3899(21)00230-0">Common sense approaches to sharing tabular data alongside publication</a></li>
+<li><a href="https://gentle-git.njtierney.com/">“Introduction to git and github”</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Git">git</a></li>
+<li><a href="https://style.tidyverse.org/files.html">The files chapter of the Tidyverse style guide</a></li>
+<li><a href="https://github.com/jennybc/how-to-name-files">“How to name files like a normie”</a></li>
+<li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510">“Good enough practices in scientific computing”</a></li>
+</ul>
+</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>This section draws from <a href="https://qmd4sci.njtierney.com/workflow.html">“Workflow”</a> from my course: <a href="https://qmd4sci.njtierney.com">“quarto for scientists”</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>I swear I heard ot from someone else, but I cannot find the source<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>That lowest folder is called the <strong>root</strong> - the one folder that contains everything else. On macOS and Linux it is written <code>/</code>, so an absolute path always starts with a <code>/</code>. On Windows it is usually <code>C:\</code>. Your own home folder sits just inside it, at <code>/Users/yourname</code> on macOS or <code>/home/yourname</code> on Linux, and has a shorthand: <code>~</code>. So <code>~/Desktop/analysis-2026</code> and <code>/Users/njtierney/Desktop/analysis-2026</code> are the same place, on my machine only.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I swear I heard it from someone else, but I cannot find the source<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Ideally, you would use a version control system like <a href="https://en.wikipedia.org/wiki/Git">git</a>. Out of scope for this course.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1478,6 +1822,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./code-style-and-readability.html" class="pagination-link" aria-label="Code style and readability">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

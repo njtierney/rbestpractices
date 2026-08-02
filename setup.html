@@ -141,7 +141,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <a href="./">R Best Practices</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/njtierney/rbestpractices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="./R-Best-Practices.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -170,6 +169,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-style-and-readability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-readable-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -192,11 +203,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
   <li><a href="#the-r-packages" id="toc-the-r-packages" class="nav-link" data-scroll-target="#the-r-packages">The R packages</a></li>
-  <li><a href="#code-formatters" id="toc-code-formatters" class="nav-link" data-scroll-target="#code-formatters">Code formatters</a></li>
-  <li><a href="#jarl-the-linter" id="toc-jarl-the-linter" class="nav-link" data-scroll-target="#jarl-the-linter">Jarl, the linter</a></li>
+  <li><a href="#sec-code-formatters" id="toc-sec-code-formatters" class="nav-link" data-scroll-target="#sec-code-formatters">Code formatters</a></li>
+  <li><a href="#sec-jarl-setup" id="toc-sec-jarl-setup" class="nav-link" data-scroll-target="#sec-jarl-setup">Jarl, the linter</a></li>
   <li><a href="#checking-it-all-worked" id="toc-checking-it-all-worked" class="nav-link" data-scroll-target="#checking-it-all-worked">Checking it all worked</a></li>
   <li><a href="#if-something-will-not-install" id="toc-if-something-will-not-install" class="nav-link" data-scroll-target="#if-something-will-not-install">If something will not install</a></li>
   </ul></li>
+  <li><a href="#sec-rbp-exercises" id="toc-sec-rbp-exercises" class="nav-link" data-scroll-target="#sec-rbp-exercises">Get course exercise materials on your machine</a></li>
+  <li>Links</li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/setup.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -433,8 +446,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-15"><a href="#cb6-15" aria-label="15"></a><span class="fu">install.packages</span>(<span class="st">'fnmate'</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">'https://milesmcbain.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>sf</code> and <code>sp</code> are only needed for one optional exercises. They are the heaviest things on the list, so if they give you trouble, leave them and let me know.</p>
 </section>
-<section id="code-formatters" class="level3">
-<h3 class="anchored" data-anchor-id="code-formatters">Code formatters</h3>
+<section id="sec-code-formatters" class="level3">
+<h3 class="anchored" data-anchor-id="sec-code-formatters">Code formatters</h3>
 <p><a href="https://posit-dev.github.io/air/">Air</a> is an R formatter from Posit. It is not an R package, so it installs from the terminal rather than from R.</p>
 <p>See their installation instruction on their website:</p>
 <p>But briefly, here are the most popular ways to install:</p>
@@ -446,12 +459,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="ex">air</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You should get a version number back. If you get “command not found”, the install did not finish, so try it again.</p>
 <p>We set up format-on-save together in chapter 2, so there is nothing else to do with air before we start.</p>
-<p>If you have trouble installing {air}, we have installed the {styler} R package before, which does the same thing, just not as fast.</p>
+<p>If you have trouble installing {air}, <code>{styler}</code> is in the package list above and does the same job, just not as fast.</p>
 </section>
-<section id="jarl-the-linter" class="level3">
-<h3 class="anchored" data-anchor-id="jarl-the-linter">Jarl, the linter</h3>
+<section id="sec-jarl-setup" class="level3">
+<h3 class="anchored" data-anchor-id="sec-jarl-setup">Jarl, the linter</h3>
 <p><a href="https://jarl.etiennebacher.com/">Jarl</a> is a fast linter by <a href="https://www.etiennebacher.com/">Etienne Bacher</a>, built on top of Air. Installation instructions are on its site.</p>
-<p>If jarl gives you any trouble, do not worry about it. <code>lintr</code> is in the package list above and does the same job from inside R, and everything in chapter 2 works with either.</p>
+<p><strong>Jarl is optional.</strong> Like air, it is a command line tool rather than an R package, so the install can go wrong in all the same ways, and I do not want you fighting it before we start.</p>
+<p>If it gives you any trouble, do not worry about it. <code>{flir}</code> is in the package list above - it is by Etienne as well, it installs the way every other R package installs, and it is the one that will still fix things for you. <code>{lintr}</code> is in the list too. Everything in chapter 2 works with any of the three.</p>
 </section>
 <section id="checking-it-all-worked" class="level3">
 <h3 class="anchored" data-anchor-id="checking-it-all-worked">Checking it all worked</h3>
@@ -459,7 +473,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>  <span class="st">"tidyverse"</span>, <span class="st">"here"</span>, <span class="st">"lintr"</span>, <span class="st">"styler"</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-label="3"></a>  <span class="st">"spelling"</span>, <span class="st">"usethis"</span>, <span class="st">"reprex"</span>, <span class="st">"fnmate"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>  <span class="st">"fnmate"</span>, <span class="st">"goodpractice"</span>, <span class="st">"sf"</span>, <span class="st">"sp"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>  <span class="st">"flir"</span>, <span class="st">"goodpractice"</span>, <span class="st">"sf"</span>, <span class="st">"sp"</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-label="5"></a>)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-label="6"></a></span>
 <span id="cb10-7"><a href="#cb10-7" aria-label="7"></a><span class="fu">sapply</span>(pkgs, requireNamespace, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -471,9 +485,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="if-something-will-not-install">If something will not install</h3>
 <p>Please do send me an email before the session rather than fighting with it on your own.</p>
 <p>Installation problems are almost always specific to one machine, and they are much faster to solve with two people looking at them. They are also, genuinely, not a reflection on you. Every one of us has lost an afternoon to a package that would not build. Ask me for some horror stories.</p>
+</section>
+</section>
+<section id="sec-rbp-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="sec-rbp-exercises">Get course exercise materials on your machine</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s download the course exercise - try running this code:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">use_course</span>(<span class="st">"njtierney/rbp-exercises"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Which will prompt you to download the repository, <a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a>, and then open it in an RStudio project.</p>
+<p><img src="gifs/demo-use-course.gif" class="img-fluid" alt="An animation of use_course running in RStudio. It asks permission to download the exercises, unpacks them into a folder on the Desktop, and opens that folder as a new RStudio project in a fresh session, with the numbered exercise folders listed in the Files pane."></p>
+<p>If you have troubles with this (sometimes firewalls can stop you) you can download it from the github page <a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a> like so:</p>
+<p><img src="figs/rstudio-download-rbp-exercises.png" class="img-fluid" alt="The rbp-exercises repository on GitHub, showing the numbered exercise folders. The green Code button has been clicked and its dropdown is open, with Download ZIP highlighted at the bottom of the list."></p>
+<p>Then, unzip that, and click on the rbp-exercises.Rproj file:</p>
+<p><img src="figs/rstudio-show-rbp-rpoj.png" class="img-fluid" alt="The unzipped rbp-exercises folder in a file browser, listing the numbered exercise folders. rbp-exercises.Rproj is highlighted, with README.md underneath it. That .Rproj file is the one to open."></p>
+</div>
+</div>
 
 
 </section>
+<section class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
+<ul>
+<li><a href="https://www.stat.auckland.ac.nz/~ihaka/downloads/R-paper.pdf">R: A Language for Data Analysis and Graphics</a></li>
+<li><a href="https://quarto.org/docs/authoring/callouts.html">Quarto: callout blocks</a></li>
+<li><a href="https://r-best-practices.njtierney.com" class="uri">https://r-best-practices.njtierney.com</a></li>
+<li><a href="https://github.com/njtierney/rbestpractices" class="uri">https://github.com/njtierney/rbestpractices</a></li>
+<li><a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a></li>
+<li><a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a></li>
+<li><a href="https://posit.co/download/rstudio-desktop/">RStudio</a></li>
+<li><a href="https://positron.posit.co/">Positron</a></li>
+<li><a href="https://allisonhorst.github.io/palmerpenguins/">palmerpenguins</a></li>
+<li><a href="https://www.njtierney.com/posts/2025-04-14-r-version-4-5-0-is-out/">R version 4.5.0 is out</a></li>
+<li><a href="https://ellakaye.github.io/basepenguins/"><code>basepenguins</code></a></li>
+<li><a href="https://posit-dev.github.io/air/">Air</a></li>
+<li><a href="https://jarl.etiennebacher.com/">Jarl</a></li>
+<li><a href="https://www.etiennebacher.com/">Etienne Bacher</a></li>
+</ul>
 </section>
 
 </main> <!-- /main -->
