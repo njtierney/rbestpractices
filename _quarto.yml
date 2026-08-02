@@ -52,6 +52,10 @@ format:
     classoption: [justified, a4paper]
     include-in-header: tufte.tex
     keep-tex: true
+    # The default mono font has no box-drawing glyphs, so the file trees
+    # silently lost every ├── and └── in print, leaving an indented list of
+    # names with no structure. Fira Code has them, and matches the HTML.
+    monofont: "Fira Code"
     # tufte-book's float machinery cannot handle Quarto's default
     # `\begin{figure}[H]` - it fails with "Extra }, or forgotten
     # \endgroup" at \end{figure}. Any captioned image triggers it.

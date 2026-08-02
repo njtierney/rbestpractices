@@ -6,7 +6,7 @@ This course is all about best practices in R. At its foundation, I think this be
 
 Remember: your project doesn't have to be perfectly organised. Instead, we focus on making the next project a little better, each time.
 
-It is worth noting that this This section draws from  ["Workflow"](https://qmd4sci.njtierney.com/workflow.html) and [RStudio, what and why](https://qmd4sci.njtierney.com/rstudio.html) from my course: ["quarto for scientists"](https://qmd4sci.njtierney.com).
+It is worth noting that this section draws from ["Workflow"](https://qmd4sci.njtierney.com/workflow.html) and [RStudio, what and why](https://qmd4sci.njtierney.com/rstudio.html) from my course: ["quarto for scientists"](https://qmd4sci.njtierney.com).
 
 ## Overview {.unnumbered}
 
@@ -109,8 +109,6 @@ You can restart R with a keyboard shortcut:
 
 :::
 
-:::
-
 
 ::: {.callout-note title="Your Turn"}
 
@@ -154,15 +152,6 @@ Positron also has the command palette! The same command as RStudio.
 
 :::
 
-::: {.callout-note title="Your Turn"}
-
-1. Turn off workspace saving using the settings above, or run `usethis::use_blank_slate()`.
-2. Restart R with `Cmd/Ctrl + Shift + F10`.
-3. Open your most recent analysis script and run it from the top in the clean session.
-4. Discuss why your work did/did not work
-
-:::
-
 
 ::: {.callout-tip title="RStudio vs Positron?" collapse="true"}
 
@@ -178,7 +167,7 @@ Worth saying upfront - RStudio isn't going away.
   - A fork of ["Visual Studio Code - Open Source"](https://github.com/microsoft/vscode)
   - Comes with many (most?) of the features of VS Code
   - Rich marketplace of extensions
-  - "polyglot" - works on all l
+  - "polyglot" - works with many languages, not just R
 
 Which to choose? Here are my opinions:
 
@@ -222,19 +211,19 @@ Let's define a few of these terms: files, directories, and paths.
 Below we show some examples of a folder structure, of directories, and files
 
 ```
-Users --------------------------------------------->> Directory/
-  `-- njtierney ----------------------------------->> Directory/
-      `-- Desktop --------------------------------->> Directory/
-          `-- analysis-2026 ----------------------->> Directory/
-              |-- analysis-2026.Rproj -----< File
-              |-- data ---------------------------->> Directory/
-              |   `-- penguins.csv -------< File
-              `-- exploratory-analysis ------------>> Directory/
-              |   |-- explore.R ----------< File
-              |   `-- eda-document.docx --< File
-              |   `-- eda-document.qmd ---< File
-              |   `-- graph.png ----------< File
-              `-- README.md --------------< File
+Users/                                  ← Directory
+└── njtierney/                          ← Directory
+    └── Desktop/                        ← Directory
+        └── analysis-2026/              ← Directory
+            ├── analysis-2026.Rproj     ← File
+            ├── data/                   ← Directory
+            │   └── penguins.csv        ← File
+            ├── exploratory-analysis/   ← Directory
+            │   ├── explore.R           ← File
+            │   ├── eda-document.qmd    ← File
+            │   ├── eda-document.docx   ← File
+            │   └── graph.png           ← File
+            └── README.md               ← File
 ```
 
 We can refer to a given location with a "path" - which we refer to as a "file path" or a "directory path" depending on which we are navigating to. Here are some examples of paths for two directories, and two files.
@@ -245,8 +234,34 @@ We can refer to a given location with a "path" - which we refer to as a "file pa
   - **File** path of "README.md"
 - `Users/njtierney/Desktop/analysis-2026/data`
   - **Directory** path of "data"
-- `Users/njtierney/Desktop/analysis-2026/data/penguins.csv` 
+- `Users/njtierney/Desktop/analysis-2026/data/penguins.csv`
   - **File** path of "penguins.csv"
+
+A path is just the folders you walk through to get there, joined up with `/`. Here is that last one again, with every step of it marked:
+
+```
+Users/                          ●
+└── njtierney/                  ●
+    └── Desktop/                ●
+        └── analysis-2026/      ●
+            ├── analysis-2026.Rproj
+            ├── data/           ●
+            │   └── penguins.csv●
+            ├── exploratory-analysis/
+            │   ├── explore.R
+            │   ├── eda-document.qmd
+            │   ├── eda-document.docx
+            │   └── graph.png
+            └── README.md
+```
+
+Read the marked lines top to bottom and you have written the path:
+
+```
+/Users/njtierney/Desktop/analysis-2026/data/penguins.csv
+```
+
+Nothing else in the tree is part of it. That is the whole idea - a path names one route down through the folders, and ignores everything it walks past.
 
 Let's talk a bit more about files, directories and paths.
 
@@ -300,19 +315,19 @@ penguins <- read_csv("/Users/njtierney/Desktop/analysis-2026/data/penguins.csv")
 In our diagram, that is this file:
 
 ```
-Users
-  `-- njtierney 
-      `-- Desktop 
-          `-- analysis-2026 
-              |-- analysis-2026.Rproj 
-              |-- data 
-              |   `-- penguins.csv -------<< This file is being read in
-              `-- exploratory-analysis
-              |   |-- explore.R 
-              |   `-- eda-document.qmd 
-              |   `-- eda-document.docx 
-              |   `-- graph.png 
-              `-- README.md 
+Users/
+└── njtierney/
+    └── Desktop/
+        └── analysis-2026/
+            ├── analysis-2026.Rproj
+            ├── data/
+            │   └── penguins.csv        ← this is the file being read in
+            ├── exploratory-analysis/
+            │   ├── explore.R
+            │   ├── eda-document.qmd
+            │   ├── eda-document.docx
+            │   └── graph.png
+            └── README.md
 ```
 
 You might also note that sometimes in your work, you don't write down this full path - it is very long! You might do something like:
@@ -344,7 +359,7 @@ penguins <- read_csv("data/penguins.csv")
 ![](figs/org-relative-path-pen.png){fig-alt="The same tree, but starting at the analysis-2026 project folder, with the folders above it gone. Only data and penguins.csv are highlighted. That short highlighted stretch is the whole of the relative path, because it starts from where you already are."}
 
 - The relative path looks nice and shorter. But it requires context - it needs to know from where you are reading.
-- The absolute path will work from anywhere on your machine. It reads from the lowest folder on your machine.
+- The absolute path will work from anywhere on your machine. It reads from the lowest folder on your machine.^[That lowest folder is called the **root** - the one folder that contains everything else. On macOS and Linux it is written `/`, so an absolute path always starts with a `/`. On Windows it is usually `C:\`. Your own home folder sits just inside it, at `/Users/yourname` on macOS or `/home/yourname` on Linux, and has a shorthand: `~`. So `~/Desktop/analysis-2026` and `/Users/njtierney/Desktop/analysis-2026` are the same place, on my machine only.]
 
 But, will the absolute work on your colleagues machine? On your machine in two weeks, next month, next year? No. My absolute path will not work on your machine. Your computer (almost certainly) doesn't have a `/Users/njtierney/` folder. It won't work on your own machine after you reorganise your folders when you spring clean. It won't work on the cloud.
 
@@ -438,7 +453,7 @@ This helps keep you sane, because:
 **Projects resolve file path problems**, because they automatically set the working directory to the location of the project.
 
 
-## Get course exercise materials on your machine {#sec-rbp-exercises}
+## Get course exercise materials on your machine {#sec-rbp-exercises-ch1}
 
 
 :::{.callout-note title="Your Turn"}
@@ -619,17 +634,24 @@ A well organised project does not guarantee reproducibility. But, if you can't t
 
 A well organised project makes it easier to check, run later, and understand.
 
-A README does not need to be long. Mine are often ten lines. Here is a complete, entirely adequate README:
+A README does not need to be long. Mine are often ten lines. It just has to answer those six questions.
+
+Here is a complete, entirely adequate README, with the question each part is answering marked in the margin:
 
 ```markdown
-# Penguin body mass analysis
+# Penguin body mass analysis                        ← WHAT
 
-Fits a model of penguin body mass against flipper length and species,
-for the 2026 report to the department.
+Fits a model of penguin body mass against flipper
+length and species, for the 2026 report to the
+department.                                         ← WHY
 
-## How to run
+Run by Nick Tierney. Last run 2026-03-14, on my
+laptop, with R 4.5.0.                               ← WHO, WHEN, WHERE
 
-Open `penguins.Rproj`, then run the scripts in `analysis/` in order:
+## How to run                                       ← HOW
+
+Open `penguins.Rproj`, then run the scripts in
+`analysis/` in order:
 
 1. `01-clean-data.R`
 2. `02-fit-model.R`
@@ -639,9 +661,13 @@ Figures are written to `output/figures/`.
 
 ## Data
 
-`data/penguins.csv` is from the {palmerpenguins} package, saved on
-2026-03-14. Do not edit this file.
+`data/penguins.csv` is from the {palmerpenguins}
+package, saved on 2026-03-14. Do not edit this file.
 ```
+
+The arrows are not part of the file. They are there to show you that a short README is not a summary of the project - it is six answers, in whatever order suits you.
+
+If you are staring at an empty `README.md` and do not know where to start, write the six words down the page and fill them in.
 
 Write the README first, if you can, and return to it often.
 
@@ -999,6 +1025,39 @@ You might have some data provided for analysis and there might be instructions t
 
 - The problem: Hand editing raw data
 - The solution: Raw data should be read-only, and changes that happen to it happen with code, and are saved to separate outputs.
+
+The way you actually enforce that is with two folders. `data-raw/` holds the file exactly as it arrived and nothing ever writes to it. `data/` holds the version your analysis reads, and it is produced by a script.
+
+::: {.panel-tabset}
+
+## Problem
+
+One file, edited by hand, and no way to tell what you changed or when.
+
+```
+04-editing-raw-data/
+├── analysis.R
+└── penguin-survey.xlsx     ← opened in Excel, typos fixed by hand
+```
+
+## Better
+
+```
+04-editing-raw-data/
+├── data-raw/
+│   ├── penguin-survey.xlsx  ← exactly as it arrived. Read only.
+│   ├── clean-penguins.R     ← every fix you would have made by hand
+│   └── README.md            ← where it came from, and when
+├── data/
+│   └── penguins.csv         ← written by clean-penguins.R
+└── analysis.R               ← reads data/, never the xlsx
+```
+
+:::
+
+Every correction is now a line of code. You can read it, re-run it, and disagree with it in six months. The typo fix that used to be a keystroke nobody saw is now `mutate(species = if_else(species == "Adelei", "Adelie", species))`, sitting in a script with the raw file beside it.
+
+And it survives the thing that hand editing cannot: the data arriving again next year, slightly different. Re-run the script.
 
 ### Outputs mixed in with inputs
 

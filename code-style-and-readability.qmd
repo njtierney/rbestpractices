@@ -55,13 +55,23 @@ The punctuation changed the meaning!
 You can still work out what it says. But you spend energy doing it. Our precious mental energy. 
 
 
-<!-- Note: example of the following -->
-
 We want our code to be easier to understand, when we're reading a big lump of text:
 
+::: {.panel-tabset}
 
+## As it arrived
 
-... these little bumps interrupt your thinking:
+> we ran the model on the new data and it's results where different to what we expected. the team thought maybe the cleaning script had changed But after checking, changed it had not. Their was one column read in as character not a number, which meant the mean was computed over text and returned NA this is the kind of thing thats easy to miss when your reading quickly
+
+## Tidied up
+
+> We ran the model on the new data, and its results were different to what we expected. The team thought maybe the cleaning script had changed, but after checking, it had not. There was one column read in as a character rather than a number, which meant the mean was computed over text and returned `NA`. This is the kind of thing that is easy to miss when you are reading quickly.
+
+:::
+
+Both say the same thing. The second one you read once.
+
+Going through the first, you were doing unpaid work the whole way - and these little bumps interrupt your thinking:
 
 - Silently correcting correcting "their" to "there".
 - Has a sentence ended? There was a capital letter.
@@ -92,38 +102,34 @@ R accepted both without complaint, which is the whole problem.
 
 Compare these two:
 
+Both of these take the chicks at day 21, and ask which diets came out above the average weight.
+
 ```{r}
+#| message: false
+library(tidyverse)
 d<-ChickWeight
-d<-d[d$Time==21,]
 M<-mean(d$weight)
-S<-sd(d$weight)
-t<-tapply(d$weight,d$Diet,mean)
-t2<-tapply(d$weight,d$Diet,length)
-r<-data.frame(D=names(t),m=as.numeric(t),n=as.numeric(t2))
-r<-r[order(-r$m),]
-r$f<-r$m>M
+d<-d|>filter(Time==21)
+r<-d|>group_by(Diet)|>summarise(m=mean(weight),n=n())|>arrange(desc(m))|>mutate(f=m>M)
 r
 ```
 
 ```{r}
-head(ChickWeight)
-day_21 <- ChickWeight$Time == 21
-chicks_day_21 <- ChickWeight[day_21, ]
+library(tidyverse)
 
-weight_mean <- mean(chicks_day_21$weight)
-weight_sd <- sd(chicks_day_21$weight)
+overall_mean <- mean(ChickWeight$weight)
 
-mean_by_diet <- tapply(chicks_day_21$weight, chicks_day_21$Diet, mean)
-chicks_by_diet <- tapply(chicks_day_21$weight, chicks_day_21$Diet, length)
+chicks_day_21 <- ChickWeight |>
+  filter(Time == 21)
 
-diet_summary <- data.frame(
-  diet = names(mean_by_diet),
-  weight_mean = as.numeric(mean_by_diet),
-  n_chicks = as.numeric(chicks_by_diet)
-)
-
-diet_summary <- diet_summary[order(-diet_summary$weight_mean), ]
-diet_summary$above_overall_mean <- diet_summary$weight_mean > weight_mean
+diet_summary <- chicks_day_21 |>
+  group_by(Diet) |>
+  summarise(
+    weight_mean = mean(weight),
+    n_chicks = n()
+  ) |>
+  arrange(desc(weight_mean)) |>
+  mutate(above_overall_mean = weight_mean > overall_mean)
 
 diet_summary
 ```
@@ -133,6 +139,20 @@ These both run. R does not care where you put your spaces. R does not care that 
 But you care about these things - every stray space, and every inconsistent name is one more small correction you make before you can get at what the code is trying to do.
 
 You are spending your mental cycles on this problem. It would be nice if you didn't have to do that.
+
+### Both of those are wrong
+
+Let's look closely at that last column. Every diet is above the overall mean. Weird?
+This happens because the overall mean is taken from `ChickWeight` **before** the filter. It is the average weight across every day of the study - day 0 chicks included, when they weighed about 40 grams. Every day 21 chick clears that easily.
+
+```{r}
+mean(ChickWeight$weight) # every day
+mean(ChickWeight$weight[ChickWeight$Time == 21]) # day 21 only
+```
+
+**Both versions have the bug.** Good layout doesn't fix the bug, but it make it (in my opinion!) easier to notice. `M` and `m` tell you nothing, so there is nothing to be suspicious about. `overall_mean` and `weight_mean` sitting on the same line, makes us ask: the overall mean of *what*?
+
+The style helps buy back some of your attention.
 
 And that is part of what this lesson is about - there are ways to automate a lot of this! And there are ways to turn the rest into a habit, so it stops being a decision you make every time you write a line.
 
@@ -168,19 +188,78 @@ d2 <- d[d$Time == 21, ]
 chicks_day_21 <- ChickWeight[ChickWeight$Time == 21, ]
 ```
 
-No tool can do this for you, because a name is a decision about meaning.
+This one is yours, because a name is a decision about meaning.
 
 There is a third thing that is not style at all, but often gets lumped in with it.
 
 **Correctness.** Whether your code actually does what you think it does.
 
-```r
-# correctness
-if (all.equal(x, y)) "same" else "different"
-if (isTRUE(all.equal(x, y))) "same" else "different"
+This one is worth doing slowly, with two examples, because the failures are quiet.
+
+**Comparing two numbers.** You would think this is safe:
+
+```{r}
+0.1 + 0.2 == 0.3
 ```
 
-Both of those are laid out perfectly well. Only one of them is right, and we come back to why later in this chapter. That is a *linter's* job.
+No! Those numbers are stored as binary approximations and the answer is a hair off:
+
+```{r}
+0.1 + 0.2 - 0.3
+```
+
+So you reach for `all.equal()`, which allows a small tolerance:
+
+```{r}
+all.equal(0.1 + 0.2, 0.3)
+```
+
+Good. Now watch what it does when the two things are genuinely different:
+
+```{r}
+all.equal(1, 2)
+```
+
+It does not return `FALSE`. It returns **a sentence**. And `if()` cannot do anything with a sentence:
+
+```{r}
+#| error: true
+if (all.equal(1, 2)) "same" else "different"
+```
+
+The fix is `isTRUE()`, which asks the narrower question "is this exactly `TRUE`":
+
+```{r}
+if (isTRUE(all.equal(1, 2))) "same" else "different"
+```
+
+**What that means in an analysis.** While the two values agree, `all.equal()` returns `TRUE`, your `if` works, and you never learn there is a problem. It only breaks on the day the values differ - which is precisely the day you wrote the check for.
+
+**Recoding a factor.** Here is one that does not error at all:
+
+```{r}
+grade <- factor(c("low", "high", "low"))
+ifelse(grade == "low", grade, "other")
+```
+
+You asked for `"low"` and got `"2"`. A factor is stored as integers with labels attached:
+
+```{r}
+as.integer(grade)
+levels(grade)
+```
+
+`ifelse()` drops the labels and hands back the bare codes. So `"low"` became `"2"`, its position in the alphabetical list of levels.
+
+**What that means in an analysis.** Nothing warns you. You now have a column where a category has been replaced by its alphabetical rank, and every join, plot and table built on it downstream is quietly wrong. Add a new level next year and the numbers all shift.
+
+`dplyr::if_else()` is stricter about types and keeps the factor:
+
+```{r}
+dplyr::if_else(grade == "low", grade, factor("other"))
+```
+
+Both of those problems are laid out perfectly well. Every space is in the right place. A formatter has nothing to say about either of them, and neither does a careful read, most days. That is a *linter's* job, and we come back to it later in this chapter.
 
 So.
 
@@ -188,13 +267,32 @@ So.
 - Naming is yours
 - Correctness is a different tool
 
-![A formatter takes the layout and a linter takes the correctness. The naming in the middle is the one with no tool.](figs/style-three-jobs.png){fig-alt="Three rows, each with an example and the thing that fixes it. Layout, where the spaces and line breaks go: mean(x,na.rm=TRUE) becomes mean(x, na.rm = TRUE), and air, a formatter, fixes it on save. Naming, what you call your variables and your files: d2 becomes chicks_day_21, and the row is outlined in orange with a dashed badge reading you, by hand, because no tool can do this. Correctness, whether the code does what you think it does: if (all.equal(x, y)) becomes if (isTRUE(all.equal(x, y))), and jarl, a linter, flags it for you. The middle row is the gap the tools cannot fill." width=100%}
+![A formatter takes the top row and a linter takes the bottom row. The naming in the middle is the row that needs a person.](figs/style-three-jobs.png){fig-alt="Three rows, each with an example and the thing that fixes it. Layout - spaces, line breaks: mean(x,na.rm=TRUE) becomes mean(x, na.rm = TRUE), and a formatter fixes it on save. Naming - variables, files: d2 becomes chicks_day_21, and the row is outlined in orange with a dashed badge reading you, by hand, this one is yours. Correctness, whether the code does what you think it does: if (all.equal(x, y)) becomes if (isTRUE(all.equal(x, y))), and a linter flags it for you. The middle row is the one that needs a person." width=100%}
 
 Let's get into it.
 
 ## Layout
 
 Lines are free. Use them.
+
+::: {.callout-note title="Your Turn: a quick check on pipes"}
+
+Everything from here on uses the pipe, `|>`, so let's make sure we are all in the same place before we start.
+
+- Have you used `|>`, or `%>%`, before?
+- Could you say out loud what this does?
+
+```r
+penguins |> filter(species == "Adelie")
+```
+
+I like to read the pipe as **then**:
+
+> Take the penguins data, **then** filter it to the rows where species is "Adelie".
+
+The pipe gets a proper treatment in [Workflow: code style](https://r4ds.hadley.nz/workflow-style.html) in *R for Data Science*. It's a great book!
+
+:::
 
 Let's look at the same code twice.
 
@@ -437,8 +535,6 @@ The [files chapter](https://style.tidyverse.org/files.html) is worth reading alo
 
 :::
 
-<!-- Note: review - up to here -->
-
 ## Do I have to do all this by hand?
 
 No. And you shouldn't.
@@ -451,19 +547,15 @@ The good news is that layout is mechanical, and mechanical things can be automat
 
 ## Using the {air} formatter
 
-[Air](https://posit-dev.github.io/air/) is an R formatter from Posit. You point it at your code, and it lays it out properly.
+[Air](https://posit-dev.github.io/air/) is an R formatter from Posit. You point it at your code, and it lays it out properly. It is basically magic.
 
-It is basically magic, and it changes how you work almost immediately.
-
-Once you have it wired into your editor, you stop thinking about layout. You type whatever comes out of your head, hit save, and it comes out tidy. That's it. That's the whole workflow.
+Once you have it wired into your editor, you stop thinking about layout. You type whatever comes out of your head, hit save, and it comes out tidy. You don't need to spend another moment going over your code tweaking spaces.
 
 ### Checking air is installed
 
-You installed air in [Code formatters](setup.qmd#sec-code-formatters). We just need to check it is there, and find out where it lives.
+You installed air in the setup chapter - [Code formatters](setup.qmd#sec-code-formatters). We just need to check it is there, and find out where it lives.
 
 ::: {.callout-note title="Your Turn: check air is installed"}
-
-Do this one now, before we go any further, because everything in the rest of this section needs it.
 
 1. Open a terminal. In RStudio that's the Terminal tab, next to the Console.
 2. Run `air --version` and check you get a number back.
@@ -477,39 +569,25 @@ If it won't install, don't spend the whole session fighting it. Use `{styler}` f
 
 ### If you can't install air, use {styler}
 
-Sometimes the install just doesn't go. You're on a locked down work machine, you can't get at a terminal, or the installer refuses and won't tell you why.
-
-You're not stuck.
-
-[`{styler}`](https://styler.r-lib.org/) is an R package that formats your code, and it installs the way every other R package you have ever used installs:
+If you can't install {air} because of network issues, use [`{styler}`](https://styler.r-lib.org/). This is an R package that pre dates {air}. Install it with:
 
 ```r
 install.packages("styler")
 ```
 
-No terminal, no installer script, no path to write down.
+It follows the same tidyverse style guide air does, so the output is very close. 
 
-It follows the same tidyverse style guide air does, so the output is very close. Not identical, but close enough that nothing in this chapter changes. Everywhere air comes up from here on, there is a styler tab showing you the same thing.
+There are a few differences between air and styler, basically: air is faster, and it is less configurable.
 
-Now the honest bit.
+## Format on save (aka magic)
 
-Air is faster, and it hooks into format on save, which is the whole point of the next section. With styler you have to remember to run it.
+This changes how you work!
 
-That is a real difference and I'm not going to pretend otherwise.
+Once this is set up, you write code however it falls out of your head. Wonky spacing, arguments strewn across the line, indentation all over the place. Do not fix any of it.
 
-But code you formatted by hand is still formatted, and it beats a mess. If air won't install, take styler, keep moving, and sort air out another day.
+Hit `Cmd / Ctrl + S`, and it is all just correct.
 
-## Format on save, which is the good bit
-
-This is the part that changes how you work, so I want to be clear about what it gives you.
-
-Once this is set up, you write code however it falls out of your head. Wonky spacing, arguments strewn across the line, indentation all over the place. You do not fix any of it.
-
-Then you hit `Cmd / Ctrl + S`, and it is all just correct.
-
-Not "you run a command and it tidies up". You hit save, the thing you already do a hundred times a day, and the file is formatted. There is no new habit to build, because you are attaching it to a habit you already have.
-
-I cannot really oversell this. It is the single highest value setting in this whole chapter, and it takes two minutes.
+I cannot really oversell this. 
 
 ::: {.panel-tabset}
 
@@ -521,7 +599,9 @@ You want the path you wrote down a moment ago, from `which air` or `where air`.
 
 Go: Tools → Global Options → Code → Formatting.
 
-Set **Code formatter** to **External**.
+- For {air} Set **Code formatter** to **External**.
+
+- For {styler} Set **Code formatter** to **Styler**.
 
 Set **Reformat command** to your air path followed by `format`, so something like `/Users/nick/.local/bin/air format`. If your path has spaces in it, wrap it in double quotes.
 
@@ -605,7 +685,9 @@ If you're inside a project already, this does most of the work for you:
 usethis::use_air()
 ```
 
-It sets up the editor configuration and adds an `air.toml` to your project.
+It sets up the editor configuration and adds an `air.toml` to your project, which gives you some options to customise air. 
+
+This isn't mandatory, but can be useful.
 
 :::
 
@@ -614,9 +696,9 @@ It sets up the editor configuration and adds an `air.toml` to your project.
 1. Set up format on save in your editor, using the tabs above.
 2. Open any R script. Make a mess of it on purpose. Delete the spaces around a `<-`, jam some arguments together, break the indentation.
 3. Hit `Cmd / Ctrl + S`.
-4. Do that three or four more times, with a different kind of mess each time.
+4. Do that three or four more times, with a different kind of mess each time,
 
-I want you to do it repeatedly, because the point is not that it worked once. The point is to stop believing you have to tidy your own code.
+I want you to do it repeatedly, because you don't have to tidy your own code, and that's awesome.
 
 :::
 
@@ -651,8 +733,6 @@ styler::style_file("analysis/01-clean-data.R")
 styler::style_dir(".")
 ```
 
-There is also an RStudio addin, under **Addins → Style active file**, which formats whatever file you are looking at. If you are going down this road, bind it to a keyboard shortcut, because you will use it constantly.
-
 :::
 
 ::: {.callout-note title="Your Turn"}
@@ -660,11 +740,9 @@ There is also an RStudio addin, under **Addins → Style active file**, which fo
 There is a deliberately awful script in the course repository at `06-bad-style/messy-analysis.R`. It breaks essentially every rule in this chapter.
 
 1. Open `messy-analysis.R` and read it. Note how long it takes you to work out what it does.
-2. Format it. With air, run `air format 06-bad-style/messy-analysis.R` from your terminal. With styler, run `styler::style_file("06-bad-style/messy-analysis.R")`, or open the file and use **Addins → Style active file**.
+2. Format it with air or styler.
 3. Read it again. What can you see now that you couldn't before?
 4. Look at the variable names in the formatted version. Air has not touched a single one of them, and they're still a mess. Write down three you would rename.
-
-Step 4 is the important one. It's the clearest demonstration I know that layout and naming are two different jobs.
 
 :::
 
@@ -720,7 +798,7 @@ You want both. Formatting settles arguments about layout. Linting catches the cl
 
 The name comes from a program called `lint`, written by Stephen C. Johnson at Bell Labs in 1978 to check C code for bugs and portability problems. You can read more on the [Wikipedia page for lint](https://en.wikipedia.org/wiki/Lint_(software)).
 
-The name is the good part. Lint is the fluff that clothes shed in the wash, and a clothes dryer has a lint trap to catch it. Johnson's idea was that his program would work the same way, catching the waste fibres while leaving the fabric intact.
+Lint is the fluff that clothes shed in the wash, and a clothes dryer has a lint trap to catch it. Johnson's idea was that his program would work the same way, catching the waste fibres while leaving the fabric intact.
 
 Your code is the fabric. The linter is the trap.
 
@@ -805,7 +883,7 @@ x <- c(1, NA, 3)
 x == NA
 ```
 
-Every answer is `NA`, including for the values that are obviously not missing. Your `missing_mass` vector contains no information at all, and nothing warned you.
+Every answer is `NA`, including for the values that are obviously not missing. Your `missing_mass` vector contains no information at all! Note that jarl even told you want to do!
 
 ```{r}
 is.na(x)
@@ -829,11 +907,11 @@ rm(T)
 
 `has_data` is already `TRUE` or `FALSE`. Comparing it to `TRUE` gets you back exactly what you started with, so `if (has_data)` says the same thing with less to read.
 
-This one is not a bug. It is a mental cycles problem, which is the theme of this whole chapter.
+This one is not a bug. It is a mental cycle.
 
 ::: {.callout-important title="Two nastier ones, for later" collapse="true"}
 
-These turn up in real code and are much harder to spot by eye.
+These are much harder to spot by eye.
 
 `class(dat) == "data.frame"` looks fine until you meet an object with more than one class:
 
@@ -851,7 +929,7 @@ all.equal(1, 1)
 all.equal(1, 1.1)
 ```
 
-That second one is a string, and `if()` can't do anything sensible with it. So the code works perfectly while your values match, and falls over the first time they don't, which is precisely the case you wrote the check for. `isTRUE(all.equal(x, y))` fixes it.
+`if()` can't do anything sensible with it. So the code works perfectly while your values match, and falls over the first time they don't, which is precisely the case you wrote the check for. `isTRUE(all.equal(x, y))` fixes it. (demo).
 
 :::
 
@@ -859,11 +937,9 @@ Notice that these fail in two different ways.
 
 `== NA` and `na.rm = T` are **silent**. They run, there is no error and no warning, and the answer is wrong.
 
-The two in the callout above **error**, which sounds better and is arguably worse. They work fine while the data behaves, so they pass every test you run on tidy data, and then fail on a Friday afternoon on somebody else's file.
+That is what a linter is for. Careful reading **could** catch all of these. But a tool catches them **every** time.
 
-That is what a linter is for. No amount of careful reading catches all of these reliably, and a tool catches them every time in about a tenth of a second.
-
-Where a fix is unambiguous, jarl can apply it for you:
+Where a fix is clear and safe, jarl or flir can apply it for you:
 
 ::: {.panel-tabset}
 
@@ -891,9 +967,9 @@ It ships 55+ rules, integrates with VS Code, Positron and Zed, and runs in CI. I
 
 Jarl is newer and much faster, which matters more than it sounds.
 
-A linter you run on every save changes your habits. A linter that takes eighteen seconds is one you run occasionally, and then stop running.
+A linter you run on every save changes your habits.
 
-Use whichever you like. Use one of them.
+Use something! Either one of them.
 
 :::
 
@@ -918,9 +994,7 @@ flir::fix("06-bad-style/dodgy-logic.R")
 
 `lint()` tells you what it found. `fix()` applies the changes it's confident about, the same way `jarl check --fix` does.
 
-Call them with `flir::` in front, as above. If you run `library(flir)` instead, its `fix()` will mask the `fix()` that comes with R, and you'll get a warning that has nothing to do with your code.
-
-That second one is why I'm pointing you at flir rather than at `{lintr}`. If you can't install jarl, flir is the only one of these that will still fix things for you.
+Call them with `flir::` in front, as above. If you run `library(flir)` instead, its `fix()` will mask the `fix()` that comes with R, and you'll get a warning.
 
 One thing you should know. Etienne has moved on to jarl, and says on the flir site that he won't be adding new rules to it. So flir is finished rather than growing.
 
@@ -948,7 +1022,6 @@ The style and naming material in this chapter is adapted from my blog post [How 
 
 - Badly laid out code makes you spend mental cycles on the surface before you get to the ideas, in the same way that bad spelling does.
 - Mental cycles are worth more than computer cycles. Spend the machine's, guard your own.
-- Style splits into layout, which a tool can fix, and naming, which is yours.
 - Lines are free. Use them, because your eye reads down far better than across.
 - Pick a naming convention and stick to it, because consistency is what makes tab complete work for you.
 - Read a style guide once, properly, and you'll see code differently afterwards.
