@@ -2,11 +2,11 @@
 
 > "Remember, you are always collaborating with your future self."
 
-This course is all about best practices in R. I want you to know the principles, and have practice at writing clear, maintainable, and reproducible R code.
-
-To build these practices, you need a good, clean, base. We start by talking about basic "hygiene" for your projects and files, before moving on to how to organise your project, and some potential pitfalls.
+This course is all about best practices in R. At its foundation, I think this begins with a well organised project that is clean and tidy. We start by talking about basic "hygiene" for your projects and files, before moving on to how to organise your project, and some potential pitfalls.
 
 Remember: your project doesn't have to be perfectly organised. Instead, we focus on making the next project a little better, each time.
+
+It is worth noting that this This section draws from  ["Workflow"](https://qmd4sci.njtierney.com/workflow.html) and [RStudio, what and why](https://qmd4sci.njtierney.com/rstudio.html) from my course: ["quarto for scientists"](https://qmd4sci.njtierney.com).
 
 ## Overview {.unnumbered}
 
@@ -24,12 +24,33 @@ Remember: your project doesn't have to be perfectly organised. Instead, we focus
   - What are "good enough" common sense principles of project organisation
   - Why should every project have a README?
 
+## Set up
 
-## Getting set up
+Go to [course exercises](setup.qmd#sec-rbp-exercises) and follow instructions to download course materials.
 
-Go to [course exercises](setup.qmd#sec-rbp-exercises) and follow the instructions on downloading the course materials.
 
-Let's talk about some easy-wins in how you set up RStudio and positron, to make it easier to make things reproducible.
+
+::: {.callout-note title="Your Turn"}
+
+When you start a **new** project:
+
+- What is your normal workflow?
+- What helps you, what hinders you?
+- What do you think you should do?
+
+When you come back to an **old** project:
+
+- What has made it easier to work on it?
+- What makes it difficult?
+- Anything you wish you did?
+
+There are no wrong answers! I want to have a discussion, and learn what wins, what makes it hard, what makes it OK.
+
+:::
+
+
+
+Let's talk about some easy-wins in how you set up RStudio and Positron, to make it easier to make things reproducible.
 
 ### RStudio
 
@@ -56,36 +77,51 @@ This matters for two reasons:
 1. **Reproducibility.** You don't want old objects from your last analysis cluttering your session - and you also don't want to depend on them, accidentally.
 2. **Privacy.** You really do not want private data written into a `.RData` file on disk. You want to read data in, deliberately, every time.
 
-Your history is the list of commands you have typed. Not saving it means you won't come to rely on something you typed in a previous session - which is a good habit to build. You can also do this via the `{usethis}` package:
+Your history is the list of commands you have typed. Not saving it means you won't come to rely on something you typed in a previous session - which is a good habit to build. 
+
+You can also do establish these settings via the `{usethis}` package:
 
 ```{r}
 #| eval: false
 usethis::use_blank_slate()
 ```
 
-Now when you restart R, it will always give you a clean session. You should make a habit of restarting R and starting from scratch. If your code works from a clean session, you know it will work. And, if it doesn't work in a new session, you know you have a bug you need to solve.
-
-There is even a keyboard shortcut to restart R - worth knowing about:
-
-- **Restart R**: `Cmd/Ctrl + Shift + F10`
+<!-- NOTE: - question for the class - understanding Interactive vs things in a script -->
 
 While you are in the settings, two more worth turning on:
 
-- **Show line numbers** - you cannot discuss code you cannot point at.
-- **Rainbow parentheses** - cheap insurance against a very common class of error.
+- **Show line numbers** - Easier to say: "The code on line 54"
+- **Rainbow parentheses** - Catch those missing brackets
+- **Rainbow indentations** - Fun indentation markers
 
 ![](figs/rstudio-setting-rainbow.png){fig-alt="RStudio's Options window, on the Code section and the Display tab. Three settings are highlighted: Show line numbers, ticked; Indentation guides, set to Rainbow lines; and Use rainbow parentheses, ticked."}
+
+::: {.callout-note title="Make a habit"}
+
+You can restart R with a keyboard shortcut:
+
+- **Restart R**: `Cmd/Ctrl + Shift + F10`
+
+- Your R session will always start from scratch now. 
+- Make a habit of restarting R and starting from scratch.
+- If your code works from a fresh session, that is a great standard
+- If it errors on a fresh session, you've got a problem to solve (which is overall a good thing to identify!)
+
+:::
+
+:::
+
 
 ::: {.callout-note title="Your Turn"}
 
 There is a really neat feature in RStudio called the "Command Pallete" - it's kind of like "spotlight" or "search" for any setting in RStudio.
 
-Try opening it and searching for "rainbow", using the keyboard shortcut:
+Try opening it using the keyboard shortcut:
 
 - Windows: `Ctrl + Shift + P`
 - Mac: `Cmd + Shift + P`
 
-Try it now, and search for "rename file" and "rainbow":
+And search for "rainbow", "rename", "new", and just explore!
 
 ![](figs/rstudio-show-cmd-palette.png){fig-alt="The RStudio command palette open over the editor, with rai typed into the search box. The matching results include Toggle Rainbow Parentheses Mode and Toggle Rainbow Fenced Divs Mode, along with the settings themselves, each showing an On toggle. You never had to know which options page they lived on."}
 
@@ -104,7 +140,7 @@ Positron also has the command palette! The same command as RStudio.
 - Windows: `Ctrl + Shift + P`
 - Mac: `Cmd + Shift + P`
 
-<!-- SCREENSHOT NEEDED: Positron settings, Extensions > R, showing the
+<!-- NOTE - screenshot Positron settings, Extensions > R, showing the
      workspace/restore options. -->
 
 
@@ -114,12 +150,51 @@ Positron also has the command palette! The same command as RStudio.
 1. Turn off workspace saving using the settings above, or run `usethis::use_blank_slate()`.
 2. Restart R with `Cmd/Ctrl + Shift + F10`.
 3. Open your most recent analysis script and run it from the top in the clean session.
-4. Did it work? If not - and it very often does not - that gap is exactly what the rest of this course is about.
+4. Discuss why your work did/did not work
+
+:::
+
+::: {.callout-note title="Your Turn"}
+
+1. Turn off workspace saving using the settings above, or run `usethis::use_blank_slate()`.
+2. Restart R with `Cmd/Ctrl + Shift + F10`.
+3. Open your most recent analysis script and run it from the top in the clean session.
+4. Discuss why your work did/did not work
 
 :::
 
 
-## A common problem: file paths^[This section draws from ["Workflow"](https://qmd4sci.njtierney.com/workflow.html) from my course: ["quarto for scientists"](https://qmd4sci.njtierney.com).]
+::: {.callout-tip title="RStudio vs Positron?" collapse="true"}
+
+Worth saying upfront - RStudio isn't going away.
+
+- RStudio
+  - created in 2011. 
+  - Focus on R, but allows you to write in Python.
+  - Supports other languages like C, C++. 
+  - It has 15 years of design for use in data analysis. It just works.
+- Positron
+  - Created in 2024.
+  - A fork of ["Visual Studio Code - Open Source"](https://github.com/microsoft/vscode)
+  - Comes with many (most?) of the features of VS Code
+  - Rich marketplace of extensions
+  - "polyglot" - works on all l
+
+Which to choose? Here are my opinions:
+
+- New to R --> RStudio
+- Just using R --> RStudio
+- Mostly using R, occasional other language --> RStudio
+- Sometimes R, mostly other language --> Positron
+- R + frequently other other languages (Python, Rust, C) --> Positron
+- Experienced in R and want full control of every setting --> Positron
+
+If you want to read more about the features of Positron and RStudio, see [Posit's article on the topic](https://positron.posit.co/migrate-rstudio-compare.html).
+
+:::
+
+
+## A common problem: file paths
 
 Before we get into projects, and organising them, I really think it is worthwhile spending a bit of time talking about **file paths**.
 
@@ -134,11 +209,13 @@ This error is R saying:
 
 > I do not know where "my-very-important-data-file-somewhere.csv" is.
 
-There are lots of reasons that R doesn't know where that file could be - but the chances are that _you_ know exactly where it is, and now you need to get into the mind of R, to understand where it thinks it is.
+There are lots of reasons that R doesn't know where that file could be!
 
-We can resolve these errors if we keep our **files**, **paths**, and **directories** ordered. This goes together with a **workflow** for clearly, and portably letting R know where these are. This practice is referred to as **good file path hygiene**.
+Chances are **you** know exactly where the file is, and now you need to get into the mind of R, to understand **why it cannot find the file**.
 
-But we need to define a few of these terms: files, directories, and paths.
+We can resolve these errors if we keep our **files**, **paths**, and **directories** ordered. This goes together with a **workflow** for clearly, and portably letting R know where these are. This practice is sometimes referred to as **good file path hygiene**.
+
+Let's define a few of these terms: files, directories, and paths.
 
 ### Files, directories, paths
 
@@ -162,10 +239,14 @@ Users --------------------------------------------->> Directory/
 
 We can refer to a given location with a "path" - which we refer to as a "file path" or a "directory path" depending on which we are navigating to. Here are some examples of paths for two directories, and two files.
 
-- `Users/njtierney/Desktop/analysis-2026/` - directory path of "analysis-2026"
-- `Users/njtierney/Desktop/analysis-2026/README.md` - file path of "README.md"
-- `Users/njtierney/Desktop/analysis-2026/data` - directory path of "data"
-- `Users/njtierney/Desktop/analysis-2026/data/penguins.csv` - file path of "penguins.csv"
+- `Users/njtierney/Desktop/analysis-2026/`
+  - **Directory** path of "analysis-2026"
+- `Users/njtierney/Desktop/analysis-2026/README.md`
+  - **File** path of "README.md"
+- `Users/njtierney/Desktop/analysis-2026/data`
+  - **Directory** path of "data"
+- `Users/njtierney/Desktop/analysis-2026/data/penguins.csv` 
+  - **File** path of "penguins.csv"
 
 Let's talk a bit more about files, directories and paths.
 
@@ -175,14 +256,14 @@ Let's talk a bit more about files, directories and paths.
 - These are all files: "explore.R", "eda-document.docx", "graph.png", "README.md", "penguins.csv"
 - Files have "file extensions", which are the last characters after a `.`, and they tell us what kind of file they are:
   - "explore.R" ends with **.R**, it is an R script
-  - "eda-document.docx" is a Microsoft Word Document, ".doc" is an older format
+  - "eda-document.docx" is a Microsoft Word Document
   - "graph.png" is an image (specifically, a ["PNG"](https://en.wikipedia.org/wiki/PNG))
   - "README.md" is a **m**ark**d**own text file.
   - "penguins.csv" is a "comma separated values" file
 
 #### Directories 📁
 
-- Also known as folders. This comes from the image analogy of putting pieces of paper inside a folder.
+- Also known as folders (files inside a folder)
 - A directory contains files
 - A directory can also contain directories
 
@@ -190,8 +271,10 @@ Let's talk a bit more about files, directories and paths.
 
 A path, or "file path", or "directory path" is the machine-readable directions to where files on your computer live. Kind of like a street address. "Machine readable" just means your computer can read it easily:
 
-- Machine readable: `/Users/njtierney/Desktop/analysis-2026/data/penguins.csv`
-- Not-quite machine readable: "The folder on my desktop named analysis 2026"
+- Machine readable: 
+  - `/Users/njtierney/Desktop/analysis-2026/data/penguins.csv`
+- Not-quite machine readable: 
+  - "The folder on my desktop named analysis 2026"
 
 So, the **file path**:
 
@@ -341,23 +424,58 @@ When you start on a new idea, a new project, a new paper - anything new - it sho
 
 A project keeps related work together in the same place. They also do the following:
 
-* Keep all your files together.
 * Set the working directory to the project directory.
 * Start a new session of R.
 * Restore previously edited files into your editor tabs.
-* Restore other editor settings.
 * Let you have several projects open at once.
 
 This helps keep you sane, because:
 
-* Your projects are each independent.
+* Your projects are independent.
 * You can work on different projects at the same time.
 * Objects and functions you create in one project won't affect another.
-* You can refer to your data in a consistent way.
-
-And finally, the big one:
 
 **Projects resolve file path problems**, because they automatically set the working directory to the location of the project.
+
+
+## Get course exercise materials on your machine {#sec-rbp-exercises}
+
+
+:::{.callout-note title="Your Turn"}
+
+Let's download the course exercise - try running this code:
+
+```{r}
+#| eval: false
+use_course("njtierney/rbp-exercises")
+```
+
+Which will prompt you to download the repository, <https://github.com/njtierney/rbp-exercises>, and then open it in an RStudio project.
+
+::: {.content-visible when-format="html"}
+
+![](gifs/demo-use-course.gif){fig-alt="An animation of use_course running in RStudio. It asks permission to download the exercises, unpacks them into a folder on the Desktop, and opens that folder as a new RStudio project in a fresh session, with the numbered exercise folders listed in the Files pane."}
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+![](figs/demo-use-course-still.png){fig-alt="RStudio open on the downloaded rbp-exercises project in a clean session. The Files pane lists the numbered exercise folders and rbp-exercises.Rproj, and the console shows a freshly started R."}
+
+*Where you end up. This one is a screen recording in the web version of the book.*
+
+:::
+
+If you have troubles with this (sometimes firewalls can stop you) you can download it from the github page <https://github.com/njtierney/rbp-exercises> like so:
+
+![](figs/rstudio-download-rbp-exercises.png){fig-alt="The rbp-exercises repository on GitHub, showing the numbered exercise folders. The green Code button has been clicked and its dropdown is open, with Download ZIP highlighted at the bottom of the list."}
+
+Then, unzip that, and click on the rbp-exercises.Rproj file:
+
+![](figs/rstudio-show-rbp-rpoj.png){fig-alt="The unzipped rbp-exercises folder in a file browser, listing the numbered exercise folders. rbp-exercises.Rproj is highlighted, with README.md underneath it. That .Rproj file is the one to open."}
+
+:::
+
 
 ::: {.callout-caution title="Aside: creating a project" collapse="true"}
 
@@ -468,31 +586,13 @@ works whether the code is called from the top of the project, from inside `analy
 
 :::
 
-::: {.callout-note title="Your Turn"}
-
-When you start a **new** project:
-
-- What is your normal workflow?
-- What helps you, what hinders you?
-- What do you think you should do?
-
-When you come back to an **old** project:
-
-- What has made it easier to work on it?
-- What makes it difficult?
-- Anything you wish you did?
-
-There are no wrong answers! I want to have a discussion, and learn what wins, what makes it hard, what makes it OK.
-
-:::
-
 ## Organise your project with a README
 
 When you are working on a project, you are almost certainly going to be returning to it, at some point. When you do, you might look at the code, and wonder:
 
 > Who wrote this, and are they insane?
 
-And then you realise that indeed, **it was you** that wrote this.
+And then you realise that **you wrote this**.
 
 I think it is worthwhile internalising this saying:
 
@@ -500,12 +600,12 @@ I think it is worthwhile internalising this saying:
 
 I think a really easy win here is to have a README file, which is a plain text file that helps answer:
 
-- **Who** did it: Was it just you? Were there many people?
-- **What** you did: What was run
-- **When** you did it: Last year, last month? 
-- **Where** you did it: On your computer? The cloud? 
 - **Why** you did it: what was the goal
+- **When** you did it: Last year, last month? 
+- **What** you did: What was run
 - **How** you did it: What was the order you ran things? Which file should I look at first?
+- **Who** did it: Was it just you? Were there many people?
+- **Where** you did it: On your computer? The cloud? 
 
 If you can't answer these questions about a project, how much harder would it be for you to return to it?
 
@@ -517,7 +617,7 @@ What I am getting at here is:
 
 A well organised project does not guarantee reproducibility. But, if you can't tell me which script to run first, then we cannot reproduce an analysis. 
 
-The point is not to tidy your project just so it is tidy. The point is having a tidy project that is well organised makes it easier to check, run later, and understand.
+A well organised project makes it easier to check, run later, and understand.
 
 A README does not need to be long. Mine are often ten lines. Here is a complete, entirely adequate README:
 
@@ -547,11 +647,21 @@ Write the README first, if you can, and return to it often.
 
 You can have **more than one README**. A short one inside `data-raw/` explaining where those files came from is often the most valuable file in the whole project.
 
-And it's worth recording **when you obtained the data, and what versions of software you used**, so that someone later, including you, can reconstruct similar conditions.
+And it's worth recording **when you obtained the data** - just noting the data, and also **what versions of software you used**, so that someone later, including you, can reconstruct similar conditions.
+
+You can get the dependencies in an R project with:
+
+```r
+renv::dependencies("path/to/directory")
+```
 
 ::: {.callout-note title="Your Turn"}
 
-Write a README for the project you sketched above. Ten lines. Answer the three questions.
+Write a README for the project you sketched above. Answer the questions. Start it with:
+
+```r
+usethis::use_readme_md()
+```
 
 Do it now, before you write any code - you will find it clarifies what you are actually about to do.
 
@@ -579,13 +689,13 @@ That's the real payoff, and it's why I'd rather you set this up now than tidy it
 
 ## Pitfalls of organisation
 
-There are so many ways to organise a project. And there is no one correct. And organising a project well is hard. While there isn't a **right** way, there are definitely **better** and **worse** ways. Circling back to the start of the lesson, one of the takeaways from today I want you to remember is:
+There are so many ways to organise a project. While there isn't a single **right** way, there are definitely **better** and **worse** ways. A key takeaway from today I want you to remember is:
 
 > Your project might not be perfectly organised, but it should be possible for someone to understand how it is structured, and what to run first.
 
-There are a few patterns that I think appear in projects. I am guilty of all of these, so know that I am not judging you if these are how you work now. What I am saying is that it is OK, and that there are some ways you can improve.
+There are a few patterns that make picking up a new project hard. I am guilty of all of these. I am not judging you if these are how you work now. What I am saying is there are some ways you can improve.
 
-You can see these patterns in the course exercises repository: <https://github.com/njtierney/rbp-exercises>
+You can see these patterns in the course exercises you downloaded earlier: <https://github.com/njtierney/rbp-exercises>
 
 We will quickly move through these now.
 
@@ -904,7 +1014,7 @@ You might have some data provided for analysis and there might be instructions t
 └── raw survey data.xlsx
 ```
 
-In this case, figures, model outputs, and cleaned data sit in the same folder as your raw data and scripts. This mean that you cannot tell at a glance what is necessary for your analysis, and what is produced as output by your analysis. If you cannot tell what is input, and what is output, it means you don't have a clear sense of how to reproduce files, or where edits can be safely made. A good test: *could I delete this folder entirely and regenerate it by running my code?* If yes, it is an output, and it should live somewhere that says so.
+In this case, figures, model outputs, and cleaned data sit in the same folder as your raw data and scripts. You cannot tell at a glance what is necessary for your analysis, and what is produced as output by your analysis. This means you don't have a clear sense of how to reproduce files, or where edits can be safely made. A good test: *could I delete this folder entirely and regenerate it by running my code?* If yes, it is an output, and it should live somewhere that says so.
 
 - The problem: Not knowing what is inputs vs outputs impacts reproducibility.
 - The solution: Clearly label inputs and outputs - potentially put your outputs in an "outputs" folder. Or have a file that describes the inputs and outputs, such as a README, or an analysis script.
@@ -1009,11 +1119,11 @@ The principles I would hold you to:
 
 That is the whole list. If you do those seven things, you are organised enough, and the remaining effort is better spent on the analysis itself.
 
-One more principle, which is really about attitude:
+One more thing:
 
 > Don't reorganise everything tonight.
 
-Apply this to your *next* project. Retrofitting a large existing project is a big job with a small payoff, and it is a very effective way to talk yourself out of the whole idea. Start clean, once, and let the habit build.
+Apply this to your *next* project. Retrofitting a large existing project is a big job, and can be a very effective way to talk yourself out of the whole idea. Start clean, once, and let the habit build.
 
 ::: {.callout-note title="Your Turn"}
 
