@@ -100,8 +100,6 @@ The first line assigns `1` to `x`. The second asks whether `x` is less than nega
 
 R accepted both without complaint, which is the whole problem.
 
-Compare these two:
-
 Both of these take the chicks at day 21, and ask which diets came out above the average weight.
 
 ```{r}
@@ -150,7 +148,7 @@ mean(ChickWeight$weight) # every day
 mean(ChickWeight$weight[ChickWeight$Time == 21]) # day 21 only
 ```
 
-**Both versions have the bug.** Good layout doesn't fix the bug, but it make it (in my opinion!) easier to notice. `M` and `m` tell you nothing, so there is nothing to be suspicious about. `overall_mean` and `weight_mean` sitting on the same line, makes us ask: the overall mean of *what*?
+**Both versions have the bug.** Good layout doesn't fix the bug, but it makes it (in my opinion!) easier to notice. `M` and `m` tell you nothing, so there is nothing to be suspicious about. `overall_mean` and `weight_mean` sitting on the same line, makes us ask: the overall mean of *what*?
 
 The style helps buy back some of your attention.
 

@@ -18,7 +18,11 @@ book:
   page-footer: "Copyright 2026, Nicholas Tierney"
   page-navigation: true
   search: true
-  downloads: [pdf]
+  # PDF disabled 3 Aug 2026. The runner has no Fira Code, so `monofont:
+  # "Fira Code"` fails with a fontspec error, and because the PDF is part of
+  # the book render it takes the HTML deploy down with it. Restore this line
+  # and the pdf: block below once the font is installed in the workflow.
+  # downloads: [pdf]
   chapters:
     - "index.qmd"
     - "setup.qmd"
@@ -47,16 +51,19 @@ format:
     # to 80 characters and scrolls beyond that; wrapping instead would
     # destroy the indentation that shows the shape of a pipeline, which is
     # the thing the style chapter spends its time arguing for.
-  pdf:
-    documentclass: tufte-book
-    classoption: [justified, a4paper]
-    include-in-header: tufte.tex
-    keep-tex: true
-    # The default mono font has no box-drawing glyphs, so the file trees
-    # silently lost every ├── and └── in print, leaving an indented list of
-    # names with no structure. Fira Code has them, and matches the HTML.
-    monofont: "Fira Code"
-    # tufte-book's float machinery cannot handle Quarto's default
-    # `\begin{figure}[H]` - it fails with "Extra }, or forgotten
-    # \endgroup" at \end{figure}. Any captioned image triggers it.
-    fig-pos: 'ht'
+  # PDF disabled 3 Aug 2026 — see the note on downloads: above. Nothing here
+  # is wrong except that Fira Code is not on the GitHub runner. Uncomment as a
+  # block to restore.
+  # pdf:
+  #   documentclass: tufte-book
+  #   classoption: [justified, a4paper]
+  #   include-in-header: tufte.tex
+  #   keep-tex: true
+  #   # The default mono font has no box-drawing glyphs, so the file trees
+  #   # silently lost every ├── and └── in print, leaving an indented list of
+  #   # names with no structure. Fira Code has them, and matches the HTML.
+  #   monofont: "Fira Code"
+  #   # tufte-book's float machinery cannot handle Quarto's default
+  #   # `\begin{figure}[H]` - it fails with "Extra }, or forgotten
+  #   # \endgroup" at \end{figure}. Any captioned image triggers it.
+  #   fig-pos: 'ht'
