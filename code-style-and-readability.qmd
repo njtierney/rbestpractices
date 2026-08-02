@@ -1,6 +1,6 @@
 # Code style and readability {#sec-code-style}
 
-There is more to your code than having it run. I mean, it **should run**, and that is the first step. But this is a book on **best practices**, so we are aiming for your code to not just be "running", but "easy to read, and easy to understand".
+There is more to your code than having it run. We are aiming for your code to be "running" AND "easy to read, and easy to understand".
 
 There are some really useful tools we can apply to get quick wins on improving the readability of your code. In this section we will discuss concepts of **code style**, talking about how to easily improve code **layout (whitespace, newlines, punctuation standards)**, and improving code with **code linting** - where a program looks at how your code is written and identifies common errors, style inconsistencies, and other known problem patterns.
 
@@ -32,11 +32,9 @@ Which of these is easier to read?
 
 :::
 
-One of these is harder to read than the other, and I think this is because one of them has a few spelling mistakes, and doesn't clearly express what it says.
+One of these is harder to read than the other. It is easier to read the text that has correct spelling and grammar.
 
-Now, writing is hard! I'm not saying it is easy. It takes time, it takes iteration. You have to revisit things. My point is: text is easier to understand when the spelling is correct, the grammar is good.
-
-Punctuation does the same job, and sometimes it does more than that. Sometimes it decides what the words mean.
+Punctuation is an example of grammar - it plays a role in deciding what the words mean.
 
 Here is [Lionel Hutz](https://en.wikipedia.org/wiki/Lionel_Hutz), from [The Simpsons](https://en.wikipedia.org/wiki/The_Simpsons), attorney at law.
 
@@ -54,15 +52,20 @@ Here is [Lionel Hutz](https://en.wikipedia.org/wiki/Lionel_Hutz), from [The Simp
 
 The punctuation changed the meaning! 
 
-You can still work out what it says. But you spend energy doing it. Our precious mental energy. If you're reading something:
+You can still work out what it says. But you spend energy doing it. Our precious mental energy. 
+
 
 <!-- Note: example of the following -->
 
-and these little bumps interrupt your thinking:
+We want our code to be easier to understand, when we're reading a big lump of text:
 
-- silently correcting correcting "their" to "there".
+
+
+... these little bumps interrupt your thinking:
+
+- Silently correcting correcting "their" to "there".
 - Has a sentence ended? There was a capital letter.
-- re-reading the sentence, it sounds backwards.
+- Re-reading the sentence, it sounds backwards.
 
 Our energy and our attention are finite resources, and if we spend them on these smaller things, then we will spend less energy on the goal: understanding the meaning.
 
@@ -133,19 +136,15 @@ You are spending your mental cycles on this problem. It would be nice if you did
 
 And that is part of what this lesson is about - there are ways to automate a lot of this! And there are ways to turn the rest into a habit, so it stops being a decision you make every time you write a line.
 
-Here's the good news. Nearly all of that surface level noise is systematic, which means we can get rid of it systematically. Quite a lot of it we can hand to a computer entirely.
+Nearly all of that surface level noise is systematic, which means we can get rid of it systematically.
 
-And once it's gone, your attention goes to the part that actually needs you: whether the code does the right thing.
+And once it's gone, your attention goes to the part that actually needs you: whether the code does the right thing. 
 
 ## Style is like grammar
 
 Style guides define a set of rules that keep code easy to read. To quote [Hadley Wickham](https://hadley.nz/):
 
 > Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.
-
-That's the whole argument, and the sentence performs it on you as you read it.
-
-There is a comprehensive guide in the [Tidyverse style guide](https://style.tidyverse.org/), and a shorter one in the [style chapter of Advanced R, 1st edition](http://adv-r.had.co.nz/Style.html).
 
 ### Style: layout, naming, correctness
 
@@ -194,6 +193,8 @@ So.
 Let's get into it.
 
 ## Layout
+
+Lines are free. Use them.
 
 Let's look at the same code twice.
 
@@ -248,40 +249,11 @@ Three steps, one per line, each indented to show it belongs to the pipeline.
 
 In the first one you have to parse it yourself, character by character, before you can even start thinking about whether the analysis is right.
 
-The third one is the interesting case, because it is the one that looks fine. Every space is in the right place, the indentation is correct, and `air` would leave it exactly as it is.
+The third one is the interesting case, because it is the one that looks fine. Every space is in the right place, the indentation is correct, and a formatter would leave it exactly as it is.
 
 It is still harder to read, because the steps now run inside out. `filter()` happens first and sits deepest. `summarise()` happens last and sits at the top. To read it you have to find the innermost bracket, then work your way out, holding each layer in your head as you go. To read the pipe version you start at the top and go down.
 
 That is a different problem from layout, and no formatter will fix it for you. It is also where rainbow parentheses start earning their keep - once you are three or four brackets deep, matching them by eye becomes its own small job, on top of the actual work.
-
-::: {.callout-caution title="How deep can this go?" collapse="true"}
-
-Here is the same summary again, with the read and a rename folded in as well.
-
-```r
-penguin_summary <- summarise(
-  group_by(
-    filter(
-      rename(
-        read_csv("data/penguins.csv"),
-        bill_len = bill_length_mm
-      ),
-      !is.na(bill_len)
-    ),
-    species,
-    island
-  ),
-  bill_mean = mean(bill_len),
-  bill_sd = sd(bill_len),
-  n = n()
-)
-```
-
-Five levels deep. The first thing that happens is on line five, and the last thing that happens is on line one.
-
-Nothing here is badly laid out. That is the point.
-
-:::
 
 ::: {.callout-note title="Your Turn"}
 
@@ -439,8 +411,6 @@ time_sd
 
 :::
 
-The second set is not wrong, exactly. It just means that every time you want one of those objects you have to recall how you happened to feel on the day you made it.
-
 ## Read a style guide, once
 
 It's worth your time to read through a style guide once. Properly, start to finish, one time.
@@ -466,6 +436,8 @@ It is the more complete treatment, and it explains the reasoning behind each rul
 The [files chapter](https://style.tidyverse.org/files.html) is worth reading alongside the project organisation lesson, because it is really about project structure rather than code.
 
 :::
+
+<!-- Note: review - up to here -->
 
 ## Do I have to do all this by hand?
 
