@@ -21,11 +21,10 @@ book:
   page-footer: "Copyright 2026, Nicholas Tierney"
   page-navigation: true
   search: true
-  # PDF disabled 3 Aug 2026. The runner has no Fira Code, so `monofont:
-  # "Fira Code"` fails with a fontspec error, and because the PDF is part of
-  # the book render it takes the HTML deploy down with it. Restore this line
-  # and the pdf: block below once the font is installed in the workflow.
-  # downloads: [pdf]
+  # Re-enabled 4 Aug 2026. This was off because the runner had no Fira Code
+  # and the failing PDF took the HTML deploy down with it; the workflow now
+  # installs the font before rendering.
+  downloads: [pdf]
   chapters:
     - "index.qmd"
     - "setup.qmd"
@@ -57,19 +56,31 @@ format:
     # to 80 characters and scrolls beyond that; wrapping instead would
     # destroy the indentation that shows the shape of a pipeline, which is
     # the thing the style chapter spends its time arguing for.
-  # PDF disabled 3 Aug 2026 — see the note on downloads: above. Nothing here
-  # is wrong except that Fira Code is not on the GitHub runner. Uncomment as a
-  # block to restore.
-  # pdf:
-  #   documentclass: tufte-book
-  #   classoption: [justified, a4paper]
-  #   include-in-header: tufte.tex
-  #   keep-tex: true
-  #   # The default mono font has no box-drawing glyphs, so the file trees
-  #   # silently lost every ├── and └── in print, leaving an indented list of
-  #   # names with no structure. Fira Code has them, and matches the HTML.
-  #   monofont: "Fira Code"
-  #   # tufte-book's float machinery cannot handle Quarto's default
-  #   # `\begin{figure}[H]` - it fails with "Extra }, or forgotten
-  #   # \endgroup" at \end{figure}. Any captioned image triggers it.
-  #   fig-pos: 'ht'
+  # PDF. Plain KOMA scrbook with wide margins, NOT tufte-book - see the note
+  # at the top of pdf-preamble.tex for why that changed on 4 Aug 2026.
+  pdf:
+    documentclass: scrbook
+    classoption: [a4paper]
+    include-in-header: pdf-preamble.tex
+    keep-tex: true
+    # The mono font needs box-drawing glyphs. The file trees in chapter 1 use
+    # U+2500, U+251C, U+2514 and U+2502, and a font without them drops every
+    # one silently, leaving an indented list of names with no structure.
+    monofont: "Fira Code"
+    # The margin is the point of this layout. Figure captions go out there,
+    # and what is left is room to write on a printed page.
+    #
+    # `reference-location: margin` would put footnotes out there too, and it
+    # is deliberately NOT set: on this project it makes Quarto's own filter
+    # die with "attempt to get length of a Block value". Narrowed to that one
+    # option - every other margin setting is fine - but it does not reproduce
+    # in a minimal book, so the cause is still unknown. The book has four
+    # footnotes in total, so this costs almost nothing.
+    cap-location: margin
+    geometry:
+      - left=2.2cm
+      - right=7cm
+      - top=2.5cm
+      - bottom=2.5cm
+      - marginparwidth=5.2cm
+      - marginparsep=0.6cm

@@ -255,7 +255,7 @@ That last one is the interesting bit, so don't skip it. Something becomes visibl
 
 :::
 
-::: {.callout-tip title="And the answer to `n2`", collapse="true"}
+::: {.callout-tip title="And the answer to `n2`" collapse="true"}
 
 With the names put back, those three lines read:
 
@@ -398,7 +398,7 @@ Apply these tools!
 
 ![One of these five steps is a machine's job. The other four are the review.](figs/review-process-machine-then-person.png){fig-alt="Two stacked bands. The upper grey band holds step 1, run the automated checks first, with pills for air format, jarl check, spelling colon colon spell underscore check underscore files, and restart R run from the top; it is labelled done by a machine, in seconds. An arrow crosses the gap saying only then is it worth a person's time. The lower purple band holds steps 2 to 5 - read it top to bottom and edit nothing, chunk it up, expression, and re-expression - labelled only a person can do these." width=100%}
 
-### 1. Run the automated checks first
+### Run the automated checks first
 
 Before anyone reads it:
 
@@ -425,7 +425,7 @@ Excellent tool, wrong shape for the code most of us review day to day. Worth kno
 
 :::
 
-### 2. Read it top to bottom, and mark it up
+### Read it top to bottom, and mark it up
 
 Read the whole thing without fixing anything.
 
@@ -450,7 +450,7 @@ You can find them all again with a search, and both RStudio and Positron will co
 
 Steps 3 to 5 are the second pass, over the marks you just made.
 
-### 3. Chunk it up {#sec-de-chunking}
+### Chunk it up {#sec-de-chunking}
 
 Here is a phone number:
 
@@ -545,7 +545,7 @@ Questions 3 and 4 are where the work is, and you can answer both from the commen
 
 :::
 
-### 4. Expression: can you follow it?
+### Expression: can you follow it?
 
 Now go back to the `TODO`s and `NOTE`s from step 2.
 
