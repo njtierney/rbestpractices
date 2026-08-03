@@ -190,34 +190,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">3.1</span> Overview</a></li>
-  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions"><span class="header-section-number">3.2</span> Questions</a></li>
-  <li><a href="#where-we-are-up-to" id="toc-where-we-are-up-to" class="nav-link" data-scroll-target="#where-we-are-up-to"><span class="header-section-number">3.3</span> Where we are up to</a></li>
-  <li><a href="#good-vs-bad-variable-names" id="toc-good-vs-bad-variable-names" class="nav-link" data-scroll-target="#good-vs-bad-variable-names"><span class="header-section-number">3.4</span> Good vs bad variable names</a></li>
-  <li><a href="#de-chunking-code" id="toc-de-chunking-code" class="nav-link" data-scroll-target="#de-chunking-code"><span class="header-section-number">3.5</span> De-chunking code</a></li>
-  <li><a href="#what-to-look-for" id="toc-what-to-look-for" class="nav-link" data-scroll-target="#what-to-look-for"><span class="header-section-number">3.6</span> What to look for</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#good-vs-bad-variable-names" id="toc-good-vs-bad-variable-names" class="nav-link" data-scroll-target="#good-vs-bad-variable-names"><span class="header-section-number">3.1</span> Good vs bad variable names</a></li>
+  <li><a href="#de-chunking-code" id="toc-de-chunking-code" class="nav-link" data-scroll-target="#de-chunking-code"><span class="header-section-number">3.2</span> De-chunking code</a></li>
+  <li><a href="#what-to-look-for" id="toc-what-to-look-for" class="nav-link" data-scroll-target="#what-to-look-for"><span class="header-section-number">3.3</span> What to look for</a>
   <ul class="collapse">
-  <li><a href="#code-smells" id="toc-code-smells" class="nav-link" data-scroll-target="#code-smells"><span class="header-section-number">3.6.1</span> Code smells</a></li>
-  <li><a href="#inputs-and-outputs" id="toc-inputs-and-outputs" class="nav-link" data-scroll-target="#inputs-and-outputs"><span class="header-section-number">3.6.2</span> Inputs and outputs</a></li>
-  <li><a href="#complexity-that-has-a-simpler-form" id="toc-complexity-that-has-a-simpler-form" class="nav-link" data-scroll-target="#complexity-that-has-a-simpler-form"><span class="header-section-number">3.6.3</span> Complexity that has a simpler form</a></li>
-  <li><a href="#refactoring" id="toc-refactoring" class="nav-link" data-scroll-target="#refactoring"><span class="header-section-number">3.6.4</span> Refactoring</a></li>
+  <li><a href="#code-smells" id="toc-code-smells" class="nav-link" data-scroll-target="#code-smells"><span class="header-section-number">3.3.1</span> Code smells</a></li>
+  <li><a href="#inputs-and-outputs" id="toc-inputs-and-outputs" class="nav-link" data-scroll-target="#inputs-and-outputs"><span class="header-section-number">3.3.2</span> Inputs and outputs</a></li>
+  <li><a href="#complexity-that-has-a-simpler-form" id="toc-complexity-that-has-a-simpler-form" class="nav-link" data-scroll-target="#complexity-that-has-a-simpler-form"><span class="header-section-number">3.3.3</span> Complexity that has a simpler form</a></li>
+  <li><a href="#refactoring" id="toc-refactoring" class="nav-link" data-scroll-target="#refactoring"><span class="header-section-number">3.3.4</span> Refactoring</a></li>
   </ul></li>
-  <li><a href="#a-process-for-reviewing-code" id="toc-a-process-for-reviewing-code" class="nav-link" data-scroll-target="#a-process-for-reviewing-code"><span class="header-section-number">3.7</span> A process for reviewing code</a>
+  <li><a href="#a-process-for-reviewing-code" id="toc-a-process-for-reviewing-code" class="nav-link" data-scroll-target="#a-process-for-reviewing-code"><span class="header-section-number">3.4</span> A process for reviewing code</a>
   <ul class="collapse">
-  <li><a href="#run-the-automated-checks-first" id="toc-run-the-automated-checks-first" class="nav-link" data-scroll-target="#run-the-automated-checks-first"><span class="header-section-number">3.7.1</span> 1. Run the automated checks first</a></li>
-  <li><a href="#read-it-top-to-bottom-and-dont-edit-anything" id="toc-read-it-top-to-bottom-and-dont-edit-anything" class="nav-link" data-scroll-target="#read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.7.2</span> 2. Read it top to bottom, and don’t edit anything</a></li>
-  <li><a href="#chunk-it-up" id="toc-chunk-it-up" class="nav-link" data-scroll-target="#chunk-it-up"><span class="header-section-number">3.7.3</span> 3. Chunk it up</a></li>
-  <li><a href="#expression-can-you-follow-it" id="toc-expression-can-you-follow-it" class="nav-link" data-scroll-target="#expression-can-you-follow-it"><span class="header-section-number">3.7.4</span> 4. Expression: can you follow it?</a></li>
-  <li><a href="#re-expression-can-you-say-it-more-simply" id="toc-re-expression-can-you-say-it-more-simply" class="nav-link" data-scroll-target="#re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.7.5</span> 5. Re-expression: can you say it more simply?</a></li>
+  <li><a href="#run-the-automated-checks-first" id="toc-run-the-automated-checks-first" class="nav-link" data-scroll-target="#run-the-automated-checks-first"><span class="header-section-number">3.4.1</span> 1. Run the automated checks first</a></li>
+  <li><a href="#read-it-top-to-bottom-and-dont-edit-anything" id="toc-read-it-top-to-bottom-and-dont-edit-anything" class="nav-link" data-scroll-target="#read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.4.2</span> 2. Read it top to bottom, and don’t edit anything</a></li>
+  <li><a href="#chunk-it-up" id="toc-chunk-it-up" class="nav-link" data-scroll-target="#chunk-it-up"><span class="header-section-number">3.4.3</span> 3. Chunk it up</a></li>
+  <li><a href="#expression-can-you-follow-it" id="toc-expression-can-you-follow-it" class="nav-link" data-scroll-target="#expression-can-you-follow-it"><span class="header-section-number">3.4.4</span> 4. Expression: can you follow it?</a></li>
+  <li><a href="#re-expression-can-you-say-it-more-simply" id="toc-re-expression-can-you-say-it-more-simply" class="nav-link" data-scroll-target="#re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.4.5</span> 5. Re-expression: can you say it more simply?</a></li>
   </ul></li>
-  <li><a href="#reviewing-someone-elses-code" id="toc-reviewing-someone-elses-code" class="nav-link" data-scroll-target="#reviewing-someone-elses-code"><span class="header-section-number">3.8</span> Reviewing someone else’s code</a>
+  <li><a href="#reviewing-someone-elses-code" id="toc-reviewing-someone-elses-code" class="nav-link" data-scroll-target="#reviewing-someone-elses-code"><span class="header-section-number">3.5</span> Reviewing someone else’s code</a>
   <ul class="collapse">
-  <li><a href="#start-by-asking-what-they-want" id="toc-start-by-asking-what-they-want" class="nav-link" data-scroll-target="#start-by-asking-what-they-want"><span class="header-section-number">3.8.1</span> Start by asking what they want</a></li>
-  <li><a href="#non-adversarial-on-purpose" id="toc-non-adversarial-on-purpose" class="nav-link" data-scroll-target="#non-adversarial-on-purpose"><span class="header-section-number">3.8.2</span> Non-adversarial, on purpose</a></li>
-  <li><a href="#exercise-the-code-dont-just-read-it" id="toc-exercise-the-code-dont-just-read-it" class="nav-link" data-scroll-target="#exercise-the-code-dont-just-read-it"><span class="header-section-number">3.8.3</span> Exercise the code, don’t just read it</a></li>
-  <li><a href="#it-will-be-slow-at-first" id="toc-it-will-be-slow-at-first" class="nav-link" data-scroll-target="#it-will-be-slow-at-first"><span class="header-section-number">3.8.4</span> It will be slow at first</a></li>
+  <li><a href="#start-by-asking-what-they-want" id="toc-start-by-asking-what-they-want" class="nav-link" data-scroll-target="#start-by-asking-what-they-want"><span class="header-section-number">3.5.1</span> Start by asking what they want</a></li>
+  <li><a href="#non-adversarial-on-purpose" id="toc-non-adversarial-on-purpose" class="nav-link" data-scroll-target="#non-adversarial-on-purpose"><span class="header-section-number">3.5.2</span> Non-adversarial, on purpose</a></li>
+  <li><a href="#exercise-the-code-dont-just-read-it" id="toc-exercise-the-code-dont-just-read-it" class="nav-link" data-scroll-target="#exercise-the-code-dont-just-read-it"><span class="header-section-number">3.5.3</span> Exercise the code, don’t just read it</a></li>
+  <li><a href="#it-will-be-slow-at-first" id="toc-it-will-be-slow-at-first" class="nav-link" data-scroll-target="#it-will-be-slow-at-first"><span class="header-section-number">3.5.4</span> It will be slow at first</a></li>
   </ul></li>
-  <li><a href="#clean-as-you-go" id="toc-clean-as-you-go" class="nav-link" data-scroll-target="#clean-as-you-go"><span class="header-section-number">3.9</span> Clean as you go</a></li>
+  <li><a href="#clean-as-you-go" id="toc-clean-as-you-go" class="nav-link" data-scroll-target="#clean-as-you-go"><span class="header-section-number">3.6</span> Clean as you go</a></li>
   <li>Links</li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/writing-readable-code.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -244,38 +242,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>We have focussed on a lot of structural things, that I would class as “easy wins” - but we haven’t necessarily talked about how to read the code properly. In this section we go over what you are looking for when you read code, some ideas on a process for reviewing your code, or anothers code.</p>
-<section id="overview" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">3.1</span> Overview</h2>
+<p>We have focussed on a lot of structural things, that I would class as “easy wins” - where things live, creating projects, file paths and reproducibility, style linting, and project structure - like a README.</p>
+<p>Now let us talk about <strong>how</strong> to read code, to improve it. In an analogy for writing - this is the task of how to become a good editor.</p>
+<p>In this section we go over what you are looking for when you read code, and some ideas on code review process.</p>
+<section id="overview" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
 <ul>
 <li><strong>Duration</strong> 45 minutes</li>
-</ul>
-</section>
-<section id="questions" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="questions"><span class="header-section-number">3.2</span> Questions</h2>
+<li><strong>Questions</strong>
 <ul>
 <li>Where does readable code start, once the tools have done their bit?</li>
 <li>What makes a variable name good enough?</li>
 <li>How do I break a wall of code into readable pieces?</li>
 <li>What am I actually looking for when I read code?</li>
 <li>How do I review code, including my own?</li>
+</ul></li>
 </ul>
 </section>
-<section id="where-we-are-up-to" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="where-we-are-up-to"><span class="header-section-number">3.3</span> Where we are up to</h2>
-<p><a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a> was about where things live. A project that opens, paths that work on someone else’s machine, a README that says what the thing is.</p>
-<p><a href="code-style-and-readability.html" class="quarto-xref">Code style and readability&nbsp;<span>2</span></a> was about how the code looks. Pick a naming convention. Let <code>air</code> or {styler} handle the layout. Let a linter like {jarl} or {flir} tell you about the rest.</p>
-<p>Organising your project is putting your notes and drafts in sensible folders. Running <code>air</code> is spell check, and running a linter is the automatic grammar check that tells you a sentence has no verb.</p>
-<p>In this chapter, we go through how to review code and ask whether a person can follow it.</p>
-</section>
-<section id="good-vs-bad-variable-names" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="good-vs-bad-variable-names"><span class="header-section-number">3.4</span> Good vs bad variable names</h2>
+<section id="good-vs-bad-variable-names" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="good-vs-bad-variable-names"><span class="header-section-number">3.1</span> Good vs bad variable names</h2>
 <p>There is a quote attributed to <a href="https://www.karlton.org/">Phil Karlton</a>:</p>
 <blockquote class="blockquote">
-<p>There are only two hard things in computer science: cache invalidation and naming things.</p>
+<p>There are only two hard things in computer science: cache invalidation[^:https://yihui.org/en/2018/06/cache-invalidation/] and naming things.</p>
 </blockquote>
-<p>Read Yihui Xie’s blog post to learn about cache invalidation.</p>
-<p>The point is, naming things well is genuinely hard. One way through this, is to lower the bar a bit:</p>
+<p>It is comforting to know that naming things is genuinely hard. I think we can sometimes let perfect become the enemy of good - we can combat this by saying:</p>
 <blockquote class="blockquote">
 <p><strong>giving things an OK name is much easier than giving things a great name.</strong></p>
 </blockquote>
@@ -298,16 +288,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>In <a href="code-style-and-readability.html" class="quarto-xref">Code style and readability&nbsp;<span>2</span></a> we talked about naming <em>conventions</em>. Pick one, stick to it, and get tab complete for free.</p>
 <p>This is the other half. A name can follow your convention perfectly and still tell you nothing.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"survey.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>df2 <span class="ot">&lt;-</span> df1[df1<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2024</span>, ]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>df3 <span class="ot">&lt;-</span> df2[df2<span class="sc">$</span>site <span class="sc">==</span> <span class="st">"north"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>That is consistent, it is <code>air</code>-clean, and a linter has no complaint about it. But if I meet <code>df3</code> two hundred lines later I have to go back and reconstruct what it is.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>df1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"survey.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>df2 <span class="ot">&lt;-</span> df1 <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2024</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>df3 <span class="ot">&lt;-</span> df2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(site <span class="sc">==</span> <span class="st">"north"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That is consistent, it is formatted clean, and a linter has no complaint about it. But if I meet <code>df3</code> two hundred lines later I have to go back and reconstruct what it is.</p>
 <p>Compare:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>survey_raw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"survey.csv"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>survey_2024 <span class="ot">&lt;-</span> survey_raw[survey_raw<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2024</span>, ]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>survey_north <span class="ot">&lt;-</span> survey_2024[survey_2024<span class="sc">$</span>site <span class="sc">==</span> <span class="st">"north"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>survey_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"survey.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>survey_2024 <span class="ot">&lt;-</span> survey_raw <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2024</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>survey_north <span class="ot">&lt;-</span> survey_2024 <span class="sc">|&gt;</span> <span class="fu">filter</span>(site <span class="sc">==</span> <span class="st">"north)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Same code, and now the name carries the history of what happened to the data.</p>
-<p>There is a small counter-example. Inside very short functions, <code>x</code> is often the right name, precisely because the function is small enough that you can see everything at once. But that is the exception, and you will know when you are in it.</p>
+<p>The core idea:</p>
+<blockquote class="blockquote">
+<p>Name the variable separating it by <code>_</code>,</p>
+</blockquote>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -326,8 +321,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="de-chunking-code" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="de-chunking-code"><span class="header-section-number">3.5</span> De-chunking code</h2>
+<section id="de-chunking-code" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="de-chunking-code"><span class="header-section-number">3.2</span> De-chunking code</h2>
 <p>Here is a phone number:</p>
 <pre><code>1-8-0-0-1-3-1-0-8-6</code></pre>
 <p>Ten digits. Try to hold them in your head. Now try this:</p>
@@ -372,8 +367,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="what-to-look-for" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="what-to-look-for"><span class="header-section-number">3.6</span> What to look for</h2>
+<section id="what-to-look-for" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="what-to-look-for"><span class="header-section-number">3.3</span> What to look for</h2>
 <p>Once the tools have done their bit, what are you actually reading <em>for</em>?</p>
 <p>Here are four things worth having names for:</p>
 <ol type="1">
@@ -382,15 +377,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Complexity that has a simpler form</li>
 <li>Refactoring</li>
 </ol>
-<section id="code-smells" class="level3" data-number="3.6.1">
-<h3 data-number="3.6.1" class="anchored" data-anchor-id="code-smells"><span class="header-section-number">3.6.1</span> Code smells</h3>
+<section id="code-smells" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="code-smells"><span class="header-section-number">3.3.1</span> Code smells</h3>
 <p>A code smell is a bit of code that isn’t wrong, but that makes you uneasy.</p>
 <p>The word is deliberate, because it is the feeling of opening the fridge and knowing something in there has gone off before you have worked out what.</p>
 <p>Smells are useful precisely because they are cheap, and you do not have to prove anything to act on one. You notice that a function is doing three things, or that a block has been copied twice with one number changed, and you make a note.</p>
 <p>For a great introduction to this, watch <a href="https://www.youtube.com/watch?v=7oyiPBjLAWY">Jenny Bryan’s “Code smells and feels”</a>.</p>
 </section>
-<section id="inputs-and-outputs" class="level3" data-number="3.6.2">
-<h3 data-number="3.6.2" class="anchored" data-anchor-id="inputs-and-outputs"><span class="header-section-number">3.6.2</span> Inputs and outputs</h3>
+<section id="inputs-and-outputs" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="inputs-and-outputs"><span class="header-section-number">3.3.2</span> Inputs and outputs</h3>
 <p>For any section of code, two questions:</p>
 <p><strong>What does this need in order to run?</strong> and <strong>what does it leave behind?</strong></p>
 <p>If a chunk needs six objects that were made in four different places, that’s the finding. You’ve found something that can’t be moved, can’t be tested, and can’t be understood on its own.</p>
@@ -422,8 +417,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="complexity-that-has-a-simpler-form" class="level3" data-number="3.6.3">
-<h3 data-number="3.6.3" class="anchored" data-anchor-id="complexity-that-has-a-simpler-form"><span class="header-section-number">3.6.3</span> Complexity that has a simpler form</h3>
+<section id="complexity-that-has-a-simpler-form" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="complexity-that-has-a-simpler-form"><span class="header-section-number">3.3.3</span> Complexity that has a simpler form</h3>
 <p>Sometimes code is doing something perfectly reasonable in a roundabout way, and R already has the direct version.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">sapply</span>(my_list, <span class="cf">function</span>(i) <span class="fu">length</span>(i))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That works, but R already has:</p>
@@ -431,15 +426,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Same answer, and now the line says what it means rather than how it is done.</p>
 <p>You cannot spot these unless you happen to know the shortcut, which is a bit unfair. So do not go hunting for them. Just notice when a line feels like more machinery than the idea deserves, and have a look.</p>
 </section>
-<section id="refactoring" class="level3" data-number="3.6.4">
-<h3 data-number="3.6.4" class="anchored" data-anchor-id="refactoring"><span class="header-section-number">3.6.4</span> Refactoring</h3>
+<section id="refactoring" class="level3" data-number="3.3.4">
+<h3 data-number="3.3.4" class="anchored" data-anchor-id="refactoring"><span class="header-section-number">3.3.4</span> Refactoring</h3>
 <p><strong>Refactoring</strong> means changing code while keeping its behaviour the same.</p>
 <p>It is like giving a car a service, or replacing parts that have worn out. The car still drives the same, it just does so more reliably.</p>
 <p>This is the move you make once you have found a smell. The behaviour is fine, and the expression of it is not.</p>
 </section>
 </section>
-<section id="a-process-for-reviewing-code" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="a-process-for-reviewing-code"><span class="header-section-number">3.7</span> A process for reviewing code</h2>
+<section id="a-process-for-reviewing-code" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="a-process-for-reviewing-code"><span class="header-section-number">3.4</span> A process for reviewing code</h2>
 <p>Here is the process I actually use, and it works on my own code as well as on other people’s.</p>
 <p>The principle underneath it is this: <strong>let the machine review the mechanics, so that people can review the thinking.</strong></p>
 <p>If a human reviewer spends their attention on spacing, on a misspelled word in a comment, or on <code>any(is.na(x))</code>, that attention is gone and it was worth almost nothing. Those are all things a tool does perfectly, instantly, every time.</p>
@@ -449,8 +444,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption>One of these five steps is a machine’s job. The other four are the review.</figcaption>
 </figure>
 </div>
-<section id="run-the-automated-checks-first" class="level3" data-number="3.7.1">
-<h3 data-number="3.7.1" class="anchored" data-anchor-id="run-the-automated-checks-first"><span class="header-section-number">3.7.1</span> 1. Run the automated checks first</h3>
+<section id="run-the-automated-checks-first" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="run-the-automated-checks-first"><span class="header-section-number">3.4.1</span> 1. Run the automated checks first</h3>
 <p>Before anyone reads it:</p>
 <ul>
 <li><strong>Format it.</strong> <code>air format .</code></li>
@@ -480,15 +475,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="read-it-top-to-bottom-and-dont-edit-anything" class="level3" data-number="3.7.2">
-<h3 data-number="3.7.2" class="anchored" data-anchor-id="read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.7.2</span> 2. Read it top to bottom, and don’t edit anything</h3>
+<section id="read-it-top-to-bottom-and-dont-edit-anything" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.4.2</span> 2. Read it top to bottom, and don’t edit anything</h3>
 <p>This one is harder than it sounds, because the urge to fix the first thing you see is strong.</p>
 <p>Resist it, because on this pass you are only getting the shape of the thing.</p>
 <p>What you are collecting is a list of the places where the code caught you. The bits where it did not quite make sense, or where something was not clear, or where you had to read a line twice.</p>
 <p>Those moments are the data, so mark them and keep going.</p>
 </section>
-<section id="chunk-it-up" class="level3" data-number="3.7.3">
-<h3 data-number="3.7.3" class="anchored" data-anchor-id="chunk-it-up"><span class="header-section-number">3.7.3</span> 3. Chunk it up</h3>
+<section id="chunk-it-up" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="chunk-it-up"><span class="header-section-number">3.4.3</span> 3. Chunk it up</h3>
 <p>Now put similar things together.</p>
 <ul>
 <li>All <code>library()</code> calls at the top, in alphabetical order.</li>
@@ -500,14 +495,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>None of this changes what the code does, and all of it changes how much you have to hold in your head to read it.</p>
 </section>
-<section id="expression-can-you-follow-it" class="level3" data-number="3.7.4">
-<h3 data-number="3.7.4" class="anchored" data-anchor-id="expression-can-you-follow-it"><span class="header-section-number">3.7.4</span> 4. Expression: can you follow it?</h3>
+<section id="expression-can-you-follow-it" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="expression-can-you-follow-it"><span class="header-section-number">3.4.4</span> 4. Expression: can you follow it?</h3>
 <p>Now go back to the places that caught you in step 2.</p>
 <p>For each one: <strong>do you understand what the code is doing when you read it?</strong></p>
 <p>Not what it does line by line. What it’s <em>for</em>. If you can’t say it in a sentence, that’s the finding.</p>
 </section>
-<section id="re-expression-can-you-say-it-more-simply" class="level3" data-number="3.7.5">
-<h3 data-number="3.7.5" class="anchored" data-anchor-id="re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.7.5</span> 5. Re-expression: can you say it more simply?</h3>
+<section id="re-expression-can-you-say-it-more-simply" class="level3" data-number="3.4.5">
+<h3 data-number="3.4.5" class="anchored" data-anchor-id="re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.4.5</span> 5. Re-expression: can you say it more simply?</h3>
 <p>The last question is the useful one.</p>
 <p><strong>Can you re-express the intention of the code, and keep the output the same?</strong></p>
 <p>That is refactoring, and it is where the smells you noticed earlier get cashed in. The copied block becomes a function, the nine objects become one, and the <code>sapply</code> becomes <code>lengths</code>.</p>
@@ -552,8 +547,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="reviewing-someone-elses-code" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="reviewing-someone-elses-code"><span class="header-section-number">3.8</span> Reviewing someone else’s code</h2>
+<section id="reviewing-someone-elses-code" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="reviewing-someone-elses-code"><span class="header-section-number">3.5</span> Reviewing someone else’s code</h2>
 <p>Everything above works on your own code. Doing it to someone else’s is a different skill, and most of the difference is social rather than technical.</p>
 <ol type="1">
 <li>Start by asking what they want</li>
@@ -562,23 +557,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>It will be slow, at first</li>
 <li></li>
 </ol>
-<section id="start-by-asking-what-they-want" class="level3" data-number="3.8.1">
-<h3 data-number="3.8.1" class="anchored" data-anchor-id="start-by-asking-what-they-want"><span class="header-section-number">3.8.1</span> Start by asking what they want</h3>
+<section id="start-by-asking-what-they-want" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="start-by-asking-what-they-want"><span class="header-section-number">3.5.1</span> Start by asking what they want</h3>
 <p>The most useful question you can ask before reading a single line is: <strong>what kind of feedback are you looking for?</strong></p>
 <p>Someone who wants to know whether the statistics are right does not want thirty comments about variable names.</p>
 <p>And the second question: <strong>what is this code meant to do?</strong></p>
 <p>Find the intention before you review the implementation. Half of what looks like a mistake turns out to be a decision you didn’t have the context for.</p>
 </section>
-<section id="non-adversarial-on-purpose" class="level3" data-number="3.8.2">
-<h3 data-number="3.8.2" class="anchored" data-anchor-id="non-adversarial-on-purpose"><span class="header-section-number">3.8.2</span> Non-adversarial, on purpose</h3>
+<section id="non-adversarial-on-purpose" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="non-adversarial-on-purpose"><span class="header-section-number">3.5.2</span> Non-adversarial, on purpose</h3>
 <p>Review is not a verdict. The goal is better code, not a judgement about whether the code passed.</p>
 <p>That sounds obvious written down, and it is surprisingly easy to lose once you are twenty comments deep.</p>
 <p>Two things that keep it on track.</p>
 <p><strong>Review the code, not the person.</strong> “This function is doing three things” is useful. “You always overcomplicate things” isn’t.</p>
 <p><strong>Say what’s good, specifically.</strong> This is not politeness. If you only ever name problems, people learn what to avoid but never what to aim for.</p>
 </section>
-<section id="exercise-the-code-dont-just-read-it" class="level3" data-number="3.8.3">
-<h3 data-number="3.8.3" class="anchored" data-anchor-id="exercise-the-code-dont-just-read-it"><span class="header-section-number">3.8.3</span> Exercise the code, don’t just read it</h3>
+<section id="exercise-the-code-dont-just-read-it" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="exercise-the-code-dont-just-read-it"><span class="header-section-number">3.5.3</span> Exercise the code, don’t just read it</h3>
 <p>Don’t review from reading alone. Run it.</p>
 <p>Then run it on something slightly different from what the author ran it on. Your data, an extra column, a year that isn’t in their file.</p>
 <p>Reading tells you whether code is comprehensible. Running it on something unfamiliar is what surfaces the assumptions the author didn’t know they were making.</p>
@@ -597,8 +592,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="it-will-be-slow-at-first" class="level3" data-number="3.8.4">
-<h3 data-number="3.8.4" class="anchored" data-anchor-id="it-will-be-slow-at-first"><span class="header-section-number">3.8.4</span> It will be slow at first</h3>
+<section id="it-will-be-slow-at-first" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="it-will-be-slow-at-first"><span class="header-section-number">3.5.4</span> It will be slow at first</h3>
 <p>Your first few reviews will take ages, and you will finish them feeling like you did not have much to say.</p>
 <p>That is normal, and it is what reviewing is like at the start.</p>
 <p>Reviewing is a skill like any other, and it gets faster with practice. The people who seem to spot things instantly have simply read a lot of code.</p>
@@ -653,8 +648,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="clean-as-you-go" class="level2" data-number="3.9">
-<h2 data-number="3.9" class="anchored" data-anchor-id="clean-as-you-go"><span class="header-section-number">3.9</span> Clean as you go</h2>
+<section id="clean-as-you-go" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="clean-as-you-go"><span class="header-section-number">3.6</span> Clean as you go</h2>
 <p>Get into the habit of going back over your code briefly to tidy it up, as you go.</p>
 <p>A kitchen analogy is useful here. Professional kitchens clean as they go, because a tidy workspace keeps your mind clear and because the alternative is an unusable bench by service. The same is true of code.</p>
 <p>I rarely write my best code on the first pass. It gets better with iteration.</p>
