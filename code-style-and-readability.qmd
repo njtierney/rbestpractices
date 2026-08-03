@@ -1,16 +1,30 @@
 # Code style and readability {#sec-code-style}
 
+> "Programs must be written for people to read, and only incidentally for machines to execute."
+>
+> -- Harold Abelson and Gerald Jay Sussman, [Structure and Interpretation of Computer Programs](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html)
+
 There is more to your code than having it run. We are aiming for your code to be "running" AND "easy to read, and easy to understand".
 
 There are some really useful tools we can apply to get quick wins on improving the readability of your code. In this section we will discuss concepts of **code style**, talking about how to easily improve code **layout (whitespace, newlines, punctuation standards)**, and improving code with **code linting** - where a program looks at how your code is written and identifies common errors, style inconsistencies, and other known problem patterns.
 
+::: {.overview}
+
 ## Overview {.unnumbered}
 
-- **Duration** 45 minutes
-- **Questions**
-  - Why does style matter?
-  - What is a code formatter?
-  - What is a code linter?
+**Duration** 45 minutes
+
+**Questions**
+
+<!-- These map onto the sections below, in order. If you move a section, move its question. -->
+
+- Why does style matter, if the code runs either way?
+- What counts as style: layout, naming, or correctness?
+- How should I lay out a pipeline, and what should I call things?
+- What is a code formatter, and how do I get one to run on save?
+- What is a linter, and what does it catch that a formatter does not?
+
+:::
 
 ## Reading things that are hard to read is hard
 
@@ -748,7 +762,7 @@ There is a deliberately awful script in the course repository at `06-bad-style/m
 
 A few things that will save you some confusion.
 
-**There is very little to configure, and that's on purpose.** Air's settings live in an `air.toml` file, and there are about ten of them. The ones you might actually change are `line-width` (default 80) and `indent-width` (default 2). There is no way to spend an afternoon tuning it, which is the point.
+**There is very little to configure, and that's on purpose.** Air's settings live in an `air.toml` file, and there are about ten of them. The ones you might actually change are `line-width` (default 80) and `indent-width` (default 2). There is no way to spend an afternoon tuning it, which is exactly why I like it.
 
 **It won't work on an untitled tab.** Air needs a file that exists on disk, with an `.R` extension, so that it knows it's looking at R code. Save the file first.
 
