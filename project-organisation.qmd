@@ -462,7 +462,7 @@ Let's download the course exercise - try running this code:
 
 ```{r}
 #| eval: false
-use_course("njtierney/rbp-exercises")
+usethis::use_course("njtierney/rbp-exercises")
 ```
 
 Which will prompt you to download the repository, <https://github.com/njtierney/rbp-exercises>, and then open it in an RStudio project.

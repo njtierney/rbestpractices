@@ -1,38 +1,28 @@
 # Writing readable code {#sec-writing-readable-code}
 
-We have focussed on a lot of structural things, that I would class as "easy wins" - but we haven't necessarily talked about how to read the code properly. In this section we go over what you are looking for when you read code, some ideas on a process for reviewing your code, or anothers code.
+We have focussed on a lot of structural things, that I would class as "easy wins" - where things live, creating projects, file paths and reproducibility, style linting, and project structure - like a README. 
 
-## Overview
+Now let us talk about **how** to read code, to improve it. In an analogy for writing - this is the task of how to become a good editor.
 
-* **Duration** 45 minutes
+In this section we go over what you are looking for when you read code, and some ideas on code review process.
 
-## Questions
+## Overview {.unnumbered}
 
-- Where does readable code start, once the tools have done their bit?
-- What makes a variable name good enough?
-- How do I break a wall of code into readable pieces?
-- What am I actually looking for when I read code?
-- How do I review code, including my own?
-
-## Where we are up to
-
-[Project organisation -@sec-project-organisation] was about where things live. A project that opens, paths that work on someone else's machine, a README that says what the thing is.
-
-[Code style and readability -@sec-code-style] was about how the code looks. Pick a naming convention. Let `air` or {styler} handle the layout. Let a linter like {jarl} or {flir} tell you about the rest. 
-
-Organising your project is putting your notes and drafts in sensible folders. Running `air` is spell check, and running a linter is the automatic grammar check that tells you a sentence has no verb.
-
-In this chapter, we go through how to review code and ask whether a person can follow it.
+- **Duration** 45 minutes
+- **Questions**
+    - Where does readable code start, once the tools have done their bit?
+    - What makes a variable name good enough?
+    - How do I break a wall of code into readable pieces?
+    - What am I actually looking for when I read code?
+    - How do I review code, including my own?
 
 ## Good vs bad variable names
 
 There is a quote attributed to [Phil Karlton](https://www.karlton.org/):
 
-> There are only two hard things in computer science: cache invalidation and naming things.
+> There are only two hard things in computer science: cache invalidation[^:https://yihui.org/en/2018/06/cache-invalidation/] and naming things.
 
-Read Yihui Xie's blog post to learn about cache invalidation. 
-
-The point is, naming things well is genuinely hard. One way through this, is to lower the bar a bit:
+It is comforting to know that naming things is genuinely hard. I think we can sometimes let perfect become the enemy of good - we can combat this by saying:
 
 > **giving things an OK name is much easier than giving things a great name.**
 
@@ -49,24 +39,28 @@ In [Code style and readability -@sec-code-style] we talked about naming *convent
 This is the other half. A name can follow your convention perfectly and still tell you nothing.
 
 ```r
-df1 <- read.csv("survey.csv")
-df2 <- df1[df1$year == 2024, ]
-df3 <- df2[df2$site == "north", ]
+library(readr)
+library(dplyr)
+df1 <- read_csv("survey.csv")
+df2 <- df1 |> filter(year == 2024)
+df3 <- df2 |> filter(site == "north")
 ```
 
-That is consistent, it is `air`-clean, and a linter has no complaint about it. But if I meet `df3` two hundred lines later I have to go back and reconstruct what it is.
+That is consistent, it is formatted clean, and a linter has no complaint about it. But if I meet `df3` two hundred lines later I have to go back and reconstruct what it is.
 
 Compare:
 
 ```r
-survey_raw <- read.csv("survey.csv")
-survey_2024 <- survey_raw[survey_raw$year == 2024, ]
-survey_north <- survey_2024[survey_2024$site == "north", ]
+survey_raw <- read_csv("survey.csv")
+survey_2024 <- survey_raw |> filter(year == 2024)
+survey_north <- survey_2024 |> filter(site == "north)
 ```
 
 Same code, and now the name carries the history of what happened to the data.
 
-There is a small counter-example. Inside very short functions, `x` is often the right name, precisely because the function is small enough that you can see everything at once. But that is the exception, and you will know when you are in it.
+The core idea:
+
+> Name the variable separating it by `_`, 
 
 ::: {.callout-note title="Your Turn"}
 
