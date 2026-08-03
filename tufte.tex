@@ -93,28 +93,47 @@
 \@namedef{ver@marginnote.sty}{9999/01/01}
 \makeatother
 
-% --- Every image runs the full width of its column ------------------------
+% --- Image sizing ----------------------------------------------------------
 %
-% Images arrive here three ways, and only the first is already full width:
+% Images arrive here three ways:
 %
 %   1. `width=100%` in the .qmd  -> \includegraphics[width=1\linewidth]
 %   2. `width=70%`  in the .qmd  -> \includegraphics[width=0.7\linewidth]
 %   3. no width at all           -> \pandocbounded{\includegraphics{...}},
-%      which only ever *shrinks* an image to fit, never grows it, so a small
-%      PNG stays small.
+%      which only ever *shrinks* an image to fit, never grows it. On this
+%      class that still means a wide screenshot fills the whole measure.
 %
-% Rather than edit every image in the source - which would also change the
-% HTML, where the 70% sizing is wanted - force the width here. This file is
-% only loaded by the PDF format, so HTML is untouched.
+% This used to force EVERY image to the full measure, by appending our width
+% after the passed options so it won. That is why the screenshots came out
+% enormous in print: a dialog box of six checkboxes ran the full text column
+% plus the margin.
 %
-% The passed options `#1` are kept and our width is appended *after* them:
-% graphicx uses the last value given for a key, so this beats an explicit
-% `width=0.7\linewidth` while preserving `alt=`, which carries the fig-alt
-% text into the tagged PDF.
+% Dropping them all to one small fraction is not the fix either. Tried at
+% 0.5, and the purpose-built teaching diagrams - the chunking figure, the
+% inputs and outputs figure - became too small to read the labels on. Those
+% ask for `width=100%` in the .qmd precisely because they need the room.
+%
+% So the rule now is: THE .QMD WINS. Our width goes FIRST and the passed
+% options `#1` come after, and graphicx takes the last value given for a
+% key. An explicit `width=` in the source therefore overrides this, and only
+% images that asked for nothing fall back to \rbpfigscale.
+%
+% THE KNOB: \rbpfigscale sizes the images that did NOT ask for a width -
+% which in this book is nearly all the screenshots. Lower it to shrink them
+% further. To change one specific image, set `width=` on it in the .qmd,
+% where you can see it next to the picture it applies to.
+\newcommand{\rbpfigscale}{0.5}
+%
+% \makebox is what keeps a less-than-full-width image centred. Without it the
+% image sits hard against the left edge with a river of white space down the
+% right, and `\centering` cannot help: an inline image comes wrapped in
+% \pandocbounded rather than in a float, so there is no float to centre it in.
 \usepackage{letltxmacro}
 \LetLtxMacro{\rbporigincludegraphics}{\includegraphics}
 \renewcommand{\includegraphics}[2][]{%
-  \rbporigincludegraphics[#1,width=\linewidth,height=\maxdimen,keepaspectratio]{#2}%
+  \makebox[\linewidth]{%
+    \rbporigincludegraphics[width=\rbpfigscale\linewidth,height=\maxdimen,keepaspectratio,#1]{#2}%
+  }%
 }
 
 % Code blocks are wider than tufte's narrow text column, so allow a little
@@ -164,6 +183,71 @@
 }{%
   \rbporigendShaded
   \endgroup
+}
+\makeatother
+
+% --- The chapter overview box ----------------------------------------------
+%
+% overview-box.lua turns `::: {.overview}` into this environment, with the
+% heading lifted out to become the title. See that file for why.
+%
+% tcolorbox is loaded here rather than left to Quarto so that this definition
+% can sit in the preamble. Quarto emits
+% `\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}`
+% further down, which takes the empty branch once we have loaded it - and the
+% options must match Quarto's exactly, or that becomes an option clash.
+%
+% The keys mirror Quarto's own callouts so the two sit together on a page,
+% minus the colour: the five callout types each mean something specific and
+% navigate by colour, and the overview is furniture rather than a sixth
+% meaning. Same reasoning as the HTML, in chapter-overview.scss.
+\usepackage[skins,breakable]{tcolorbox}
+\newtcolorbox{rbpoverview}[1]{%
+  enhanced jigsaw,
+  breakable,
+  arc=.35mm,
+  colback=white,
+  opacityback=0,
+  colframe=black!30,
+  colbacktitle=black!6,
+  opacitybacktitle=1,
+  coltitle=black,
+  left=2mm,
+  leftrule=.15mm,
+  rightrule=.15mm,
+  toprule=.15mm,
+  bottomrule=.15mm,
+  titlerule=0mm,
+  toptitle=1mm,
+  bottomtitle=1mm,
+  title={\textbf{#1}},
+}
+
+% --- Callouts span the text column and the margin --------------------------
+%
+% Quarto sets every callout as a tcolorbox, and a tcolorbox takes its width
+% from \linewidth, which on this class is the narrow text column. So the
+% boxes came out visibly narrower than the code blocks and the figures
+% around them, which already reach into the margin. Three different measures
+% on one page reads as a mistake.
+%
+% `grow to right by` is the right key rather than `width`: it extends the
+% box into the margin while leaving the left edge anchored on the text
+% block, so the callout's left edge still lines up with the prose.
+%
+% \@tufte@overhang is tufte's own measure of how far fullwidth material
+% reaches past the text block - the same dimension the code blocks above
+% borrow, so all three now stop in the same place.
+%
+% This is set globally rather than per callout type because Quarto emits no
+% hook for individual callouts, and nothing else in the book uses tcolorbox.
+%
+% Guarded, because Quarto only loads tcolorbox when the document actually
+% contains a callout. An unguarded \tcbset aborts the build on a document
+% that happens not to have one.
+\makeatletter
+\AtBeginDocument{%
+  \@ifpackageloaded{tcolorbox}{\tcbset{grow to right by=\@tufte@overhang}}{}%
 }
 \makeatother
 

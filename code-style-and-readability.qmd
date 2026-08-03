@@ -1,8 +1,8 @@
 # Code style and readability {#sec-code-style}
 
-> "Programs must be written for people to read, and only incidentally for machines to execute."
+> Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.
 >
-> -- Harold Abelson and Gerald Jay Sussman, [Structure and Interpretation of Computer Programs](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html)
+> -- [Hadley Wickham](https://hadley.nz/):
 
 There is more to your code than having it run. We are aiming for your code to be "running" AND "easy to read, and easy to understand".
 

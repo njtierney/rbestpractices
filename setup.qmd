@@ -28,7 +28,7 @@ Four kinds of box turn up throughout, each with its own colour and icon:
 - **✏️ Your Turn** - something for you to do. Most of these we do together in the session, and a few are there for afterwards. The ones that ask what you think have no wrong answers; I am genuinely curious what has gone wrong for you before.
 - **🕰️ Some history** - where something came from. Why a linter is called a linter, where the backslash in `\(x)` comes from. Entirely skippable, and quietly my favourite part of the book.
 - **🔎 Going deeper** - optional extra detail, a longer example, or a list you might want later. Boxes titled **Read more** point at the blog post or talk a section is adapted from, so you can follow the original if you want it.
-- **🚨** - the things that will actually bite you. There are not many. That is the point of them.
+- **🚨** - the things that will actually bite you. There are not many, and that is deliberate.
 
 Rather than describe them, here is one of each.
 

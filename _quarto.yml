@@ -6,6 +6,9 @@ project:
 # them at the end. Set here rather than per-chapter so they cannot drift.
 filters:
   - linkate
+  # The chapter overview box. HTML gets it from chapter-overview.scss;
+  # this is the LaTeX half, and it is a no-op in every other format.
+  - overview-box.lua
 
 book:
   title: "R Best Practices"
@@ -34,6 +37,8 @@ book:
   #   - "putting-it-all-together.qmd"
   # appendices:
   #   - "appendix-speed-of-thought.qmd"
+  #   - "appendix-pipes.qmd"
+  #   - "appendix-curly-braces.qmd"
 
 format:
   html:
@@ -44,6 +49,7 @@ format:
       - measured/_measured-house.scss      # what each callout type means
       - measured/measured-legible.scss     # Atkinson Hyperlegible + Fira Code
       - book-grid.scss                     # book column is narrower than a website
+      - chapter-overview.scss              # the box each chapter opens with
     code-copy: true
     code-line-numbers: true
     toc: true
