@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7002e898bdb3cc4fe1c43d944ce9f4e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-cd562747a821bcd71e1fae8341a609dc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -249,18 +249,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<blockquote class="blockquote">
+<p>Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.</p>
+<p>– <a href="https://hadley.nz/">Hadley Wickham</a>:</p>
+</blockquote>
 <p>There is more to your code than having it run. We are aiming for your code to be “running” AND “easy to read, and easy to understand”.</p>
 <p>There are some really useful tools we can apply to get quick wins on improving the readability of your code. In this section we will discuss concepts of <strong>code style</strong>, talking about how to easily improve code <strong>layout (whitespace, newlines, punctuation standards)</strong>, and improving code with <strong>code linting</strong> - where a program looks at how your code is written and identifies common errors, style inconsistencies, and other known problem patterns.</p>
-<section id="overview" class="level2 unnumbered">
+<section id="overview" class="level2 unnumbered overview">
 <h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
+<p><strong>Duration</strong> 45 minutes</p>
+<p><strong>Questions</strong></p>
+<!-- These map onto the sections below, in order. If you move a section, move its question. -->
 <ul>
-<li><strong>Duration</strong> 45 minutes</li>
-<li><strong>Questions</strong>
-<ul>
-<li>Why does style matter?</li>
-<li>What is a code formatter?</li>
-<li>What is a code linter?</li>
-</ul></li>
+<li>Why does style matter, if the code runs either way?</li>
+<li>What counts as style: layout, naming, or correctness?</li>
+<li>How should I lay out a pipeline, and what should I call things?</li>
+<li>What is a code formatter, and how do I get one to run on save?</li>
+<li>What is a linter, and what does it catch that a formatter does not?</li>
 </ul>
 </section>
 <section id="reading-things-that-are-hard-to-read-is-hard" class="level2" data-number="2.1">
@@ -927,7 +932,7 @@ Levels: high low other</code></pre>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A few things that will save you some confusion.</p>
-<p><strong>There is very little to configure, and that’s on purpose.</strong> Air’s settings live in an <code>air.toml</code> file, and there are about ten of them. The ones you might actually change are <code>line-width</code> (default 80) and <code>indent-width</code> (default 2). There is no way to spend an afternoon tuning it, which is the point.</p>
+<p><strong>There is very little to configure, and that’s on purpose.</strong> Air’s settings live in an <code>air.toml</code> file, and there are about ten of them. The ones you might actually change are <code>line-width</code> (default 80) and <code>indent-width</code> (default 2). There is no way to spend an afternoon tuning it, which is exactly why I like it.</p>
 <p><strong>It won’t work on an untitled tab.</strong> Air needs a file that exists on disk, with an <code>.R</code> extension, so that it knows it’s looking at R code. Save the file first.</p>
 <p><strong>In RStudio it won’t work inside R chunks in Quarto or R Markdown.</strong> This is an RStudio limitation rather than an air one, and it may well change. Positron handles chunks fine.</p>
 <p><strong>If your code doesn’t reformat, you probably have a syntax error.</strong> Air will not format code it cannot parse. So a file that stubbornly refuses to tidy up is telling you something useful. Go and find your missing bracket.</p>
@@ -1205,9 +1210,9 @@ warning: redundant_equals
 <section class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
 <ul>
+<li><a href="https://hadley.nz/">Hadley Wickham</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Lionel_Hutz">Lionel Hutz</a></li>
 <li><a href="https://en.wikipedia.org/wiki/The_Simpsons">The Simpsons</a></li>
-<li><a href="https://hadley.nz/">Hadley Wickham</a></li>
 <li><a href="https://r4ds.hadley.nz/workflow-style.html">Workflow: code style</a></li>
 <li><a href="https://xkcd.com/1015/">kerning</a></li>
 <li><a href="http://adv-r.had.co.nz/Style.html">style chapter of Advanced R, 1st edition</a></li>

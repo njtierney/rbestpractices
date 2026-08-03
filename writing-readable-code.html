@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7002e898bdb3cc4fe1c43d944ce9f4e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-cd562747a821bcd71e1fae8341a609dc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -191,31 +191,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#good-vs-bad-variable-names" id="toc-good-vs-bad-variable-names" class="nav-link" data-scroll-target="#good-vs-bad-variable-names"><span class="header-section-number">3.1</span> Good vs bad variable names</a></li>
-  <li><a href="#de-chunking-code" id="toc-de-chunking-code" class="nav-link" data-scroll-target="#de-chunking-code"><span class="header-section-number">3.2</span> De-chunking code</a></li>
-  <li><a href="#what-to-look-for" id="toc-what-to-look-for" class="nav-link" data-scroll-target="#what-to-look-for"><span class="header-section-number">3.3</span> What to look for</a>
+  <li><a href="#clean-as-you-go" id="toc-clean-as-you-go" class="nav-link" data-scroll-target="#clean-as-you-go"><span class="header-section-number">3.1</span> Clean as you go</a></li>
+  <li><a href="#sec-the-script" id="toc-sec-the-script" class="nav-link" data-scroll-target="#sec-the-script"><span class="header-section-number">3.2</span> The script</a></li>
+  <li><a href="#bad-better-and-good-variable-names" id="toc-bad-better-and-good-variable-names" class="nav-link" data-scroll-target="#bad-better-and-good-variable-names"><span class="header-section-number">3.3</span> Bad, better, and good variable names</a>
   <ul class="collapse">
-  <li><a href="#code-smells" id="toc-code-smells" class="nav-link" data-scroll-target="#code-smells"><span class="header-section-number">3.3.1</span> Code smells</a></li>
-  <li><a href="#inputs-and-outputs" id="toc-inputs-and-outputs" class="nav-link" data-scroll-target="#inputs-and-outputs"><span class="header-section-number">3.3.2</span> Inputs and outputs</a></li>
-  <li><a href="#complexity-that-has-a-simpler-form" id="toc-complexity-that-has-a-simpler-form" class="nav-link" data-scroll-target="#complexity-that-has-a-simpler-form"><span class="header-section-number">3.3.3</span> Complexity that has a simpler form</a></li>
-  <li><a href="#refactoring" id="toc-refactoring" class="nav-link" data-scroll-target="#refactoring"><span class="header-section-number">3.3.4</span> Refactoring</a></li>
+  <li><a href="#a-bit-more-on-ok-names" id="toc-a-bit-more-on-ok-names" class="nav-link" data-scroll-target="#a-bit-more-on-ok-names"><span class="header-section-number">3.3.1</span> A bit more on OK names</a></li>
   </ul></li>
-  <li><a href="#a-process-for-reviewing-code" id="toc-a-process-for-reviewing-code" class="nav-link" data-scroll-target="#a-process-for-reviewing-code"><span class="header-section-number">3.4</span> A process for reviewing code</a>
+  <li><a href="#sec-conflicted" id="toc-sec-conflicted" class="nav-link" data-scroll-target="#sec-conflicted"><span class="header-section-number">3.4</span> When two packages collide</a>
   <ul class="collapse">
-  <li><a href="#run-the-automated-checks-first" id="toc-run-the-automated-checks-first" class="nav-link" data-scroll-target="#run-the-automated-checks-first"><span class="header-section-number">3.4.1</span> 1. Run the automated checks first</a></li>
-  <li><a href="#read-it-top-to-bottom-and-dont-edit-anything" id="toc-read-it-top-to-bottom-and-dont-edit-anything" class="nav-link" data-scroll-target="#read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.4.2</span> 2. Read it top to bottom, and don’t edit anything</a></li>
-  <li><a href="#chunk-it-up" id="toc-chunk-it-up" class="nav-link" data-scroll-target="#chunk-it-up"><span class="header-section-number">3.4.3</span> 3. Chunk it up</a></li>
-  <li><a href="#expression-can-you-follow-it" id="toc-expression-can-you-follow-it" class="nav-link" data-scroll-target="#expression-can-you-follow-it"><span class="header-section-number">3.4.4</span> 4. Expression: can you follow it?</a></li>
-  <li><a href="#re-expression-can-you-say-it-more-simply" id="toc-re-expression-can-you-say-it-more-simply" class="nav-link" data-scroll-target="#re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.4.5</span> 5. Re-expression: can you say it more simply?</a></li>
+  <li><a href="#the-conflicted-pkg-to-the-rescue" id="toc-the-conflicted-pkg-to-the-rescue" class="nav-link" data-scroll-target="#the-conflicted-pkg-to-the-rescue"><span class="header-section-number">3.4.1</span> The <code>conflicted</code> pkg to the rescue!</a></li>
   </ul></li>
-  <li><a href="#reviewing-someone-elses-code" id="toc-reviewing-someone-elses-code" class="nav-link" data-scroll-target="#reviewing-someone-elses-code"><span class="header-section-number">3.5</span> Reviewing someone else’s code</a>
+  <li><a href="#a-guide-to-reviewing-code" id="toc-a-guide-to-reviewing-code" class="nav-link" data-scroll-target="#a-guide-to-reviewing-code"><span class="header-section-number">3.5</span> A guide to reviewing code</a>
   <ul class="collapse">
-  <li><a href="#start-by-asking-what-they-want" id="toc-start-by-asking-what-they-want" class="nav-link" data-scroll-target="#start-by-asking-what-they-want"><span class="header-section-number">3.5.1</span> Start by asking what they want</a></li>
-  <li><a href="#non-adversarial-on-purpose" id="toc-non-adversarial-on-purpose" class="nav-link" data-scroll-target="#non-adversarial-on-purpose"><span class="header-section-number">3.5.2</span> Non-adversarial, on purpose</a></li>
-  <li><a href="#exercise-the-code-dont-just-read-it" id="toc-exercise-the-code-dont-just-read-it" class="nav-link" data-scroll-target="#exercise-the-code-dont-just-read-it"><span class="header-section-number">3.5.3</span> Exercise the code, don’t just read it</a></li>
-  <li><a href="#it-will-be-slow-at-first" id="toc-it-will-be-slow-at-first" class="nav-link" data-scroll-target="#it-will-be-slow-at-first"><span class="header-section-number">3.5.4</span> It will be slow at first</a></li>
+  <li><a href="#run-the-automated-checks-first" id="toc-run-the-automated-checks-first" class="nav-link" data-scroll-target="#run-the-automated-checks-first"><span class="header-section-number">3.5.1</span> 1. Run the automated checks first</a></li>
+  <li><a href="#read-it-top-to-bottom-and-mark-it-up" id="toc-read-it-top-to-bottom-and-mark-it-up" class="nav-link" data-scroll-target="#read-it-top-to-bottom-and-mark-it-up"><span class="header-section-number">3.5.2</span> 2. Read it top to bottom, and mark it up</a></li>
+  <li><a href="#sec-de-chunking" id="toc-sec-de-chunking" class="nav-link" data-scroll-target="#sec-de-chunking"><span class="header-section-number">3.5.3</span> 3. Chunk it up</a></li>
+  <li><a href="#expression-can-you-follow-it" id="toc-expression-can-you-follow-it" class="nav-link" data-scroll-target="#expression-can-you-follow-it"><span class="header-section-number">3.5.4</span> 4. Expression: can you follow it?</a></li>
+  <li><a href="#re-expression-refactoring" id="toc-re-expression-refactoring" class="nav-link" data-scroll-target="#re-expression-refactoring"><span class="header-section-number">3.5.5</span> 5. Re-expression: refactoring</a></li>
   </ul></li>
-  <li><a href="#clean-as-you-go" id="toc-clean-as-you-go" class="nav-link" data-scroll-target="#clean-as-you-go"><span class="header-section-number">3.6</span> Clean as you go</a></li>
+  <li><a href="#reviewing-someone-elses-code" id="toc-reviewing-someone-elses-code" class="nav-link" data-scroll-target="#reviewing-someone-elses-code"><span class="header-section-number">3.6</span> Reviewing someone else’s code</a></li>
   <li>Links</li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/writing-readable-code.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -242,34 +236,172 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>We have focussed on a lot of structural things, that I would class as “easy wins” - where things live, creating projects, file paths and reproducibility, style linting, and project structure - like a README.</p>
-<p>Now let us talk about <strong>how</strong> to read code, to improve it. In an analogy for writing - this is the task of how to become a good editor.</p>
-<p>In this section we go over what you are looking for when you read code, and some ideas on code review process.</p>
-<section id="overview" class="level2 unnumbered">
+<blockquote class="blockquote">
+<p>“Programs must be written for people to read, and only incidentally for machines to execute.”</p>
+<p>– Harold Abelson and Gerald Jay Sussman, <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html">Structure and Interpretation of Computer Programs</a></p>
+</blockquote>
+<p>So far we have focussed on structural things I would class as “easy wins” - where things live, creating projects, file paths and reproducibility, style linting, and a README. Something I really appreciate is how tools like {air}/{styler} and {jarl}/{flir} make this easy and repeatable.</p>
+<p>Now let’s talk about something that is a bit more of a skill - how to write readable code. We work on one script the whole way through. First the names, then the code, then how to do this to somebody else’s work without it going badly.</p>
+<section id="overview" class="level2 unnumbered overview">
 <h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
-<ul>
-<li><strong>Duration</strong> 45 minutes</li>
-<li><strong>Questions</strong>
+<p><strong>Duration</strong> 60 minutes</p>
+<p><strong>Questions</strong></p>
 <ul>
 <li>Where does readable code start, once the tools have done their bit?</li>
 <li>What makes a variable name good enough?</li>
+<li>What happens when two packages have a function with the same name?</li>
 <li>How do I break a wall of code into readable pieces?</li>
 <li>What am I actually looking for when I read code?</li>
 <li>How do I review code, including my own?</li>
-</ul></li>
 </ul>
 </section>
-<section id="good-vs-bad-variable-names" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="good-vs-bad-variable-names"><span class="header-section-number">3.1</span> Good vs bad variable names</h2>
+<section id="clean-as-you-go" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="clean-as-you-go"><span class="header-section-number">3.1</span> Clean as you go</h2>
+<p>There is one core idea I’d like to get across this chapter:</p>
+<blockquote class="blockquote">
+<p>You won’t write your best code on the first pass.</p>
+</blockquote>
+<p>Just like writing, I don’t write my best code on the first pass. Your code gets better as you review it. The first pass is for getting it working, mostly. After that, you are improving readability, and expression.</p>
+<p>To add another analogy into the mix: Professional kitchens clean as they go, because a tidy bench keeps your mind clear and because the alternative is chaos by service.</p>
+<p>So, I think when you finish a piece of work, it would serve you well to go back over it briefly:</p>
+<ul>
+<li>Clean up the comments that no longer mean anything.</li>
+<li>Remove the “wilted lettuce”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.
+<ul>
+<li>The commented-out chunks of code you <strong>might just come back to</strong></li>
+<li>You probably won’t come back to these bits</li>
+<li>If one really matters, write a comment saying why, rather than leaving it lying there.</li>
+</ul></li>
+<li>Fix the style (use air or styler).</li>
+<li>Check the names.</li>
+<li>Make any notes about weirdness/strangeness/slowness</li>
+</ul>
+<p>Now, you can’t do a full review of your code, all the time.</p>
+<p>But <strong>doing some of it</strong> will make your code better - and you’ll get faster at it the more you practice.</p>
+<p>Let’s talk about how to do this.</p>
+</section>
+<section id="sec-the-script" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-the-script"><span class="header-section-number">3.2</span> The script</h2>
+<p>Imagine that someone hands you a script. It runs, it makes a plot at the end, and they would like another year of data added to it. Today, ideally.</p>
+<p>Here’s the script! Don’t read it closely yet. Scroll through it. What do you notice?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="co"># load packages for data analysis</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a><span class="fu">library</span>(visdat)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a><span class="co"># Read in the raw data</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a>d <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a>  <span class="at">path =</span> <span class="st">"data/Education and work, 2023, Datacube 2 (Table 11).xlsx"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a>  <span class="at">sheet =</span> <span class="st">"2014"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>  <span class="at">skip =</span> <span class="dv">4</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-label="14"></a>  <span class="at">n_max =</span> <span class="dv">32</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-label="15"></a>  <span class="co"># use janitor::make_clean_names to turn `15-19 years` to "x15_19_years"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-label="16"></a>  <span class="at">.name_repair =</span> make_clean_names</span>
+<span id="cb1-17"><a href="#cb1-17" aria-label="17"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-label="18"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-label="19"></a><span class="co"># clean up the silly names from excel</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-label="20"></a><span class="fu">names</span>(d)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-label="21"></a>n1 <span class="ot">&lt;-</span> <span class="fu">names</span>(d)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-label="22"></a>n1[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"state_territory"</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-label="23"></a>n2 <span class="ot">&lt;-</span> n1</span>
+<span id="cb1-24"><a href="#cb1-24" aria-label="24"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-label="25"></a><span class="co"># subset the data down to the number of educated people section</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-label="26"></a>d</span>
+<span id="cb1-27"><a href="#cb1-27" aria-label="27"></a>x1 <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-label="28"></a>  <span class="fu">slice</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-label="29"></a>  <span class="fu">set_names</span>(n2)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-label="30"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-label="31"></a>x1</span>
+<span id="cb1-32"><a href="#cb1-32" aria-label="32"></a>x2 <span class="ot">&lt;-</span> x1 <span class="sc">%&gt;%</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-label="33"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb1-34"><a href="#cb1-34" aria-label="34"></a>    <span class="at">cols =</span> <span class="sc">-</span>state_territory,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-label="35"></a>    <span class="at">names_to =</span> <span class="st">"age_group"</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-label="36"></a>    <span class="at">names_prefix =</span> <span class="st">"x"</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-label="37"></a>    <span class="at">names_pattern =</span> <span class="st">"(.*)_years"</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-label="38"></a>    <span class="at">values_to =</span> <span class="st">"n_studying"</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-label="39"></a>    <span class="at">values_transform =</span> as.numeric</span>
+<span id="cb1-40"><a href="#cb1-40" aria-label="40"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-label="41"></a>  <span class="fu">arrange</span>(</span>
+<span id="cb1-42"><a href="#cb1-42" aria-label="42"></a>    state_territory,</span>
+<span id="cb1-43"><a href="#cb1-43" aria-label="43"></a>    age_group</span>
+<span id="cb1-44"><a href="#cb1-44" aria-label="44"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-label="45"></a>  <span class="co"># remove larger 15_24/64/74 age bands</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-label="46"></a>  <span class="fu">filter</span>(</span>
+<span id="cb1-47"><a href="#cb1-47" aria-label="47"></a>    age_group <span class="sc">!=</span> <span class="st">"15_24"</span>,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-label="48"></a>    age_group <span class="sc">!=</span> <span class="st">"15_64"</span>,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-label="49"></a>    age_group <span class="sc">!=</span> <span class="st">"15_74"</span>,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-label="50"></a>    age_group <span class="sc">!=</span> <span class="st">"18_24"</span>,</span>
+<span id="cb1-51"><a href="#cb1-51" aria-label="51"></a>    age_group <span class="sc">!=</span> <span class="st">"25_64"</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-label="52"></a>  )</span>
+<span id="cb1-53"><a href="#cb1-53" aria-label="53"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-label="54"></a>x2</span>
+<span id="cb1-55"><a href="#cb1-55" aria-label="55"></a><span class="co"># Population in age groups</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-label="56"></a>y1 <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-label="57"></a>  <span class="fu">slice</span>(<span class="dv">24</span><span class="sc">:</span><span class="dv">31</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-label="58"></a>  <span class="fu">set_names</span>(n2)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-label="59"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-label="60"></a>y2 <span class="ot">&lt;-</span> y1 <span class="sc">%&gt;%</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-label="61"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb1-62"><a href="#cb1-62" aria-label="62"></a>    <span class="at">cols =</span> <span class="sc">-</span>state_territory,</span>
+<span id="cb1-63"><a href="#cb1-63" aria-label="63"></a>    <span class="at">names_to =</span> <span class="st">"age_group"</span>,</span>
+<span id="cb1-64"><a href="#cb1-64" aria-label="64"></a>    <span class="at">names_prefix =</span> <span class="st">"x"</span>,</span>
+<span id="cb1-65"><a href="#cb1-65" aria-label="65"></a>    <span class="at">names_pattern =</span> <span class="st">"(.*)_years"</span>,</span>
+<span id="cb1-66"><a href="#cb1-66" aria-label="66"></a>    <span class="at">values_to =</span> <span class="st">"population"</span>,</span>
+<span id="cb1-67"><a href="#cb1-67" aria-label="67"></a>    <span class="at">values_transform =</span> as.numeric</span>
+<span id="cb1-68"><a href="#cb1-68" aria-label="68"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-label="69"></a>  <span class="fu">arrange</span>(</span>
+<span id="cb1-70"><a href="#cb1-70" aria-label="70"></a>    state_territory,</span>
+<span id="cb1-71"><a href="#cb1-71" aria-label="71"></a>    age_group</span>
+<span id="cb1-72"><a href="#cb1-72" aria-label="72"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-label="73"></a>  <span class="co"># remove larger 15_24/64/74 age bands</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-label="74"></a>  <span class="fu">filter</span>(</span>
+<span id="cb1-75"><a href="#cb1-75" aria-label="75"></a>    age_group <span class="sc">!=</span> <span class="st">"15_24"</span>,</span>
+<span id="cb1-76"><a href="#cb1-76" aria-label="76"></a>    age_group <span class="sc">!=</span> <span class="st">"15_64"</span>,</span>
+<span id="cb1-77"><a href="#cb1-77" aria-label="77"></a>    age_group <span class="sc">!=</span> <span class="st">"15_74"</span>,</span>
+<span id="cb1-78"><a href="#cb1-78" aria-label="78"></a>    age_group <span class="sc">!=</span> <span class="st">"18_24"</span>,</span>
+<span id="cb1-79"><a href="#cb1-79" aria-label="79"></a>    age_group <span class="sc">!=</span> <span class="st">"25_64"</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-label="80"></a>  )</span>
+<span id="cb1-81"><a href="#cb1-81" aria-label="81"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-label="82"></a><span class="co"># combine the data</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-label="83"></a><span class="co"># I guess it's only a study rather than the true numbers?</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-label="84"></a>z <span class="ot">&lt;-</span> x2 <span class="sc">%&gt;%</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-label="85"></a>  <span class="fu">left_join</span>(y2, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"state_territory"</span>, <span class="st">"age_group"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-label="86"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-87"><a href="#cb1-87" aria-label="87"></a>    <span class="at">age_group =</span> <span class="fu">as_factor</span>(age_group),</span>
+<span id="cb1-88"><a href="#cb1-88" aria-label="88"></a>    <span class="at">prop_studying =</span> n_studying <span class="sc">/</span> population,</span>
+<span id="cb1-89"><a href="#cb1-89" aria-label="89"></a>    <span class="at">year =</span> <span class="dv">2014</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-label="90"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-label="91"></a>  <span class="fu">relocate</span>(</span>
+<span id="cb1-92"><a href="#cb1-92" aria-label="92"></a>    year</span>
+<span id="cb1-93"><a href="#cb1-93" aria-label="93"></a>  )</span>
+<span id="cb1-94"><a href="#cb1-94" aria-label="94"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-label="95"></a>z</span>
+<span id="cb1-96"><a href="#cb1-96" aria-label="96"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-label="97"></a><span class="fu">ggplot</span>(z, <span class="fu">aes</span>(<span class="at">x =</span> prop_studying, <span class="at">y =</span> state_territory)) <span class="sc">+</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-label="98"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-label="99"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>age_group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is a real script of mine, from a project called <a href="https://github.com/njtierney/ozed">ozed</a> that I used for an example project when teaching.</p>
+<p>The goal of the analysis was to look at how many Australians are studying, by age group and by state, using data from the <a href="https://www.abs.gov.au/statistics/people/education/education-and-work-australia/latest-release">Australian Bureau of Statistics</a>.</p>
+<p>I want to be fair to it, because it is not <strong>bad</strong> code.</p>
+<p>It runs. It’s formatted. A linter has almost nothing to say about it. It even has comments. By the standards of everything in this book so far, it passes.</p>
+<p>But I think we can do better.</p>
+<p>Here’s a few things wrong with the code:</p>
+<ol type="1">
+<li><strong>The names tell you nothing.</strong> <code>x1</code>, <code>x2</code>, <code>y1</code>, <code>y2</code>, <code>z</code>.</li>
+<li><strong>Two of the functions in it might not be the ones you think.</strong> <code>filter()</code> is in there. There are two functions called <code>filter()</code>, and which one you get depends on the order of those six <code>library()</code> calls.</li>
+<li><strong>It is a wall of text.</strong> There isn’t much guidance.</li>
+</ol>
+<p>We shall look at these now, in that order.</p>
+</section>
+<section id="bad-better-and-good-variable-names" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="bad-better-and-good-variable-names"><span class="header-section-number">3.3</span> Bad, better, and good variable names</h2>
 <p>There is a quote attributed to <a href="https://www.karlton.org/">Phil Karlton</a>:</p>
 <blockquote class="blockquote">
-<p>There are only two hard things in computer science: cache invalidation[^:https://yihui.org/en/2018/06/cache-invalidation/] and naming things.</p>
+<p>There are only two hard things in computer science: <a href="https://yihui.org/en/2018/06/cache-invalidation/">cache invalidation</a> and naming things.</p>
 </blockquote>
-<p>It is comforting to know that naming things is genuinely hard. I think we can sometimes let perfect become the enemy of good - we can combat this by saying:</p>
-<blockquote class="blockquote">
-<p><strong>giving things an OK name is much easier than giving things a great name.</strong></p>
-</blockquote>
-<p>As you practice giving OK names to things, you’ll get more practice at naming, and get better. But don’t put too much into it.</p>
 <div class="callout callout-style-default callout-caution callout-titled" title="Some history: where the quote comes from">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -286,69 +418,260 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In <a href="code-style-and-readability.html" class="quarto-xref">Code style and readability&nbsp;<span>2</span></a> we talked about naming <em>conventions</em>. Pick one, stick to it, and get tab complete for free.</p>
-<p>This is the other half. A name can follow your convention perfectly and still tell you nothing.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>df1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"survey.csv"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>df2 <span class="ot">&lt;-</span> df1 <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2024</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>df3 <span class="ot">&lt;-</span> df2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(site <span class="sc">==</span> <span class="st">"north"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>That is consistent, it is formatted clean, and a linter has no complaint about it. But if I meet <code>df3</code> two hundred lines later I have to go back and reconstruct what it is.</p>
-<p>Compare:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>survey_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"survey.csv"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>survey_2024 <span class="ot">&lt;-</span> survey_raw <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2024</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>survey_north <span class="ot">&lt;-</span> survey_2024 <span class="sc">|&gt;</span> <span class="fu">filter</span>(site <span class="sc">==</span> <span class="st">"north)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Same code, and now the name carries the history of what happened to the data.</p>
-<p>The core idea:</p>
+<p>It’s comforting to know that naming things is genuinely hard. I think we can sometimes let perfect become the enemy of good - we can combat this by saying:</p>
 <blockquote class="blockquote">
-<p>Name the variable separating it by <code>_</code>,</p>
+<p><strong>giving things an OK name is much easier than giving things a great name.</strong></p>
 </blockquote>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<p>If we can aim to make the names a little better - even just “OK”, then that’s good progress.</p>
+<p>Here’s a little demo of some names of four things:</p>
 <ol type="1">
-<li>Open <code>07-needs-review/analysis.R</code> from the messy project repo. Find every object whose name tells you nothing about what it holds.</li>
-<li>Rename three of them. Don’t try to do all of them, and don’t aim for perfect names. Aim for OK.</li>
-<li>Did renaming change how long it took you to work out what the next section does?</li>
+<li>a data frame read off disk,</li>
+<li>that data frame with one island kept,</li>
+<li>a model,</li>
+<li>and a plot.</li>
 </ol>
-</div>
-</div>
-</section>
-<section id="de-chunking-code" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="de-chunking-code"><span class="header-section-number">3.2</span> De-chunking code</h2>
-<p>Here is a phone number:</p>
-<pre><code>1-8-0-0-1-3-1-0-8-6</code></pre>
-<p>Ten digits. Try to hold them in your head. Now try this:</p>
-<pre><code>1800 131 086</code></pre>
-<p>Same ten digits, and suddenly it’s easy.</p>
-<p>Nothing about the information changed. Only the <strong>chunking</strong> did.</p>
-<p>This is not a party trick. Our working memory holds roughly <strong>seven, plus or minus two</strong> chunks at once, a finding from George Miller’s 1956 paper <a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">“The magical number seven, plus or minus two”</a>. Crucially, memory isn’t limited by the amount of information. It’s limited by the <em>number of chunks</em>.</p>
-<p>So make bigger chunks and you hold more.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/chunking-working-memory.png" class="img-fluid figure-img" style="width:100.0%" alt="Ten pink boxes each holding one digit of 1800131086, labelled 10 chunks, beyond your limit. Below, the same digits in three green boxes reading 1800, 131 and 086, labelled 3 chunks, well within it. Underneath, a box filled with twenty-six anonymous grey lines labelled 50 lines, an arrow pointing right, and a box holding five named green bars: read the data, clean the names, fit the model, build the table, save the figure."></p>
-<figcaption>Ten loose digits are ten chunks. Grouped as a phone number they are three, and code works the same way.</figcaption>
-</figure>
-</div>
-<p>Code is the same. The question to keep asking is:</p>
-<blockquote class="blockquote">
-<p>How do I take all this complexity and break it into smaller pieces, each of which I can reason about, each of which I can hold in my head?</p>
-</blockquote>
-<p>So when you look at a long script:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Bad</th>
+<th>OK</th>
+<th>Good</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>d</code></td>
+<td><code>penguins</code></td>
+<td><code>penguins_raw</code></td>
+</tr>
+<tr class="even">
+<td><code>df2</code></td>
+<td><code>penguins_filtered</code></td>
+<td><code>penguins_biscoe</code></td>
+</tr>
+<tr class="odd">
+<td><code>m</code></td>
+<td><code>model</code></td>
+<td><code>lm_mass_by_species</code></td>
+</tr>
+<tr class="even">
+<td><code>p1</code></td>
+<td><code>mass_plot</code></td>
+<td><code>boxplot_mass_species</code></td>
+</tr>
+</tbody>
+</table>
+<p>When you come across the names in the bad column, you usually have to refer back the script to see what they were and how they were used. <code>df2</code> could be anything. So could <code>m</code>.</p>
+<p>The OK column does not cost you that trip back to the script, as much.</p>
 <ul>
-<li><strong>50 lines of code is not 50 ideas.</strong> It is usually four or five ideas, written out longhand.</li>
-<li><strong>Chunk the code into ideas.</strong> Where does one thing end and the next begin?</li>
-<li><strong>Reason with them.</strong> Can you say what each chunk does in a sentence?</li>
-<li><strong>Find the complexity</strong>, and <strong>abstract it</strong>, often into a function with a name that says what the chunk was for.</li>
+<li><code>penguins_filtered</code> doesn’t tell me <em>which</em> filter. I am OK with that because it tells me: “this is the penguin data, and it has been filtered”.</li>
 </ul>
-<p>That last step is what the functions lesson is about. But the chunking comes first, and you can do it with nothing more than a blank line and a comment.</p>
+<p>The good column is better again.</p>
+<p>Notice the gap between bad and OK is much wider than the gap between OK and good.</p>
+<p>It’s OK to aim for OK.</p>
+<p>As you practice giving OK names to things, you’ll get more practice at naming, and get better. But don’t put too much into it.</p>
+<section id="a-bit-more-on-ok-names" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="a-bit-more-on-ok-names"><span class="header-section-number">3.3.1</span> A bit more on OK names</h3>
+<p>How do give things OK names?</p>
+<blockquote class="blockquote">
+<p>Say what it holds, in two or three words, joined by <code>_</code>. If a better name shows up later, rename it then.</p>
+</blockquote>
+<p>A name isn’t a commitment! You can rename easily, and there’s some good tricks.</p>
+<p>You can do:</p>
+<ul>
+<li>Find + replace (Cmd/Ctrl + F)</li>
+<li>Find all (Cmd/Ctrl + Shift + F)</li>
+<li>Rename in scope (Cmd / Ctrl + Shift + Alt + M) with your curstor on the name.</li>
+</ul>
+<p>Or search any of those in the command palette.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn: rename the script">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn: rename the script
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The script is <code>10-hard-to-read/analysis.R</code> in the course repo, or copy it out of <a href="#sec-the-script">the listing above</a>. Either way, it has eight badly named objects in it: <code>d</code>, <code>n1</code>, <code>n2</code>, <code>x1</code>, <code>x2</code>, <code>y1</code>, <code>y2</code> and <code>z</code>.</p>
+<ol type="1">
+<li>Rename them. Five seconds each. OK names, not great ones, and don’t stop to admire any of them.</li>
+<li>Use <strong>Rename in Scope</strong> (<code>Cmd / Ctrl + Shift + Alt + M</code>) or <code>F2</code>, not find and replace. Find and replace on a name like <code>d</code> will do something you did not want.</li>
+<li>Read the script again afterwards. How much of it can you now follow without scrolling back up?</li>
+<li>One question I actually want an answer to: <strong>what is <code>n2</code>, and why are there two of them?</strong></li>
+</ol>
+<p>That last one is the interesting bit, so don’t skip it. Something becomes visible when the names are fixed that was invisible before, and it was in my real script, not something I planted.</p>
+</div>
+</div>
+<p>::: {.callout-tip title=“And the answer to <code>n2</code>”, collapse=“true”}</p>
+<p>With the names put back, those three lines read:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>new_data_names_raw <span class="ot">&lt;-</span> <span class="fu">names</span>(raw_data)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>new_data_names_raw[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"state_territory"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>new_data_names <span class="ot">&lt;-</span> new_data_names_raw</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The third line copies the second variable into a third one and never touches it again. <code>new_data_names</code> <strong>is</strong> <code>new_data_names_raw</code>.</p>
+<p>As <code>n1</code> and <code>n2</code> that was invisible, because nobody looks twice at <code>n2 &lt;- n1</code>. Written out with names, it’s obviously a line doing nothing, and you can delete it.</p>
+<p>That’s the argument for OK names in one example. I didn’t plant that line. I wrote it, and I didn’t notice it until I gave the variables names.</p>
+<p>:::</p>
+</section>
+</section>
+<section id="sec-conflicted" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-conflicted"><span class="header-section-number">3.4</span> When two packages collide</h2>
+<p>This is a really common error, that I wanted to bring attention to in this script. Look at the top of <a href="#sec-the-script">the script</a> again. Six <code>library()</code> calls, and further down it uses <code>filter()</code>.</p>
+<p>Which <code>filter()</code>?</p>
+<p>Do you know what this message here is telling us?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>#&gt;
+#&gt; Attaching package: 'dplyr'
+#&gt;
+#&gt; The following objects are masked from 'package:stats':
+#&gt;
+#&gt;     filter, lag
+#&gt;
+#&gt; The following objects are masked from 'package:base':
+#&gt;
+#&gt;     intersect, setdiff, setequal, union</code></pre>
+<p>R is telling you that there are now two functions called <code>filter()</code>, two called <code>lag()</code>, and that when you type one of those names it will hand you the <code>{dplyr}</code> one, because <code>{dplyr}</code> was attached most recently.</p>
+<p>Which means the meaning of your code depends on the order of the <code>library()</code> calls at the top of your script. And that’s a strange thing to be true.</p>
+<p>Let’s quickly show that as it hits you - does this look familiar?</p>
+<p><code>{MASS}</code> also has a <code>select()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">library</span>(MASS)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MASS'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    select</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `select()`:
+! unused arguments (name, height)</code></pre>
+</div>
+</div>
+<p>An error, straight away. Annoying. Familiar?</p>
+<div class="callout callout-style-default callout-important callout-titled" title="This is why library() order is not a style question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>This is why library() order is not a style question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Two scripts with the same lines in a different order can give different answers.</p>
+<p>Worse, so can the <em>same</em> script run by two different people, if one of them had a package attached from a previous session. Which is one more reason for the blank slate settings in <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>.</p>
+</div>
+</div>
+<section id="the-conflicted-pkg-to-the-rescue" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="the-conflicted-pkg-to-the-rescue"><span class="header-section-number">3.4.1</span> The <code>conflicted</code> pkg to the rescue!</h3>
+<p>The <a href="https://conflicted.r-lib.org/">{conflicted}</a> package is built for this!</p>
+<p>Instead of silently picking the last package attached, R refuses to pick at all:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a><span class="fu">library</span>(conflicted)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-label="3"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-label="4"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! [conflicted] select found in 2 packages.
+Either pick the one you want with `::`:
+• MASS::select
+• dplyr::select
+Or declare a preference with `conflicts_prefer()`:
+• `conflicts_prefer(MASS::select)`
+• `conflicts_prefer(dplyr::select)`</code></pre>
+</div>
+</div>
+<p>An error, at the line that is ambiguous, naming both candidates and telling you how to fix it. I think that is about as good as an error message gets.</p>
+<p>You then say which one you meant, once, at the top of the script:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a><span class="fu">library</span>(conflicted)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-label="4"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-label="5"></a><span class="fu">conflicts_prefer</span>(dplyr<span class="sc">::</span>select)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[conflicted] Will prefer dplyr::select over any other package.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 87 × 1
+   name              
+   &lt;chr&gt;             
+ 1 Luke Skywalker    
+ 2 C-3PO             
+ 3 R2-D2             
+ 4 Darth Vader       
+ 5 Leia Organa       
+ 6 Owen Lars         
+ 7 Beru Whitesun Lars
+ 8 R5-D4             
+ 9 Biggs Darklighter 
+10 Obi-Wan Kenobi    
+# ℹ 77 more rows</code></pre>
+</div>
+</div>
+<p>This is a nice example of code that is documenting the reasoning.</p>
+<p>You can also get {conflicted} to do a little reporting for you:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a><span class="fu">conflict_scout</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>3 conflicts</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• `filter()`: dplyr and stats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• `lag()`: dplyr and stats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• `select()`: dplyr</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Going deeper: why not just write dplyr::select() everywhere?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Going deeper: why not just write dplyr::select() everywhere?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You can, and some people do. It removes the ambiguity completely, and it is common practice in R package development.</p>
+<p>I find in an analysis, it is a bit of noise. I have to look at this code a lot! A <code>{ggplot2}</code> plot block written that way is <code>ggplot2::</code> down the left hand side of every line, and the shape of the code disappears behind a prefix that is identical on every row.</p>
+<p><code>{conflicted}</code> gets you the same safety without the tax, because the machine does the checking instead of you.</p>
+<p>So should you use <code>pkg::fun()</code>? Maybe - here’s some thoughts on where it might be more worth it.</p>
+<ul>
+<li>A package you use once for one utility, and don’t otherwise need attached.</li>
+<li>Deliberately disambiguating at a single call site.</li>
+<li>In R package development</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -360,92 +683,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>In <code>07-needs-review/analysis.R</code>, mark where one idea ends and the next begins. A blank line and a comment is enough.</li>
-<li>How many ideas are in there? Write the number down before you count the lines.</li>
-<li>Are any two of those chunks doing the same thing to different data?</li>
+<li>Run <code>library(conflicted)</code> and then attach the packages your current project uses. What does <code>conflict_scout()</code> say?</li>
+<li>Pick one conflict. Which function were you actually getting?</li>
+<li>Add <code>library(conflicted)</code> as the first line of one of your scripts and run it. Did anything break? Anything that breaks was already ambiguous.</li>
 </ol>
 </div>
 </div>
 </section>
-<section id="what-to-look-for" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="what-to-look-for"><span class="header-section-number">3.3</span> What to look for</h2>
-<p>Once the tools have done their bit, what are you actually reading <em>for</em>?</p>
-<p>Here are four things worth having names for:</p>
-<ol type="1">
-<li>Code Smells</li>
-<li>Inputs &amp; outputs</li>
-<li>Complexity that has a simpler form</li>
-<li>Refactoring</li>
-</ol>
-<section id="code-smells" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="code-smells"><span class="header-section-number">3.3.1</span> Code smells</h3>
-<p>A code smell is a bit of code that isn’t wrong, but that makes you uneasy.</p>
-<p>The word is deliberate, because it is the feeling of opening the fridge and knowing something in there has gone off before you have worked out what.</p>
-<p>Smells are useful precisely because they are cheap, and you do not have to prove anything to act on one. You notice that a function is doing three things, or that a block has been copied twice with one number changed, and you make a note.</p>
-<p>For a great introduction to this, watch <a href="https://www.youtube.com/watch?v=7oyiPBjLAWY">Jenny Bryan’s “Code smells and feels”</a>.</p>
 </section>
-<section id="inputs-and-outputs" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="inputs-and-outputs"><span class="header-section-number">3.3.2</span> Inputs and outputs</h3>
-<p>For any section of code, two questions:</p>
-<p><strong>What does this need in order to run?</strong> and <strong>what does it leave behind?</strong></p>
-<p>If a chunk needs six objects that were made in four different places, that’s the finding. You’ve found something that can’t be moved, can’t be tested, and can’t be understood on its own.</p>
-<p>The same goes the other way. A chunk that creates nine objects, seven of which are never used again, is a chunk that hasn’t decided what it’s for.</p>
-<p>Long sections with many inputs and many outputs are the ones worth your attention. They’re almost always several ideas wearing one coat.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/chunk-inputs-outputs.png" class="img-fluid figure-img" style="width:100.0%" alt="Two chunks compared. The first is fed by six pink arrows leaving four boxes labelled line 12, line 40, line 88 and line 130, and emits nine arrows: two green ones reach a box marked used later, and seven orange ones stop dead at a dashed wall marked never used again. The second chunk takes one green arrow in from survey_2024 and sends one green arrow out to survey_north."></p>
-<figcaption>Count the arrows going in and the arrows coming out. That count is the finding.</figcaption>
-</figure>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Open <code>08-curly-code/penguin-report.R</code> and find the longest stretch of code between two blank lines.</p>
-<ol type="1">
-<li>List what it needs in order to run. Where was each of those things made?</li>
-<li>List what it leaves behind. How many of them are ever used again?</li>
-<li>Is that one idea, or several wearing one coat?</li>
-</ol>
-<p>You do not have to fix anything. Counting the arrows is the exercise.</p>
-</div>
-</div>
-</section>
-<section id="complexity-that-has-a-simpler-form" class="level3" data-number="3.3.3">
-<h3 data-number="3.3.3" class="anchored" data-anchor-id="complexity-that-has-a-simpler-form"><span class="header-section-number">3.3.3</span> Complexity that has a simpler form</h3>
-<p>Sometimes code is doing something perfectly reasonable in a roundabout way, and R already has the direct version.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">sapply</span>(my_list, <span class="cf">function</span>(i) <span class="fu">length</span>(i))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>That works, but R already has:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="fu">lengths</span>(my_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Same answer, and now the line says what it means rather than how it is done.</p>
-<p>You cannot spot these unless you happen to know the shortcut, which is a bit unfair. So do not go hunting for them. Just notice when a line feels like more machinery than the idea deserves, and have a look.</p>
-</section>
-<section id="refactoring" class="level3" data-number="3.3.4">
-<h3 data-number="3.3.4" class="anchored" data-anchor-id="refactoring"><span class="header-section-number">3.3.4</span> Refactoring</h3>
-<p><strong>Refactoring</strong> means changing code while keeping its behaviour the same.</p>
-<p>It is like giving a car a service, or replacing parts that have worn out. The car still drives the same, it just does so more reliably.</p>
-<p>This is the move you make once you have found a smell. The behaviour is fine, and the expression of it is not.</p>
-</section>
-</section>
-<section id="a-process-for-reviewing-code" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="a-process-for-reviewing-code"><span class="header-section-number">3.4</span> A process for reviewing code</h2>
-<p>Here is the process I actually use, and it works on my own code as well as on other people’s.</p>
-<p>The principle underneath it is this: <strong>let the machine review the mechanics, so that people can review the thinking.</strong></p>
-<p>If a human reviewer spends their attention on spacing, on a misspelled word in a comment, or on <code>any(is.na(x))</code>, that attention is gone and it was worth almost nothing. Those are all things a tool does perfectly, instantly, every time.</p>
+<section id="a-guide-to-reviewing-code" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="a-guide-to-reviewing-code"><span class="header-section-number">3.5</span> A guide to reviewing code</h2>
+<p><strong>The machine reviews the mechanics, the people review the thinking.</strong></p>
+<p>We talked about using the automated checks in air/styler and jalr/flir earlier - this means when you review code now, your attention is not on:</p>
+<ul>
+<li>spacing</li>
+<li>a misspelled comment, or</li>
+<li><code>any(is.na(x))</code></li>
+</ul>
+<p>Apply these tools!</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figs/review-process-machine-then-person.png" class="img-fluid figure-img" style="width:100.0%" alt="Two stacked bands. The upper grey band holds step 1, run the automated checks first, with pills for air format, jarl check, spelling colon colon spell underscore check underscore files, and restart R run from the top; it is labelled done by a machine, in seconds. An arrow crosses the gap saying only then is it worth a person's time. The lower purple band holds steps 2 to 5 - read it top to bottom and edit nothing, chunk it up, expression, and re-expression - labelled only a person can do these."></p>
 <figcaption>One of these five steps is a machine’s job. The other four are the review.</figcaption>
 </figure>
 </div>
-<section id="run-the-automated-checks-first" class="level3" data-number="3.4.1">
-<h3 data-number="3.4.1" class="anchored" data-anchor-id="run-the-automated-checks-first"><span class="header-section-number">3.4.1</span> 1. Run the automated checks first</h3>
+<section id="run-the-automated-checks-first" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="run-the-automated-checks-first"><span class="header-section-number">3.5.1</span> 1. Run the automated checks first</h3>
 <p>Before anyone reads it:</p>
 <ul>
 <li><strong>Format it.</strong> <code>air format .</code></li>
@@ -454,80 +717,304 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Run it from a clean session.</strong> Restart R, run from the top. If it doesn’t run, nothing else matters yet.</li>
 </ul>
 <p>Only then is it worth a person’s time.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Go deeper: if what you are reviewing is a package">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Go deeper: if what you are reviewing is a package
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Everything above works on a folder of scripts. If you are reviewing an R package, there is a tool that checks the habits a package is supposed to have:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>goodpractice<span class="sc">::</span><span class="fu">gp</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>It runs <code>R CMD check</code>, a set of linters, and a pile of structural checks - whether there is a README, whether the DESCRIPTION is well formed, whether functions are too long or too complex, whether there are tests.</p>
-<p>The reason it is down here rather than in the list above is that most of what it checks only exists in a package. Pointed at an analysis project, the great majority of its checks have nothing to look at.</p>
-<p>So: excellent tool, wrong shape for the code most of us are reviewing day to day. Worth knowing it exists for the day you write a package.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="read-it-top-to-bottom-and-dont-edit-anything" class="level3" data-number="3.4.2">
-<h3 data-number="3.4.2" class="anchored" data-anchor-id="read-it-top-to-bottom-and-dont-edit-anything"><span class="header-section-number">3.4.2</span> 2. Read it top to bottom, and don’t edit anything</h3>
-<p>This one is harder than it sounds, because the urge to fix the first thing you see is strong.</p>
-<p>Resist it, because on this pass you are only getting the shape of the thing.</p>
-<p>What you are collecting is a list of the places where the code caught you. The bits where it did not quite make sense, or where something was not clear, or where you had to read a line twice.</p>
-<p>Those moments are the data, so mark them and keep going.</p>
-</section>
-<section id="chunk-it-up" class="level3" data-number="3.4.3">
-<h3 data-number="3.4.3" class="anchored" data-anchor-id="chunk-it-up"><span class="header-section-number">3.4.3</span> 3. Chunk it up</h3>
-<p>Now put similar things together.</p>
-<ul>
-<li>All <code>library()</code> calls at the top, in alphabetical order.</li>
-<li>All function definitions together.</li>
-<li>If a variable is defined at line 10 and isn’t used until line 150, move them closer to each other.</li>
-<li>Sections of code that do similar things should sit near each other.</li>
-<li>Add commented section headers so you can see where a new area starts.</li>
-<li>If one of those sections gets long, should it be its own script?</li>
-</ul>
-<p>None of this changes what the code does, and all of it changes how much you have to hold in your head to read it.</p>
-</section>
-<section id="expression-can-you-follow-it" class="level3" data-number="3.4.4">
-<h3 data-number="3.4.4" class="anchored" data-anchor-id="expression-can-you-follow-it"><span class="header-section-number">3.4.4</span> 4. Expression: can you follow it?</h3>
-<p>Now go back to the places that caught you in step 2.</p>
-<p>For each one: <strong>do you understand what the code is doing when you read it?</strong></p>
-<p>Not what it does line by line. What it’s <em>for</em>. If you can’t say it in a sentence, that’s the finding.</p>
-</section>
-<section id="re-expression-can-you-say-it-more-simply" class="level3" data-number="3.4.5">
-<h3 data-number="3.4.5" class="anchored" data-anchor-id="re-expression-can-you-say-it-more-simply"><span class="header-section-number">3.4.5</span> 5. Re-expression: can you say it more simply?</h3>
-<p>The last question is the useful one.</p>
-<p><strong>Can you re-express the intention of the code, and keep the output the same?</strong></p>
-<p>That is refactoring, and it is where the smells you noticed earlier get cashed in. The copied block becomes a function, the nine objects become one, and the <code>sapply</code> becomes <code>lengths</code>.</p>
-<p>Then you run it again and check that the output did not move.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Some questions worth asking as you go">
+<div class="callout callout-style-default callout-tip callout-titled" title="Going deeper: if what you are reviewing is a package">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Some questions worth asking as you go
+<span class="screen-reader-only">Tip</span>Going deeper: if what you are reviewing is a package
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><strong>Can I tell what this is for?</strong> If you cannot say it in a sentence, that is the finding.</p>
-<p><strong>Is the running order obvious?</strong> Could a stranger tell what to run first?</p>
-<p><strong>Are the names consistent, and do they mean anything?</strong> <code>get.data()</code> versus <code>getData()</code> versus <code>get_data()</code> in one project is a real cost, paid every time someone has to remember which.</p>
-<p><strong>Can I reason about each piece separately?</strong> Or do I have to hold the whole thing in my head at once? This is the chunking question from earlier, asked about someone else’s code.</p>
-<p><strong>What would break if the data changed slightly?</strong> Extra column, a new <code>NA</code>, a factor level nobody expected.</p>
-<p><strong>Is anything here that I could regenerate?</strong> Or, conversely, is anything precious sitting somewhere disposable?</p>
+<p>Everything above works on a folder of scripts. If you are reviewing an R package, there is a tool that checks the habits a package is supposed to have:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>goodpractice<span class="sc">::</span><span class="fu">gp</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It runs <code>R CMD check</code>, a set of linters, and a pile of structural checks - whether there is a README, whether the DESCRIPTION is well formed, whether functions are too long or too complex, whether there are tests.</p>
+<p>It’s down here rather than in the list above because most of what it checks only exists in a package. Pointed at an analysis project, the great majority of its checks have nothing to look at.</p>
+<p>Excellent tool, wrong shape for the code most of us review day to day. Worth knowing about for the day you write a package.</p>
 </div>
 </div>
 </div>
+</section>
+<section id="read-it-top-to-bottom-and-mark-it-up" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="read-it-top-to-bottom-and-mark-it-up"><span class="header-section-number">3.5.2</span> 2. Read it top to bottom, and mark it up</h3>
+<p>Read the whole thing without fixing anything.</p>
+<p>That’s harder than it sounds, because the urge to fix the first thing you see is strong. Resist it.</p>
+<p>On this pass you’re only getting the shape of the thing, and collecting the places where the code caught you: where it didn’t quite make sense, where something was unclear, where you had to read a line twice.</p>
+<p>Those moments are the data. Mark them and keep going.</p>
+<p><strong>Mark them with a word you can search for.</strong> I use two:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: this filter drops 400 rows and I do not know why</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-label="2"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: same block as line 40, with different columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>TODO</code> for something that needs doing, <code>NOTE</code> for something you want to remember but which might turn out to be fine.</p>
+<p>This beats holding it in your head for two reasons.</p>
+<p>You can find them all again with a search, and both RStudio and Positron will collect them for you in a pane. And writing the note is far cheaper than fixing the thing, so you keep reading instead of disappearing down the first hole you find.</p>
+<p>Steps 3 to 5 are the second pass, over the marks you just made.</p>
+</section>
+<section id="sec-de-chunking" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="sec-de-chunking"><span class="header-section-number">3.5.3</span> 3. Chunk it up</h3>
+<p>Here is a phone number:</p>
+<pre><code>1-8-0-0-1-3-1-0-8-6</code></pre>
+<p>Ten digits. Try to hold them in your head. Now try this:</p>
+<pre><code>1800 131 086</code></pre>
+<p>Same ten digits, and suddenly it’s easy.</p>
+<p>Nothing about the information changed. Only the <strong>chunking</strong> did.</p>
+<p>This is not a party trick. Working memory holds roughly <strong>seven, plus or minus two</strong> chunks at once, from George Miller’s 1956 paper <a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">“The magical number seven, plus or minus two”</a>. Memory isn’t limited by the amount of information, but by the <em>number of chunks</em>.</p>
+<p>So make bigger chunks and you hold more.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/chunking-working-memory.png" class="img-fluid figure-img" style="width:100.0%" alt="Ten pink boxes each holding one digit of 1800131086, labelled 10 chunks, beyond your limit. Below, the same digits in three green boxes reading 1800, 131 and 086, labelled 3 chunks, well within it. Underneath, a box filled with twenty-six anonymous grey lines labelled 50 lines, an arrow pointing right, and a box holding five named green bars: read the data, clean the names, fit the model, build the table, save the figure."></p>
+<figcaption>Ten loose digits are ten chunks. Grouped as a phone number they are three, and code works the same way.</figcaption>
+</figure>
+</div>
+<p>Code is the same, and the question to keep asking is:</p>
+<blockquote class="blockquote">
+<p>How do I break this into pieces I can reason about one at a time?</p>
+</blockquote>
+<section id="doing-it-to-the-script" class="level4" data-number="3.5.3.1">
+<h4 data-number="3.5.3.1" class="anchored" data-anchor-id="doing-it-to-the-script"><span class="header-section-number">3.5.3.1</span> Doing it to the script</h4>
+<p>Back to our ninety lines, now with the names fixed.</p>
+<p>Read it once, and every time the <em>subject</em> changes, put in a blank line and a comment saying what just finished.</p>
+<p>Don’t fix anything. You’re drawing lines, not editing.</p>
+<p>Here is what I get:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-label="1"></a><span class="co"># 1. read the raw spreadsheet for one year</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-label="2"></a><span class="co"># 2. fix the column names Excel gave us</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-label="3"></a><span class="co"># 3. pull out the education rows, make them long, drop the wide age bands</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-label="4"></a><span class="co"># 4. pull out the population rows, make them long, drop the wide age bands</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-label="5"></a><span class="co"># 5. join them, and work out the proportion studying</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-label="6"></a><span class="co"># 6. plot it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Six lines. That’s the entire script.</p>
+<p>Ninety lines, six ideas, and I wrote those six down without understanding a single <code>pivot_longer()</code> argument. That’s what makes this move so useful: <strong>chunking does not require you to understand the code.</strong> It only requires you to notice where one thing stops and the next starts.</p>
+<p>Now look at what falls out, for free.</p>
+<p><strong>Steps 3 and 4 are the same thing.</strong> Same <code>slice()</code>, same <code>pivot_longer()</code>, same <code>arrange()</code>, same five-line <code>filter()</code>. The only differences are which rows get sliced and what the value column is called. Forty lines doing one idea twice.</p>
+<p><strong>The change they asked for lives in step 1.</strong> Another year is another sheet in the same workbook, and nothing after step 1 cares which year it is looking at. But the year is baked into <code>sheet = "2014"</code>, and <code>educated_2014</code>, and <code>population_2014</code>, and <code>year = 2014</code> - so adding one currently means copying eighty lines and editing five numbers inside them.</p>
+<p>Neither finding is subtle. Both were invisible in the wall of code, and obvious the moment it had six headings.</p>
+</section>
+<section id="then-put-like-with-like" class="level4" data-number="3.5.3.2">
+<h4 data-number="3.5.3.2" class="anchored" data-anchor-id="then-put-like-with-like"><span class="header-section-number">3.5.3.2</span> Then put like with like</h4>
+<p>Once you can see the chunks, tidy them:</p>
+<ul>
+<li>All <code>library()</code> calls at the top.</li>
+<li>All function definitions together.</li>
+<li>If a variable is defined at line 10 and first used at line 150, move them closer.</li>
+<li>Chunks that do similar things should sit near each other.</li>
+<li>Add the commented headers, so the sections are visible without counting lines.</li>
+<li>If a section is getting long, should it be its own script?</li>
+</ul>
+<p>None of this changes what the code does. All of it changes how much you’ve got to hold in your head.</p>
+<p>Two questions worth asking here: <strong>is the running order obvious</strong> to someone who has never seen it, and <strong>can you reason about each chunk on its own</strong>, or do you need the whole thing in your head at once?</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Where this script goes next">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Where this script goes next
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Those six comments are a to-do list. Each line is a function waiting to be given a name, and the two identical steps are one function called twice.</p>
+<p>We pick the script up again in <span class="quarto-unresolved-ref">?sec-writing-functions</span> and take it the rest of the way, until adding a year is one argument rather than eighty copied lines. The whole progression, one script per step, is in the <a href="https://github.com/njtierney/ozed">ozed repo</a>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn: chunk something else">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn: chunk something else
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You have watched me do it. Now do it to something I have not touched. Use <code>07-needs-review/analysis.R</code> from the course repo, or better, one of your own from last year.</p>
+<ol type="1">
+<li>Mark where one idea ends and the next begins. A blank line and a comment is enough. Fix nothing.</li>
+<li>How many ideas are in there? Write that number down, then count the lines.</li>
+<li>Are any two of those chunks doing the same thing to different data?</li>
+<li>If someone asked you to add August, how many lines would you have to touch?</li>
+</ol>
+<p>Questions 3 and 4 are where the work is, and you can answer both from the comments alone.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="expression-can-you-follow-it" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="expression-can-you-follow-it"><span class="header-section-number">3.5.4</span> 4. Expression: can you follow it?</h3>
+<p>Now go back to the <code>TODO</code>s and <code>NOTE</code>s from step 2.</p>
+<p>For each one: <strong>can you say what the code is for, in a sentence?</strong> Not what it does line by line. What it is <em>for</em>.</p>
+<p>If you can’t, that’s the finding. Three things to look at when the answer is no.</p>
+<section id="what-does-it-need-and-what-does-it-leave-behind" class="level4" data-number="3.5.4.1">
+<h4 data-number="3.5.4.1" class="anchored" data-anchor-id="what-does-it-need-and-what-does-it-leave-behind"><span class="header-section-number">3.5.4.1</span> What does it need, and what does it leave behind?</h4>
+<p>Two questions for any chunk: <strong>what does this need in order to run</strong>, and <strong>what does it leave behind?</strong></p>
+<p>A chunk that needs six objects made in four different places can’t be moved, can’t be tested, and can’t be understood on its own.</p>
+<p>The other direction is easier to see, because you can mark it up in the file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-16"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-16-1" class="code-annotation-target"><a href="#annotated-cell-16-1" aria-label="1"></a>penguins_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"penguins.csv"</span>)</span>
+<span id="annotated-cell-16-2"><a href="#annotated-cell-16-2" aria-label="2"></a>penguins <span class="ot">&lt;-</span> <span class="fu">clean_names</span>(penguins_raw)</span>
+<span id="annotated-cell-16-3"><a href="#annotated-cell-16-3" aria-label="3"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-16-4" class="code-annotation-target"><a href="#annotated-cell-16-4" aria-label="4"></a>n_total <span class="ot">&lt;-</span> <span class="fu">nrow</span>(penguins)</span>
+<span id="annotated-cell-16-5"><a href="#annotated-cell-16-5" aria-label="5"></a>n_missing <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(penguins<span class="sc">$</span>body_mass_g))</span>
+<span id="annotated-cell-16-6"><a href="#annotated-cell-16-6" aria-label="6"></a>pct_missing <span class="ot">&lt;-</span> n_missing <span class="sc">/</span> n_total</span>
+<span id="annotated-cell-16-7"><a href="#annotated-cell-16-7" aria-label="7"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-16-8" class="code-annotation-target"><a href="#annotated-cell-16-8" aria-label="8"></a>mass_summary <span class="ot">&lt;-</span> penguins <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-16-9"><a href="#annotated-cell-16-9" aria-label="9"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-16-10"><a href="#annotated-cell-16-10" aria-label="10"></a>  <span class="fu">summarise</span>(<span class="at">mass_mean =</span> <span class="fu">mean</span>(body_mass_g, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="annotated-cell-16-11"><a href="#annotated-cell-16-11" aria-label="11"></a></span>
+<span id="annotated-cell-16-12"><a href="#annotated-cell-16-12" aria-label="12"></a>temp <span class="ot">&lt;-</span> mass_summary <span class="sc">|&gt;</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(mass_mean))</span>
+<span id="annotated-cell-16-13"><a href="#annotated-cell-16-13" aria-label="13"></a></span>
+<span id="annotated-cell-16-14"><a href="#annotated-cell-16-14" aria-label="14"></a><span class="fu">ggplot</span>(mass_summary, <span class="fu">aes</span>(species, mass_mean)) <span class="sc">+</span></span>
+<span id="annotated-cell-16-15"><a href="#annotated-cell-16-15" aria-label="15"></a>  <span class="fu">geom_col</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-16" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="1,2" data-code-annotation="1">Used further down. Fine.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="4,5,6,12" data-code-annotation="2"><strong>Never mentioned again.</strong> Four objects, computed and abandoned.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="8,14" data-code-annotation="3">Used. This is the actual work.</span>
+</dd>
+</dl>
+<p>Four of the eight objects in that block are never read.</p>
+<p>They aren’t harmless either. Each one is a name a reader has to hold, and a thing they have to check before concluding it doesn’t matter.</p>
+<p>Usually it means somebody explored, found their answer, and left the exploring in.</p>
+<p>Sometimes it means a result was supposed to be used and quietly isn’t, which is a bug rather than clutter.</p>
+<p>A chunk with many inputs and many outputs is usually several jobs that happen to be sitting next to each other.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Will a linter find these for me?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Will a linter find these for me?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Partly, and it is worth knowing exactly where the line is.</p>
+<p><code>lintr::object_usage_linter()</code> finds unused variables <strong>inside a function</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-label="2"></a>  temp <span class="ot">&lt;-</span> x <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-label="3"></a>  y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-label="4"></a>  y</span>
+<span id="cb30-5"><a href="#cb30-5" aria-label="5"></a>}</span>
+<span id="cb30-6"><a href="#cb30-6" aria-label="6"></a><span class="co">#&gt; warning: [object_usage_linter] local variable 'temp' assigned but may not be used</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run the same linter over the block above, sitting at the top level of a script, and it says nothing. <code>pct_missing</code> and <code>temp</code> go unmentioned.</p>
+<p><a href="https://jarl.etiennebacher.com/rules">jarl</a> has <code>unused_function</code> and <code>unreachable_code</code>, but no unused-variable rule at the time of writing.</p>
+<p>So at script level this one is yours. It is a good thing to look for precisely because no tool is doing it for you.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="is-there-a-simpler-form" class="level4" data-number="3.5.4.2">
+<h4 data-number="3.5.4.2" class="anchored" data-anchor-id="is-there-a-simpler-form"><span class="header-section-number">3.5.4.2</span> Is there a simpler form?</h4>
+<p>Sometimes code does something perfectly reasonable in a roundabout way, and R already has the direct version.</p>
+<p>This happens most with statistics, because we were all taught the formula before we were taught the function.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Mean</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Variance</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Standard deviation</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">A linear model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href="">Counting rows</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false" href="">Lengths of a list</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-label="1"></a><span class="fu">sum</span>(x) <span class="sc">/</span> <span class="fu">length</span>(x)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-label="2"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-label="3"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a><span class="fu">sum</span>((x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="fu">length</span>(x) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-label="2"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-label="3"></a><span class="fu">var</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-label="1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>((x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="fu">length</span>(x) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-label="2"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-label="3"></a><span class="fu">sd</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, d<span class="sc">$</span>x)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-label="2"></a><span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> d<span class="sc">$</span>y</span>
+<span id="cb34-3"><a href="#cb34-3" aria-label="3"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-label="4"></a><span class="fu">coef</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> d))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-label="1"></a><span class="fu">nrow</span>(d[d<span class="sc">$</span>mass <span class="sc">&gt;</span> <span class="dv">4000</span>, ])</span>
+<span id="cb35-2"><a href="#cb35-2" aria-label="2"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-label="3"></a><span class="fu">sum</span>(d<span class="sc">$</span>mass <span class="sc">&gt;</span> <span class="dv">4000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-label="1"></a><span class="fu">sapply</span>(my_list, <span class="cf">function</span>(i) <span class="fu">length</span>(i))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-label="2"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-label="3"></a><span class="fu">lengths</span>(my_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Each pair gives the same answer. The second one says <em>what</em> is being computed, and the first says <em>how</em>, which is a detail the reader has to decode before they can get to the meaning.</p>
+<p>The <code>lm()</code> one is the sharpest, because the long version isn’t wrong. It’s the normal equations, it’s what <code>lm()</code> does, and somebody wrote it out because that’s how they learned it.</p>
+<p>It’s also less numerically stable than <code>lm()</code>, has no standard errors, and takes a reader thirty seconds to recognise.</p>
+<p>You can’t spot these unless you happen to know the shortcut, which is a bit unfair. So don’t go hunting. Just notice when a line feels like more machinery than the idea deserves, and go and look.</p>
+</section>
+<section id="what-would-break-if-the-data-changed-slightly" class="level4" data-number="3.5.4.3">
+<h4 data-number="3.5.4.3" class="anchored" data-anchor-id="what-would-break-if-the-data-changed-slightly"><span class="header-section-number">3.5.4.3</span> What would break if the data changed slightly?</h4>
+<p>An extra column. A new <code>NA</code>. A factor level nobody expected. A year that is not in the file.</p>
+<p>Code that only works on the exact data in front of it is worth a <code>NOTE</code>, even when you’re not going to do anything about it today.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn: count the arrows">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn: count the arrows
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Open <code>08-curly-code/penguin-report.R</code>. It is 97 lines and it runs.</p>
+<ol type="1">
+<li>Pick the longest stretch between two blank lines. What does it need in order to run, and where was each of those things made?</li>
+<li>What does it leave behind, and how much of that is ever read again?</li>
+<li><strong>Eight objects in that script are computed and then never used.</strong> Find as many as you can. Two of them are the same calculation done twice, in two different ways, three lines apart.</li>
+<li>Now run this:</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-label="1"></a>lintr<span class="sc">::</span><span class="fu">lint</span>(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-label="2"></a>  <span class="st">"08-curly-code/penguin-report.R"</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-label="3"></a>  <span class="at">linters =</span> lintr<span class="sc">::</span><span class="fu">object_usage_linter</span>()</span>
+<span id="cb37-4"><a href="#cb37-4" aria-label="4"></a>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-label="5"></a><span class="co">#&gt; ℹ No lints found.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Eight dead objects, and the linter says nothing, because they are all at the top level of a script rather than inside a function.</p>
+<p>You do not have to fix anything. Counting is the exercise.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="re-expression-refactoring" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="re-expression-refactoring"><span class="header-section-number">3.5.5</span> 5. Re-expression: refactoring</h3>
+<p>The last question is the useful one.</p>
+<p><strong>Can you re-express the intention of the code, and keep the output the same?</strong></p>
+<p>That’s <strong>refactoring</strong>: changing code while keeping its behaviour.</p>
+<p>It’s like giving a car a service, or replacing parts that have worn. The car drives the same, it just does it more reliably.</p>
+<p>This is where everything you marked gets cashed in. The copied block becomes a function. The four abandoned objects get deleted. The normal equations become <code>lm()</code>.</p>
+<p>Then you run it again and check the output hasn’t moved.</p>
+<p>That check isn’t optional. It’s very easy to tidy something into a different answer.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Code smells">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Code smells
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>code smell</strong> is a bit of code that is not wrong, but that makes you uneasy.</p>
+<p>The word is deliberate. It is the feeling of opening the fridge and knowing something in there has gone off before you have worked out what.</p>
+<p>Smells are useful because they’re cheap. You don’t have to prove anything to act on one.</p>
+<p>You notice that a function is doing three things, or that a block has been copied twice with one number changed, and you write a <code>NOTE</code>. Refactoring is what you do about it.</p>
+<p>For a great introduction, watch <a href="https://www.youtube.com/watch?v=7oyiPBjLAWY">Jenny Bryan’s “Code smells and feels”</a>.</p>
+</div>
+</div>
+<p>One more question worth asking before you finish: <strong>is anything here that you could regenerate?</strong> And the other way round, is anything precious sitting somewhere disposable?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -539,44 +1026,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Run steps 1 to 3 on <code>07-needs-review/analysis.R</code>. Actually run <code>air</code> and the linter. Don’t just read them.</li>
-<li>The code still isn’t easy to follow. Write down three places where it caught you.</li>
-<li>Pick one and do step 5. Re-express it, then check the output hasn’t changed.</li>
+<li>Run steps 1 to 3 on <code>07-needs-review/analysis.R</code>. Actually run <code>air</code> and the linter, don’t just read about them.</li>
+<li>It still is not easy to follow. Mark three places where it caught you, with <code>TODO</code> or <code>NOTE</code>.</li>
+<li>Pick one and do step 5. Re-express it, then check the output has not changed.</li>
 </ol>
 </div>
 </div>
 </section>
 </section>
-<section id="reviewing-someone-elses-code" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="reviewing-someone-elses-code"><span class="header-section-number">3.5</span> Reviewing someone else’s code</h2>
-<p>Everything above works on your own code. Doing it to someone else’s is a different skill, and most of the difference is social rather than technical.</p>
-<ol type="1">
-<li>Start by asking what they want</li>
-<li>Non-adversarial</li>
-<li>Run the code, don’t just read it</li>
-<li>It will be slow, at first</li>
-<li></li>
-</ol>
-<section id="start-by-asking-what-they-want" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="start-by-asking-what-they-want"><span class="header-section-number">3.5.1</span> Start by asking what they want</h3>
-<p>The most useful question you can ask before reading a single line is: <strong>what kind of feedback are you looking for?</strong></p>
-<p>Someone who wants to know whether the statistics are right does not want thirty comments about variable names.</p>
-<p>And the second question: <strong>what is this code meant to do?</strong></p>
-<p>Find the intention before you review the implementation. Half of what looks like a mistake turns out to be a decision you didn’t have the context for.</p>
-</section>
-<section id="non-adversarial-on-purpose" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="non-adversarial-on-purpose"><span class="header-section-number">3.5.2</span> Non-adversarial, on purpose</h3>
-<p>Review is not a verdict. The goal is better code, not a judgement about whether the code passed.</p>
-<p>That sounds obvious written down, and it is surprisingly easy to lose once you are twenty comments deep.</p>
-<p>Two things that keep it on track.</p>
-<p><strong>Review the code, not the person.</strong> “This function is doing three things” is useful. “You always overcomplicate things” isn’t.</p>
-<p><strong>Say what’s good, specifically.</strong> This is not politeness. If you only ever name problems, people learn what to avoid but never what to aim for.</p>
-</section>
-<section id="exercise-the-code-dont-just-read-it" class="level3" data-number="3.5.3">
-<h3 data-number="3.5.3" class="anchored" data-anchor-id="exercise-the-code-dont-just-read-it"><span class="header-section-number">3.5.3</span> Exercise the code, don’t just read it</h3>
-<p>Don’t review from reading alone. Run it.</p>
-<p>Then run it on something slightly different from what the author ran it on. Your data, an extra column, a year that isn’t in their file.</p>
-<p>Reading tells you whether code is comprehensible. Running it on something unfamiliar is what surfaces the assumptions the author didn’t know they were making.</p>
+<section id="reviewing-someone-elses-code" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="reviewing-someone-elses-code"><span class="header-section-number">3.6</span> Reviewing someone else’s code</h2>
+<p>Everything above works on your own code.</p>
+<p>Doing it to someone else’s is a different skill, and most of the difference is social rather than technical.</p>
+<p><strong>Ask what they want first.</strong> Before reading a line: <em>what kind of feedback are you looking for?</em> Someone who wants to know whether the statistics are right does not want thirty comments about variable names. Then: <em>what is this code meant to do?</em> Find the intention before you review the implementation, because half of what looks like a mistake turns out to be a decision you did not have the context for.</p>
+<p><strong>Review the code, not the person.</strong> “This function is doing three things” is useful. “You always overcomplicate things” is not.</p>
+<p><strong>Say what is good, specifically.</strong> This is not politeness. If you only ever name problems, people learn what to avoid and never what to aim for.</p>
+<p><strong>Run it, don’t just read it.</strong> Then run it on something slightly different from what the author used. Your data, an extra column, a year that is not in their file. Reading tells you whether code is comprehensible; running it on something unfamiliar surfaces the assumptions the author did not know they were making.</p>
+<p><strong>It will be slow at first.</strong> Your first few reviews will take ages and feel thin. That’s what reviewing is like at the start. The people who spot things instantly have simply read a lot of code.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="When it breaks and you cannot see why">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -587,29 +1053,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Cut it down. Take the failing thing and remove everything that is not needed to make it fail, one piece at a time, until what is left is small enough to see through.</p>
-<p>That is a review technique, and it is also exactly how you make a <strong>reprex</strong> - a small self-contained example someone else can run. We come back to it properly later in the course. For now the useful habit is the same either way: make it smaller until it is obvious.</p>
+<p>Cut it down. Remove everything not needed to make it fail, one piece at a time, until what’s left is small enough to see through.</p>
+<p>That is a review technique, and it is also exactly how you make a <strong>reprex</strong>. We come back to it in <a href="writing-a-reprex-getting-unstuck.qmd">Writing a reprex / getting unstuck</a>.</p>
 </div>
 </div>
-</section>
-<section id="it-will-be-slow-at-first" class="level3" data-number="3.5.4">
-<h3 data-number="3.5.4" class="anchored" data-anchor-id="it-will-be-slow-at-first"><span class="header-section-number">3.5.4</span> It will be slow at first</h3>
-<p>Your first few reviews will take ages, and you will finish them feeling like you did not have much to say.</p>
-<p>That is normal, and it is what reviewing is like at the start.</p>
-<p>Reviewing is a skill like any other, and it gets faster with practice. The people who seem to spot things instantly have simply read a lot of code.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="If you want to see this done at full scale">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>If you want to see this done at full scale
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Open software peer review is the most developed version of this practice, and it is all public. <a href="https://devguide.ropensci.org/softwarereview_reviewer.html">rOpenSci’s reviewer guide</a> sets out what a reviewer is asked to look at, and their <a href="https://devguide.ropensci.org/reviewtemplate.html">review template</a> is the checklist itself. Reviews happen in the open on GitHub and are signed, so you can read hundreds of real ones.</p>
-<p>Two things there are worth stealing even for a small analysis project: reviews are explicitly <strong>non-adversarial</strong>, because the goal is better software rather than a verdict. And reviewers are asked to comment on things a checklist can’t capture, such as whether the argument names read well and autocomplete sensibly.</p>
-<p>That last one should sound familiar from the naming lesson.</p>
+<p>Two things there are worth stealing for a small analysis project. Reviews are explicitly <strong>non-adversarial</strong>, because the goal is better software rather than a verdict. And reviewers are asked about things a checklist cannot capture, such as whether the argument names read well and autocomplete sensibly.</p>
+<p>That last one should sound familiar from the naming section.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="If we can see your code, we can trust it">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>If we can see your code, we can trust it
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Version control is not part of this course. It has its own.</p>
+<p>But the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history. Review is much easier when the reviewer can see not just what the code is, but how it got that way.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
@@ -624,13 +1101,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>Pair up. Swap the version of <code>analysis.R</code> you tidied earlier.</li>
-<li>Before you read it, ask your partner the two questions: what feedback do they want, and what is the code meant to do?</li>
-<li>Give three pieces of feedback. At least one of them should be something that’s working well.</li>
+<li>Before reading it, ask the two questions: what feedback do they want, and what is the code meant to do?</li>
+<li>Give three pieces of feedback. At least one should be something that is working well.</li>
 </ol>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="If you want a longer one">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -639,59 +1116,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>08-curly-code/penguin-report.R</code> in the exercises repo is the same idea at greater length. It runs, it produces a report, and a linter finds 55 things in it across 23 rules before you get to anything a person has to see.</p>
+<p><code>08-curly-code/penguin-report.R</code> in the exercises repo is the same idea at greater length. It runs, it produces a report, and <code>lintr::lint()</code> finds 125 things in it across 13 rules before you get to anything a person has to see.</p>
 <p>Work the five steps on it end to end. The automated pass takes about a second, and everything interesting happens after that.</p>
 </div>
-</div>
-</div>
-</section>
-</section>
-<section id="clean-as-you-go" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="clean-as-you-go"><span class="header-section-number">3.6</span> Clean as you go</h2>
-<p>Get into the habit of going back over your code briefly to tidy it up, as you go.</p>
-<p>A kitchen analogy is useful here. Professional kitchens clean as they go, because a tidy workspace keeps your mind clear and because the alternative is an unusable bench by service. The same is true of code.</p>
-<p>I rarely write my best code on the first pass. It gets better with iteration.</p>
-<p>So iterate briefly, as you go:</p>
-<ul>
-<li>Clean up the random comments that no longer mean anything.</li>
-<li>Remove the wilted lettuce. These are the commented-out chunks of code you <em>might just come back to</em>. You probably won’t. If one really is important, write a comment explaining why it might be relevant, rather than leaving it lying there.</li>
-<li>Fix the style.</li>
-<li>Check the names.</li>
-<li>Consider tidying up the implementation, refactoring it.</li>
-</ul>
-<p>You might not have time to do all of these, or to do them thoroughly. Doing <em>some</em> of them will still leave you with better code, and you get better at doing them the more you practise.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="If we can see your code, we can trust it">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>If we can see your code, we can trust it
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Version control isn’t part of this course. It has its own.</p>
-<p>But it’s worth saying plainly that the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history.</p>
-<p>Review is much easier when the reviewer can see not just what the code is, but how it got that way.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Your Turn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Open a script of your own. One you wrote at least a month ago.</li>
-<li>Give it ten minutes of clean-as-you-go. Comments, wilted lettuce, style, names.</li>
-<li>Ten minutes only. What did you get done, and what would you do next?</li>
-</ol>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Read more">
@@ -713,14 +1142,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
 <ul>
+<li><a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html">Structure and Interpretation of Computer Programs</a></li>
+<li><a href="https://milesmcbain.xyz/">Miles McBain</a></li>
+<li><a href="https://github.com/njtierney/ozed">ozed</a></li>
+<li><a href="https://www.abs.gov.au/statistics/people/education/education-and-work-australia/latest-release">Australian Bureau of Statistics</a></li>
 <li><a href="https://www.karlton.org/">Phil Karlton</a></li>
+<li><a href="https://yihui.org/en/2018/06/cache-invalidation/">cache invalidation</a></li>
 <li><a href="https://martinfowler.com/bliki/TwoHardThings.html">Martin Fowler has written up the provenance of the quote</a></li>
+<li><a href="#sec-the-script">the listing above</a></li>
+<li><a href="#sec-the-script">the script</a></li>
+<li><a href="https://conflicted.r-lib.org/">{conflicted}</a></li>
 <li><a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">“The magical number seven, plus or minus two”</a></li>
+<li><a href="https://github.com/njtierney/ozed">ozed repo</a></li>
+<li><a href="https://jarl.etiennebacher.com/rules">jarl</a></li>
 <li><a href="https://www.youtube.com/watch?v=7oyiPBjLAWY">Jenny Bryan’s “Code smells and feels”</a></li>
+<li><a href="writing-a-reprex-getting-unstuck.qmd">Writing a reprex / getting unstuck</a></li>
 <li><a href="https://devguide.ropensci.org/softwarereview_reviewer.html">rOpenSci’s reviewer guide</a></li>
 <li><a href="https://devguide.ropensci.org/reviewtemplate.html">review template</a></li>
 <li><a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a></li>
 </ul>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>:Credit goes to <a href="https://milesmcbain.xyz/">Miles McBain</a> for this name<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
