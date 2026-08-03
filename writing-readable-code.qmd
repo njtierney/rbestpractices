@@ -28,12 +28,15 @@ We will work on one script and discuss it, and some principles on good coding.
 
 **Questions**
 
-- Where does readable code start, once the tools have done their bit?
+<!-- These map onto the sections below, in order. If you move a section, move its question. -->
+
+- Why go back over code you have already written?
 - What makes a variable name good enough?
 - What happens when two packages have a function with the same name?
+- What are the steps of a review, and which of them can a machine do?
 - How do I break a wall of code into readable pieces?
-- What am I actually looking for when I read code?
-- How do I review code, including my own?
+- Can I say what this code is for, and can I say it more simply?
+- How do I review someone else's code without it going badly?
 
 :::
 
@@ -109,7 +112,7 @@ library(purrr)
 data
 data_subset <- data %>%
   slice(4:11) %>%
-  set_names(n2)
+  set_names(the_names2)
 
 
 # sum(is.na(data_subset))
@@ -170,6 +173,7 @@ data_population <- data_population %>%
     age_group != "25_64"
   )
 
+library(forcats)
 # combine the data
 # I guess it's only a study rather than the true numbers?
 data_joined <- data_studying %>%
@@ -310,399 +314,45 @@ You can search for this in the command palette if you forget.
 
 ::: {.callout-note title="Your Turn: rename the script"}
 
-The script is `10-hard-to-read/analysis.R` in the course repo, or copy it out of [the listing above](#sec-the-script). Either way, it has eight badly named objects in it: `d`, `n1`, `n2`, `x1`, `x2`, `y1`, `y2` and `z`.
+The script is `10-hard-to-read/analysis.R` in the course repo, or copy it out of [the listing above](#sec-the-script).
 
-1. Rename them. Five seconds each. Aim for OK.
-2. Use **Rename in Scope** (`Cmd / Ctrl + Shift + Alt + M`) or `F2`, not find and replace. Find and replace on a name like `d` will do something you did not want.
+Most of its names are already OK. `data_studying`, `data_population` and `data_joined` all tell you what they hold, and I would leave them alone. Three are worth five seconds each:
+
+- `data`
+- `data_subset`
+- `the_names2`
+
+1. Rename those three. Aim for OK, not great.
+2. Use **Rename in Scope** (`Cmd / Ctrl + Shift + Alt + M`) or `F2`, rather than find and replace. Find and replace on a name like `data` will reach into `data_studying` and `data_subset` too.
 3. Read the script again afterwards. How does it feel?
-4. Notice any bits of straggling code?
+4. `the_names2` is the interesting one. What *is* it, and why are there two?
 
 :::
 
-::: {.callout-tip title="straggling code" collapse="true"}
+::: {.callout-tip title="What `the_names2` turned out to be" collapse="true"}
 
-With the names put back, those three lines read:
+Here are those three lines on their own:
 
 ```r
-new_data_names_raw <- names(raw_data)
-new_data_names_raw[1] <- "state_territory"
-new_data_names <- new_data_names_raw
+the_names <- names(data)
+the_names[1] <- "state_territory"
+the_names2 <- the_names
 ```
 
-We don't really see `new_data_names_raw` again? Something to think about.
-:::
+The third line copies the second variable into a third one and never touches it again. `the_names2` **is** `the_names`, and the only reason it exists is that somebody was not sure whether they would need the original.
 
+The `2` is what hid it. A name ending in a number tells you there is another one somewhere, and nothing else, so you stop asking. Give it a real name, or delete the line.
 
-## A guide to reviewing code
-
-**The machine reviews the mechanics, the people review the thinking.**
-
-We talked about using the automated checks in air/styler and jalr/flir earlier - this means when you review code now, your attention is not on:
-
-- spacing
-- a misspelled comment, or 
-- `any(is.na(x))`
-
-Apply these tools! 
-
-![One of these five steps is a machine's job. The other four are the review.](figs/review-process-machine-then-person.png){fig-alt="Two stacked bands. The upper grey band holds step 1, run the automated checks first, with pills for air format, jarl check, spelling colon colon spell underscore check underscore files, and restart R run from the top; it is labelled done by a machine, in seconds. An arrow crosses the gap saying only then is it worth a person's time. The lower purple band holds steps 2 to 5 - read it top to bottom and edit nothing, chunk it up, expression, and re-expression - labelled only a person can do these." width=100%}
-
-### Run the automated checks first
-
-Before anyone reads it:
-
-- **Format it.** `air format .`
-- **Lint it.** `jarl check .` or `lintr::lint_dir()`
-- **Spell check it.** `spelling::spell_check_files()`
-- **Run it from a clean session.** Restart R, run from the top. If it doesn't run, nothing else matters yet.
-
-Only then is it worth a person's time.
-
-::: {.callout-tip title="Going deeper: if what you are reviewing is a package" collapse="true"}
-
-Everything above works on a folder of scripts. If you are reviewing an R package, there is a tool that checks the habits a package is supposed to have:
-
-```r
-goodpractice::gp()
-```
-
-It runs `R CMD check`, a set of linters, and a pile of structural checks - whether there is a README, whether the DESCRIPTION is well formed, whether functions are too long or too complex, whether there are tests.
-
-It's down here rather than in the list above because most of what it checks only exists in a package. Pointed at an analysis project, the great majority of its checks have nothing to look at.
-
-Excellent tool, wrong shape for the code most of us review day to day. Worth knowing about for the day you write a package.
+While you are here: `data` is worth renaming for a second reason. There is already a `data()` function in `{utils}`, so naming your data frame `data` shadows it - which is the same hazard as [When two packages collide -@sec-conflicted], made by hand.
 
 :::
-
-### Read it top to bottom, and mark it up
-
-Read the whole thing without fixing anything.
-
-The urge to fix the first thing you see is strong. Resist!
-
-On this pass you're only getting the shape of the thing, and collecting the places where the code caught you: where it didn't quite make sense, where something was unclear, where you had to read a line twice.
-
-**Mark them with a word you can search for.** I use two: TODO and NOTE
-
-```r
-# TODO: this filter drops 400 rows and I do not know why
-# NOTE: same block as line 40, with different columns
-```
-
-`TODO` for something that needs doing, `NOTE` for something you want to remember but which might turn out to be fine.
-
-This beats holding it in your head for two reasons.
-
-You can find them all again with a search. Writing the note is cheaper than fixing, so you keep reading instead of disappearing down the first rabbit hole.
-
-Steps 3 to 5 are the second pass, over the marks you just made.
-
-### Chunk it up {#sec-de-chunking}
-
-Here is a phone number:
-
-```
-1-8-0-0-1-3-1-0-8-6
-```
-
-Ten digits. Try to hold them in your head. Now try this:
-
-```
-1800 131 086
-```
-
-Same ten digits, and suddenly it's easy.
-
-Nothing about the information changed. Only the **chunking** did.
-
-This is not a party trick. Working memory holds roughly **seven, plus or minus two** chunks at once, from George Miller's 1956 paper ["The magical number seven, plus or minus two"](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two). Memory isn't limited by the amount of information, but by the *number of chunks*.
-
-So make bigger chunks and you hold more.
-
-![Ten loose digits are ten chunks. Grouped as a phone number they are three, and code works the same way.](figs/chunking-working-memory.png){fig-alt="Ten pink boxes each holding one digit of 1800131086, labelled 10 chunks, beyond your limit. Below, the same digits in three green boxes reading 1800, 131 and 086, labelled 3 chunks, well within it. Underneath, a box filled with twenty-six anonymous grey lines labelled 50 lines, an arrow pointing right, and a box holding five named green bars: read the data, clean the names, fit the model, build the table, save the figure." width=100%}
-
-Code is the same, and the question to keep asking is:
-
-> How do I break this into pieces I can reason about one at a time?
-
-#### Doing it to the script
-
-Back to our ninety lines, now with the names fixed.
-
-Read it once, and every time the *subject* changes, put in a blank line and a comment saying what just finished.
-
-Don't fix anything. You're drawing lines, not editing.
-
-Here is what I get:
-
-```r
-# 1. read the raw spreadsheet for one year
-# 2. fix the column names Excel gave us
-# 3. pull out the education rows, make them long, drop the wide age bands
-# 4. pull out the population rows, make them long, drop the wide age bands
-# 5. join them, and work out the proportion studying
-# 6. plot it
-```
-
-Six ideas!
-
-Run the code - look at the input, look at the output Sometimes you can undersatnd the inputs and outputs without understanding the nitty gritty. 
-
-Now look at what falls out, for free.
-
-**chunks 3 and 4 are the same thing.** Same `slice()`, same `pivot_longer()`, same `arrange()`, same five-line `filter()`. The only differences are which rows get sliced and what the value column is called. Forty lines doing one idea twice.
-
-**The change they asked for lives in chunks 1.** Another year is another sheet in the same workbook, and nothing after step 1 cares which year it is looking at. But the year is baked into `sheet = "2014"`, and `educated_2014`, and `population_2014`, and `year = 2014` - so adding one currently means copying eighty lines and editing five numbers inside them.
-
-The six chunks help identify these factors
-
-#### Then put like with like
-
-Once you can see the chunks, tidy them:
-
-- All `library()` calls at the top.
-- All function definitions together.
-- If a variable is defined at line 10 and first used at line 150, move them closer.
-- Chunks that do similar things should sit near each other.
-- Add the commented headers, so the sections are visible without counting lines.
-- If a section is getting long, should it be its own script?
-
-None of this changes what the code does. All of it changes how much you've got to hold in your head.
-
-Two questions worth asking here: **is the running order obvious** to someone who has never seen it, and **can you reason about each chunk on its own**, or do you need the whole thing in your head at once?
-
-::: {.callout-tip title="Where this script goes next"}
-
-Those six comments are a to-do list. Each line is a function waiting to be given a name, and the two identical steps are one function called twice.
-
-We pick the script up again in [Writing functions -@sec-writing-functions] and take it the rest of the way, until adding a year is one argument rather than eighty copied lines. The whole progression, one script per step, is in the [ozed repo](https://github.com/njtierney/ozed).
-
-:::
-
-::: {.callout-note title="Your Turn: chunk something else"}
-
-You have watched me do it. Now do it to something I have not touched. Use `07-needs-review/analysis.R` from the course repo, or better, one of your own from last year.
-
-1. Mark where one idea ends and the next begins. A blank line and a comment is enough. Fix nothing.
-2. How many ideas are in there? Write that number down, then count the lines.
-3. Are any two of those chunks doing the same thing to different data?
-4. If someone asked you to add August, how many lines would you have to touch?
-
-Questions 3 and 4 are where the work is, and you can answer both from the comments alone.
-
-:::
-
-### Expression: can you follow it?
-
-Now go back to the `TODO`s and `NOTE`s from step 2.
-
-For each one: **can you say what the code is for, in a sentence?** 
-
-If you can't say what it is for, here are some things to look at:
-
-- What does it need, and does it get used?
-- 
-
-#### What does it need, and does it get used?
-
-Two questions for any chunk: 
-
-1. **what does this need in order to run**, and 
-2. **does it get used?**
-
-```r
-penguins_raw <- read_csv("penguins.csv")            # <1>
-penguins <- clean_names(penguins_raw)               # <1>
-
-n_total <- nrow(penguins)                           # <2>
-n_missing <- sum(is.na(penguins$body_mass_g))       # <2>
-pct_missing <- n_missing / n_total                  # <2>
-
-mass_summary <- penguins |>                         # <3>
-  group_by(species) |>
-  summarise(mass_mean = mean(body_mass_g, na.rm = TRUE))
-
-temp <- mass_summary |> arrange(desc(mass_mean))     # <2>
-
-ggplot(mass_summary, aes(species, mass_mean)) +      # <3>
-  geom_col()
-```
-1. Used further down. Fine.
-2. **Never mentioned again.** Four objects, computed and abandoned.
-3. Used. This is the actual work.
-
-Four of the eight objects in that block are never used again.
-
-Usually it means somebody explored, found their answer, and left the exploring in.
-
-Sometimes it means a result was supposed to be used and quietly isn't.
-
-A chunk with many inputs and many outputs is usually several jobs that happen to be sitting next to each other.
-
-#### Is there a simpler form?
-
-Sometimes code does something perfectly reasonable in a roundabout way, and R already has the direct version.
-
-This can happen with statistics.
-
-::: {.panel-tabset}
-
-## Mean
-
-```r
-sum(x) / length(x)
-
-mean(x)
-```
-
-## Variance
-
-```r
-sum((x - mean(x))^2) / (length(x) - 1)
-
-var(x)
-```
-
-## Standard deviation
-
-```r
-sqrt(sum((x - mean(x))^2) / (length(x) - 1))
-
-sd(x)
-```
-
-## Counting rows
-
-```r
-nrow(d[d$mass > 4000, ])
-
-sum(d$mass > 4000)
-```
-
-## Lengths of a list
-
-```r
-sapply(my_list, function(i) length(i))
-
-lengths(my_list)
-```
-
-:::
-
-Each pair gives the same answer. The first one says how, the second one says what. We want the reader to know thw what.
-
-You can't spot these unless you happen to know the shortcut, which is a bit hard - it takes experience! So don't go hunting. Just notice when a line feels like more machinery than the idea deserves, and go and look.
-
-### 5. Re-expression: refactoring
-
-The last question is the useful one.
-
-**Can you re-express the intention of the code, and keep the output the same?**
-
-That's **refactoring**: changing code while keeping its behaviour.
-
-It's like giving a car a service, or replacing parts that have worn. The car drives the same, it just does it more reliably.
-
-This is where everything you marked gets cashed in. The copied block becomes a function. The four abandoned objects get deleted.
-
-Then you run it again and check the output hasn't moved.
-
-That check isn't optional. It's very easy to tidy something into a different answer.
-
-::: {.callout-tip title="Code smells"}
-
-A **code smell** is a bit of code that is not wrong, but that makes you uneasy.
-
-The word is deliberate. It is the feeling of opening the fridge and knowing something in there has gone off before you have worked out what.
-
-Smells are useful because they're cheap. You don't have to prove anything to act on one.
-
-You notice that a function is doing three things, or that a block has been copied twice with one number changed, and you write a `NOTE`. Refactoring is what you do about it.
-
-For a great introduction, watch [Jenny Bryan's "Code smells and feels"](https://www.youtube.com/watch?v=7oyiPBjLAWY).
-
-:::
-
-::: {.callout-note title="Your Turn"}
-
-1. Run steps 1 to 3 on `07-needs-review/analysis.R`. Actually run `air` and the linter, don't just read about them.
-2. It still is not easy to follow. Mark three places where it caught you, with `TODO` or `NOTE`.
-3. Pick one and do step 5. Re-express it, then check the output has not changed.
-
-:::
-
-## Reviewing someone else's code
-
-When you review someone else code, we apply the same ideas as above, some some social pleasantries.:
-
-1. **Ask what they want first.** 
-  - *what kind of feedback are you looking for?* Someone who wants to know whether the statistics are right does not want thirty comments about variable names. 
-  - *what is this code meant to do?* Find the intention before you review the implementation, because half of what looks like a mistake turns out to be a decision you did not have the context for.
-
-2. **Review the code, not the person.** 
-  - "This function is doing three things" is useful. "You always overcomplicate things" is not.
-
-3. **Say what is good, specifically.** 
-  - This is not politeness. If you only ever name problems, people learn what to avoid and never what to aim for.
-
-4. **Run it, don't just read it.** 
-  - Reading tells you whether code is comprehensible; running it on something unfamiliar surfaces the assumptions the author did not know they were making.
-
-::: {.callout-tip title="When it breaks and you cannot see why"}
-
-Cut it down. Remove everything not needed to make it fail, one piece at a time, until what's left is small enough to see through.
-
-That is a review technique, and it is also exactly how you make a **reprex**. We come back to it in [Writing a reprex / getting unstuck](writing-a-reprex-getting-unstuck.qmd).
-
-:::
-
-::: {.callout-tip title="If you want to see this done at full scale" collapse="true"}
-
-Open software peer review is the most developed version of this practice, and it is all public. [rOpenSci's reviewer guide](https://devguide.ropensci.org/softwarereview_reviewer.html) sets out what a reviewer is asked to look at, and their [review template](https://devguide.ropensci.org/reviewtemplate.html) is the checklist itself. Reviews happen in the open on GitHub and are signed, so you can read hundreds of real ones.
-
-Two things there are worth stealing for a small analysis project. Reviews are explicitly **non-adversarial**, because the goal is better software rather than a verdict. And reviewers are asked about things a checklist cannot capture, such as whether the argument names read well and autocomplete sensibly.
-
-That last one should sound familiar from the naming section.
-
-:::
-
-::: {.callout-tip title="If we can see your code, we can trust it"}
-
-Version control is not part of this course. It has its own.
-
-But the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history. Review is much easier when the reviewer can see not just what the code is, but how it got that way.
-
-:::
-
-::: {.callout-note title="Your Turn"}
-
-1. Pair up. Swap the version of `analysis.R` you tidied earlier.
-2. Before reading it, ask the two questions: what feedback do they want, and what is the code meant to do?
-3. Give three pieces of feedback. At least one should be something that is working well.
-
-:::
-
-::: {.callout-tip title="If you want a longer one" collapse="true"}
-
-`08-curly-code/penguin-report.R` in the exercises repo is the same idea at greater length. It runs, it produces a report, and `lintr::lint()` finds 125 things in it across 13 rules before you get to anything a person has to see.
-
-Work the five steps on it end to end. The automated pass takes about a second, and everything interesting happens after that.
-
-:::
-
-::: {.callout-tip title="Read more"}
-
-Parts of this chapter are adapted from my blog post, [How to get good with R](https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/).
-
-:::
-
-
-Perhaps come back to this, or fold it inot th example
 
 
 ## When two packages collide {#sec-conflicted}
 
-This is a really common error, that I wanted to bring attention to in this script. Look at the top of [the script](#sec-the-script) again. Six `library()` calls, and further down it uses `filter()`.
+So far this has been about names you chose. This one is about a name you didn't.
+
+Look back at [the script](#sec-the-script). It has six `library()` calls scattered through it, and further down it uses `filter()`.
 
 Which `filter()`?
 
@@ -807,3 +457,475 @@ So should you use `pkg::fun()`? Maybe - here's some thoughts on where it might b
 3. Add `library(conflicted)` as the first line of one of your scripts and run it. Did anything break? Anything that breaks was already ambiguous.
 
 :::
+
+## A guide to reviewing code
+
+**The machine reviews the mechanics, the people review the thinking.**
+
+We talked about using the automated checks in air/styler and jalr/flir earlier - this means when you review code now, your attention is not on:
+
+- spacing
+- a misspelled comment, or 
+- `any(is.na(x))`
+
+Apply these tools! 
+
+![The machine does the first thing and the last thing. Everything in between is yours.](figs/review-process-machine-then-person.png){fig-alt="Three stacked bands. The top grey band is step 1, fix the style, done by a machine in seconds, with pills for air format and styler. An arrow leads down to a purple band holding steps 2 to 6, labelled only a person can do these: read it top to bottom and mark it up, check the names, group the similar parts together, review the comments, and remove the wilted lettuce. A second arrow leads down to another grey band, step 7, run a linter, a machine again once you have finished moving things, with pills for jarl check and lintr." width=100%}
+
+### 1. Fix the style
+
+`air format .`, or `styler`. If you set up format-on-save back in [Code style and readability -@sec-code-style], this has already happened and you can move on.
+
+The other thing worth doing before you read a line: **run it from a clean session.** Restart R, run from the top. If it doesn't run, nothing else matters yet.
+
+The linter comes at the *end*, in step 7, and not here. That is deliberate - you are about to move code around, and there is no sense linting a layout you are about to change.
+
+::: {.callout-tip title="Going deeper: if what you are reviewing is a package" collapse="true"}
+
+Everything above works on a folder of scripts. If you are reviewing an R package, there is a tool that checks the habits a package is supposed to have:
+
+```r
+goodpractice::gp()
+```
+
+It runs `R CMD check`, a set of linters, and a pile of structural checks - whether there is a README, whether the DESCRIPTION is well formed, whether functions are too long or too complex, whether there are tests.
+
+It's down here rather than in the list above because most of what it checks only exists in a package. Pointed at an analysis project, the great majority of its checks have nothing to look at.
+
+Excellent tool, wrong shape for the code most of us review day to day. Worth knowing about for the day you write a package.
+
+:::
+
+### 2. Read it top to bottom, and mark it up
+
+Read the whole thing without fixing anything.
+
+The urge to fix the first thing you see is strong. Resist!
+
+On this pass you're only getting the shape of the thing, and collecting the places where the code caught you: where it didn't quite make sense, where something was unclear, where you had to read a line twice.
+
+**Mark them with a word you can search for.** I use two: TODO and NOTE
+
+```r
+# TODO: this filter drops 400 rows and I do not know why
+# NOTE: same block as line 40, with different columns
+```
+
+`TODO` for something that needs doing, `NOTE` for something you want to remember but which might turn out to be fine.
+
+This beats holding it in your head for two reasons.
+
+You can find them all again with a search. Writing the note is cheaper than fixing, so you keep reading instead of disappearing down the first rabbit hole.
+
+::: {.callout-tip title="What you are marking: code smells"}
+
+A **code smell** is a bit of code that is not wrong, but that makes you uneasy.
+
+The word is deliberate. It's the feeling of opening the fridge and knowing something in there has gone off before you have worked out what.
+
+Smells are useful because they're cheap. You don't have to prove anything to act on one - you notice that a chunk is doing three things, or that a block has been copied twice with one number changed, and you write a `NOTE`. That's all this step is.
+
+Refactoring, in step 7, is what you do about them. Marking is not fixing.
+
+For a great introduction, watch [Jenny Bryan's "Code smells and feels"](https://www.youtube.com/watch?v=7oyiPBjLAWY).
+
+:::
+
+Steps 3 to 6 are the second pass, over the marks you just made.
+
+### 3. Check the names
+
+We did this one at length in [Bad, better, and good variable names](#bad-better-and-good-variable-names), because it is the step with the best return for the effort.
+
+It sits here in the list so you know where it falls in the pass: after you have read the thing and marked it up, before you start moving code around. Renaming while you are still working out what the code does is how you end up with a confidently wrong name.
+
+### 4. Group the similar parts together {#sec-de-chunking}
+
+The question to keep asking:
+
+> How do I break this into pieces I can reason about one at a time?
+
+Here is our script with every line coloured by the chunk it belongs to.
+
+![Five ideas. The package colour turns up in five separate places, which is the whole argument for grouping like with like.](figs/chunking-working-memory.png){fig-alt="A listing of the education script with each line tinted by the chunk it belongs to, and each chunk named down the right hand side. The five chunks are attach the packages, read the spreadsheet, prepare the education rows, prepare the population rows, and join it up and plot. The package colour appears in five separate places down the listing, because the library calls are scattered through the script rather than gathered at the top." width=100%}
+
+Five ideas in thirty-odd lines. And the orange band, the `library()` calls, turns up five separate times on the way down.
+
+::: {.callout-tip title="Going deeper: why chunking works" collapse="true"}
+
+Here is a phone number:
+
+```
+1-8-0-0-1-3-1-0-8-6
+```
+
+Ten digits. Try to hold them in your head. Now try this:
+
+```
+1800 131 086
+```
+
+Same ten digits, and suddenly it's easy. Nothing about the information changed. Only the **chunking** did.
+
+This is not a party trick. Working memory holds roughly **seven, plus or minus two** chunks at once, from George Miller's 1956 paper ["The magical number seven, plus or minus two"](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two). Memory isn't limited by the amount of information, but by the *number of chunks*.
+
+So make bigger chunks and you hold more. Thirty lines you can't hold. Five named ideas you can.
+
+:::
+
+#### Doing it to the script
+
+Back to our ninety lines, now with the names fixed.
+
+Read it once, and every time the *subject* changes, put in a blank line and a comment saying what just finished.
+
+Don't fix anything. You're drawing lines, not editing.
+
+Here is what I get:
+
+```r
+# 1. read the raw spreadsheet for one year
+# 2. fix the column names Excel gave us
+# 3. pull out the education rows, make them long, drop the wide age bands
+# 4. pull out the population rows, make them long, drop the wide age bands
+# 5. join them, and work out the proportion studying
+# 6. plot it
+```
+
+Six ideas!
+
+Run the code - look at the input, look at the output Sometimes you can undersatnd the inputs and outputs without understanding the nitty gritty. 
+
+Now look at what falls out, for free.
+
+**Chunks 3 and 4 are the same thing.** Same `slice()`, same `pivot_longer()`, same `arrange()`, same five-line `filter()`. The only differences are which rows get sliced and what the value column is called. Forty lines doing one idea twice.
+
+**The change they asked for lives in chunk 1.** Another year is another sheet in the same workbook, and nothing after that first chunk cares which year it is looking at. But the year is baked into `sheet = "2014"`, and `educated_2014`, and `population_2014`, and `year = 2014` - so adding one currently means copying eighty lines and editing five numbers inside them.
+
+The six chunks help identify these factors
+
+#### Then put like with like
+
+Once you can see the chunks, tidy them:
+
+- All `library()` calls at the top.
+- All function definitions together.
+- If a variable is defined at line 10 and first used at line 150, move them closer.
+- Chunks that do similar things should sit near each other.
+- Add the commented headers, so the sections are visible without counting lines.
+- If a section is getting long, should it be its own script?
+
+None of this changes what the code does. All of it changes how much you've got to hold in your head.
+
+Two questions worth asking here: **is the running order obvious** to someone who has never seen it, and **can you reason about each chunk on its own**, or do you need the whole thing in your head at once?
+
+::: {.callout-tip title="Where this script goes next"}
+
+Those six comments are a to-do list. Each line is a function waiting to be given a name, and the two identical steps are one function called twice.
+
+We pick the script up again in [Writing functions -@sec-writing-functions] and take it the rest of the way, until adding a year is one argument rather than eighty copied lines. The whole progression, one script per step, is in the [ozed repo](https://github.com/njtierney/ozed).
+
+:::
+
+::: {.callout-note title="Your Turn: chunk something else"}
+
+You have watched me do it. Now do it to something I have not touched. Use `07-needs-review/analysis.R` from the course repo, or better, one of your own from last year.
+
+Work the list in order:
+
+1. **Fix the style.** `air format .` on it first.
+2. **Read it and mark it up.** `TODO` and `NOTE`, fix nothing.
+3. **Check the names.** Rename three. Aim for OK.
+4. **Group the similar parts.** Where does one chunk end and the next begin? How many are there?
+
+Then two questions the chunking will answer for you:
+
+- Are any two of those chunks doing the same thing to different data?
+- If someone asked you to add August, how many lines would you have to touch?
+
+Those last two are where the work is, and you can answer both from your chunk comments alone.
+
+:::
+
+### 5. Review the comments
+
+Now read what the comments say, rather than reading past them.
+
+The ones to delete are the ones that restate the code:
+
+```r
+# read in the data
+data <- read_excel(path)
+```
+
+The ones to keep are the ones that say *why*, which the code cannot:
+
+```r
+# skip = 4 because the ABS puts four rows of notes above the header
+data <- read_excel(path, skip = 4)
+```
+
+Our script has one of each. `# Read in the raw data` tells you nothing that `read_excel()` doesn't. `# use janitor::make_clean_names to turn 15-19 years to x15_19_years` is genuinely useful, and I would keep it.
+
+Worth reading on this: [comment your code as little (and as well) as possible](https://blog.r-hub.io/2023/01/26/code-comments-self-explaining-code/).
+
+### 6. Remove the wilted lettuce
+
+The commented-out code you might just come back to.
+
+Our script has four of them:
+
+```r
+# sum(is.na(data))
+# nrow(data)
+# sum(is.na(data_subset))
+# names(data_studying)
+```
+
+Those are someone checking their work as they went, which is a good thing to have done and not a thing to keep. They are noise now, and worse, a reader has to decide whether each one matters before ignoring it.
+
+Delete them. If one really does matter, write a comment saying why it is there, rather than leaving a dead line lying around.
+
+If you are worried about losing something: that is what version control is for, and it is much better at remembering than a commented-out line is.
+
+### 7. Run a linter
+
+`jarl check .`, or `lintr::lint_dir()`.
+
+Last, not first. You have just moved code around, deleted lines and renamed things, so this is the sweep that catches what you disturbed on the way through.
+
+::: {.callout-tip title="Going deeper: if what you are reviewing is a package" collapse="true"}
+
+Everything above works on a folder of scripts. If you are reviewing an R package, there is a tool that checks the habits a package is supposed to have:
+
+```r
+goodpractice::gp()
+```
+
+It runs `R CMD check`, a set of linters, and a pile of structural checks - whether there is a README, whether the DESCRIPTION is well formed, whether functions are too long or too complex, whether there are tests.
+
+Most of what it checks only exists in a package. Pointed at an analysis project, the great majority of its checks have nothing to look at.
+
+Excellent tool, wrong shape for the code most of us review day to day. Worth knowing about for the day you write a package.
+
+:::
+
+## Can you say what it is for?
+
+The seven steps tidy code up. This is the deeper question underneath them, and it is the one that actually makes code readable.
+
+### Expression: can you follow it?
+
+Now go back to the `TODO`s and `NOTE`s from step 2.
+
+For each one: **can you say what the code is for, in a sentence?**
+
+Here are two versions of the same calculation. Both give `0.27`, `0.33`, `0.81`.
+
+::: {.panel-tabset}
+
+## Hard to say
+
+```r
+d3 <- d2[d2$Month %in% c(5, 6, 7) & !is.na(d2$Ozone), ]
+d3$f <- d3$Ozone > 30
+res <- tapply(d3$f, d3$Month, mean)
+```
+
+## Easy to say
+
+```r
+prop_high_ozone <- airquality |>
+  filter(!is.na(Ozone), Month %in% 5:7) |>
+  group_by(Month) |>
+  summarise(prop_high = mean(Ozone > 30))
+```
+
+:::
+
+The second one has a sentence: *the proportion of days with high ozone, by month*.
+
+For the first one I have to work out what `f` is, then what `tapply` is splitting by, then what `res` holds, and only then can I say the sentence. Same answer, and I had to run it in my head to get there.
+
+If you can't say the sentence, here are two things to look at.
+
+#### What does it need, and does it get used?
+
+Two questions for any chunk: 
+
+1. **what does this need in order to run**, and 
+2. **does it get used?**
+
+```r
+penguins_raw <- read_csv("penguins.csv")            # <1>
+penguins <- clean_names(penguins_raw)               # <1>
+
+n_total <- nrow(penguins)                           # <2>
+n_missing <- sum(is.na(penguins$body_mass_g))       # <2>
+pct_missing <- n_missing / n_total                  # <2>
+
+mass_summary <- penguins |>                         # <3>
+  group_by(species) |>
+  summarise(mass_mean = mean(body_mass_g, na.rm = TRUE))
+
+temp <- mass_summary |> arrange(desc(mass_mean))     # <2>
+
+ggplot(mass_summary, aes(species, mass_mean)) +      # <3>
+  geom_col()
+```
+1. Used further down. Fine.
+2. **Never mentioned again.** Four objects, computed and abandoned.
+3. Used. This is the actual work.
+
+Four of the eight objects in that block are never used again.
+
+Usually it means somebody explored, found their answer, and left the exploring in.
+
+Sometimes it means a result was supposed to be used and quietly isn't.
+
+A chunk with many inputs and many outputs is usually several jobs that happen to be sitting next to each other.
+
+#### Is there a simpler form?
+
+Sometimes code does something perfectly reasonable in a roundabout way, and R already has the direct version.
+
+This can happen with statistics.
+
+::: {.panel-tabset}
+
+## Mean
+
+```r
+sum(x) / length(x)
+
+mean(x)
+```
+
+## Variance
+
+```r
+sum((x - mean(x))^2) / (length(x) - 1)
+
+var(x)
+```
+
+## Standard deviation
+
+```r
+sqrt(sum((x - mean(x))^2) / (length(x) - 1))
+
+sd(x)
+```
+
+## Counting rows
+
+```r
+nrow(d[d$mass > 4000, ])
+
+sum(d$mass > 4000)
+```
+
+## Lengths of a list
+
+```r
+sapply(my_list, function(i) length(i))
+
+lengths(my_list)
+```
+
+:::
+
+Each pair gives the same answer. The first one says how, the second one says what. We want the reader to know thw what.
+
+You can't spot these unless you happen to know the shortcut, which is a bit hard - it takes experience! So don't go hunting. Just notice when a line feels like more machinery than the idea deserves, and go and look.
+
+### Re-expression: can you say it more simply?
+
+The last question is the useful one.
+
+**Can you re-express the intention of the code, and keep the output the same?**
+
+That's **refactoring**: changing code while keeping its behaviour.
+
+It's like giving a car a service, or replacing parts that have worn. The car drives the same, it just does it more reliably.
+
+This is where everything you marked gets cashed in. The copied block becomes a function. The four abandoned objects get deleted.
+
+Then you run it again and check the output hasn't moved.
+
+That check isn't optional. It's very easy to tidy something into a different answer.
+
+::: {.callout-note title="Your Turn"}
+
+1. Run steps 1 to 3 on `07-needs-review/analysis.R`. Actually run `air` and the linter, don't just read about them.
+2. It still is not easy to follow. Mark three places where it caught you, with `TODO` or `NOTE`.
+3. Pick one and do step 5. Re-express it, then check the output has not changed.
+
+:::
+
+## Reviewing someone else's code
+
+When you review someone else code, we apply the same ideas as above, some some social pleasantries.:
+
+1. **Ask what they want first.** 
+  - *what kind of feedback are you looking for?* Someone who wants to know whether the statistics are right does not want thirty comments about variable names. 
+  - *what is this code meant to do?* Find the intention before you review the implementation, because half of what looks like a mistake turns out to be a decision you did not have the context for.
+
+2. **Review the code, not the person.** 
+  - "This function is doing three things" is useful. "You always overcomplicate things" is not.
+
+3. **Say what is good, specifically.** 
+  - This is not politeness. If you only ever name problems, people learn what to avoid and never what to aim for.
+
+4. **Run it, don't just read it.** 
+  - Reading tells you whether code is comprehensible; running it on something unfamiliar surfaces the assumptions the author did not know they were making.
+
+::: {.callout-tip title="When it breaks and you cannot see why"}
+
+Cut it down. Remove everything not needed to make it fail, one piece at a time, until what's left is small enough to see through.
+
+That is a review technique, and it is also exactly how you make a **reprex**. We come back to it in [Writing a reprex / getting unstuck](writing-a-reprex-getting-unstuck.qmd).
+
+:::
+
+::: {.callout-tip title="If you want to see this done at full scale" collapse="true"}
+
+Open software peer review is the most developed version of this practice, and it is all public. [rOpenSci's reviewer guide](https://devguide.ropensci.org/softwarereview_reviewer.html) sets out what a reviewer is asked to look at, and their [review template](https://devguide.ropensci.org/reviewtemplate.html) is the checklist itself. Reviews happen in the open on GitHub and are signed, so you can read hundreds of real ones.
+
+Two things there are worth stealing for a small analysis project. Reviews are explicitly **non-adversarial**, because the goal is better software rather than a verdict. And reviewers are asked about things a checklist cannot capture, such as whether the argument names read well and autocomplete sensibly.
+
+That last one should sound familiar from the naming section.
+
+:::
+
+::: {.callout-tip title="If we can see your code, we can trust it"}
+
+Version control is not part of this course. It has its own.
+
+But the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history. Review is much easier when the reviewer can see not just what the code is, but how it got that way.
+
+:::
+
+::: {.callout-note title="Your Turn"}
+
+1. Pair up. Swap the version of `analysis.R` you tidied earlier.
+2. Before reading it, ask the two questions: what feedback do they want, and what is the code meant to do?
+3. Give three pieces of feedback. At least one should be something that is working well.
+
+:::
+
+::: {.callout-tip title="If you want a longer one" collapse="true"}
+
+`08-curly-code/penguin-report.R` in the exercises repo is the same idea at greater length. It runs, it produces a report, and `lintr::lint()` finds 125 things in it across 13 rules before you get to anything a person has to see.
+
+Work the five steps on it end to end. The automated pass takes about a second, and everything interesting happens after that.
+
+:::
+
+::: {.callout-tip title="Read more"}
+
+Parts of this chapter are adapted from my blog post, [How to get good with R](https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/).
+
+:::
+
+

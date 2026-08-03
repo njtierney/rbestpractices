@@ -1,95 +1,71 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img" aria-labelledby="t d">
-<title id="t">Chunking and working memory</title>
-<desc id="d">Ten loose digits are ten chunks to remember. The same ten digits grouped as a phone number are three chunks. Code works the same way: a wall of fifty lines is usually four or five ideas written longhand.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 856" width="980" height="856" role="img" aria-labelledby="t d">
+<title id="t">One script, five chunks</title>
+<desc id="d">A listing of the education script with each line tinted by the chunk it belongs to, and each chunk named down the right hand side. The five chunks are: attach the packages, read the spreadsheet, prepare the education rows, prepare the population rows, and join then plot. The package colour appears in five separate places down the listing, because the library calls are scattered through the script rather than gathered at the top.</desc>
 <defs><style>
- .h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;font-weight:bold}
- .s{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12.5px;fill:#4a5160}
- .n{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12px;font-weight:bold}
- .m{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:12.5px;fill:#1b2733}
- .big{font-family:"DejaVu Sans Mono",Menlo,monospace;font-size:28px;fill:#1b2733}
+ .code{font-family:"DejaVu Sans Mono",Menlo,Consolas,monospace;font-size:26px}
+ .head{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:19px;font-weight:bold}
+ .desc{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:16px}
+ .pill{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold}
+ .lead{fill:none;stroke-width:2.1}
 </style>
-<marker id="ah-o" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6.5,3 L0,6 Z" fill="#D95F02"/></marker>
+<marker id="a-name" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#178665"/></marker>
+<marker id="a-fn" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#736EB2"/></marker>
+<marker id="a-args" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#C25502"/></marker>
+<marker id="a-default" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9B6E1B"/></marker>
+<marker id="a-body" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#666666"/></marker>
+<marker id="a-return" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E0197F"/></marker>
+<marker id="a-good" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#178665"/></marker>
+<marker id="a-bad" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E0197F"/></marker>
+<marker id="a-warn" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#C25502"/></marker>
+<marker id="a-muted" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#666666"/></marker>
 </defs>
-<rect width="900" height="700" fill="#fff"/>
-<text class="h" x="30" y="44" fill="#1b2733">Ten loose digits</text>
-<rect x="30" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="58" y="102" text-anchor="middle">1</text>
-<rect x="98" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="126" y="102" text-anchor="middle">8</text>
-<rect x="166" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="194" y="102" text-anchor="middle">0</text>
-<rect x="234" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="262" y="102" text-anchor="middle">0</text>
-<rect x="302" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="330" y="102" text-anchor="middle">1</text>
-<rect x="370" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="398" y="102" text-anchor="middle">3</text>
-<rect x="438" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="466" y="102" text-anchor="middle">1</text>
-<rect x="506" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="534" y="102" text-anchor="middle">0</text>
-<rect x="574" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="602" y="102" text-anchor="middle">8</text>
-<rect x="642" y="58" width="56" height="66" rx="7" fill="#E7298A" fill-opacity="0.10" stroke="#E7298A" stroke-opacity="0.35"/>
-<text class="big" x="670" y="102" text-anchor="middle">6</text>
-<rect x="716" y="66" width="154" height="30" rx="15" fill="#E7298A" opacity="0.12"/>
-<text class="n" x="793" y="86" text-anchor="middle" fill="#E7298A">10 chunks</text>
-<text class="s" x="793" y="112" text-anchor="middle">beyond your limit</text>
-<text class="h" x="30" y="170" fill="#1b2733">The same digits, grouped</text>
-<rect x="30" y="184" width="140" height="66" rx="7" fill="#1B9E77" fill-opacity="0.10" stroke="#1B9E77" stroke-opacity="0.35"/>
-<text class="big" x="100" y="228" text-anchor="middle">1800</text>
-<rect x="190" y="184" width="120" height="66" rx="7" fill="#1B9E77" fill-opacity="0.10" stroke="#1B9E77" stroke-opacity="0.35"/>
-<text class="big" x="250" y="228" text-anchor="middle">131</text>
-<rect x="330" y="184" width="120" height="66" rx="7" fill="#1B9E77" fill-opacity="0.10" stroke="#1B9E77" stroke-opacity="0.35"/>
-<text class="big" x="390" y="228" text-anchor="middle">086</text>
-<rect x="716" y="192" width="154" height="30" rx="15" fill="#1B9E77" opacity="0.12"/>
-<text class="n" x="793" y="212" text-anchor="middle" fill="#1B9E77">3 chunks</text>
-<text class="s" x="793" y="238" text-anchor="middle">well within it</text>
-<text class="s" x="30" y="286">Nothing about the information changed. Only the chunking did.</text>
-<text class="s" x="30" y="308">Working memory holds about seven chunks, plus or minus two. Make the chunks bigger and you hold more.</text>
-<line x1="30" y1="342" x2="870" y2="342" stroke="#e6e8eb"/>
-<text class="h" x="30" y="376" fill="#1b2733">Code is the same</text>
-<text class="h" x="30" y="410" fill="#666666">50 lines</text>
-<text class="h" x="470" y="410" fill="#1B9E77">four or five ideas</text>
-<rect x="30" y="424" width="330" height="200" rx="8" fill="#fbfbfb" stroke="#e6e8eb"/>
-<rect x="48" y="438.0" width="240" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="444.9" width="173" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="451.8" width="288" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="458.7" width="134" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="465.6" width="202" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="472.5" width="259" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="479.4" width="154" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="486.3" width="221" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="493.2" width="182" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="500.1" width="278" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="507.0" width="144" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="513.9" width="230" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="520.8" width="192" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="527.7" width="269" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="534.6" width="163" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="541.5" width="250" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="548.4" width="211" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="555.3" width="182" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="562.2" width="240" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="569.1" width="125" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="576.0" width="221" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="582.9" width="278" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="589.8" width="154" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="596.7" width="202" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="603.6" width="259" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<rect x="48" y="610.5" width="173" height="4" rx="2" fill="#666666" opacity="0.30"/>
-<path d="M 372,524 H 458" stroke="#D95F02" stroke-width="2" fill="none" marker-end="url(#ah-o)"/>
-<rect x="470" y="424" width="400" height="200" rx="8" fill="#fbfbfb" stroke="#e6e8eb"/>
-<rect x="486" y="439" width="368" height="29" rx="6" fill="#1B9E77" opacity="0.12"/>
-<text class="n" x="502" y="459" fill="#1B9E77">read the data</text>
-<rect x="486" y="474" width="368" height="29" rx="6" fill="#1B9E77" opacity="0.12"/>
-<text class="n" x="502" y="494" fill="#1B9E77">clean the names</text>
-<rect x="486" y="509" width="368" height="29" rx="6" fill="#1B9E77" opacity="0.12"/>
-<text class="n" x="502" y="529" fill="#1B9E77">fit the model</text>
-<rect x="486" y="544" width="368" height="29" rx="6" fill="#1B9E77" opacity="0.12"/>
-<text class="n" x="502" y="564" fill="#1B9E77">build the table</text>
-<rect x="486" y="579" width="368" height="29" rx="6" fill="#1B9E77" opacity="0.12"/>
-<text class="n" x="502" y="599" fill="#1B9E77">save the figure</text>
-<text class="s" x="30" y="662">Same idea. A wall of code is not fifty separate things to understand.</text>
-<text class="s" x="30" y="684">Find the ideas, give each one a name, and you are holding five things instead of fifty.</text>
+<rect width="980" height="856" fill="#ffffff"/>
+<rect x="60" y="49" width="500" height="34" rx="4" fill="#D95F02" opacity="0.16"/>
+<rect x="60" y="83" width="500" height="34" rx="4" fill="#D95F02" opacity="0.16"/>
+<rect x="60" y="151" width="500" height="34" rx="4" fill="#1B9E77" opacity="0.16"/>
+<rect x="60" y="185" width="500" height="34" rx="4" fill="#1B9E77" opacity="0.16"/>
+<rect x="60" y="219" width="500" height="34" rx="4" fill="#1B9E77" opacity="0.16"/>
+<rect x="60" y="287" width="500" height="34" rx="4" fill="#D95F02" opacity="0.16"/>
+<rect x="60" y="321" width="500" height="34" rx="4" fill="#D95F02" opacity="0.16"/>
+<rect x="60" y="355" width="500" height="34" rx="4" fill="#7570B3" opacity="0.16"/>
+<rect x="60" y="389" width="500" height="34" rx="4" fill="#7570B3" opacity="0.16"/>
+<rect x="60" y="423" width="500" height="34" rx="4" fill="#7570B3" opacity="0.16"/>
+<rect x="60" y="491" width="500" height="34" rx="4" fill="#A6761D" opacity="0.16"/>
+<rect x="60" y="525" width="500" height="34" rx="4" fill="#A6761D" opacity="0.16"/>
+<rect x="60" y="559" width="500" height="34" rx="4" fill="#A6761D" opacity="0.16"/>
+<rect x="60" y="627" width="500" height="34" rx="4" fill="#D95F02" opacity="0.16"/>
+<rect x="60" y="661" width="500" height="34" rx="4" fill="#E7298A" opacity="0.16"/>
+<rect x="60" y="695" width="500" height="34" rx="4" fill="#E7298A" opacity="0.16"/>
+<rect x="60" y="763" width="500" height="34" rx="4" fill="#D95F02" opacity="0.16"/>
+<rect x="60" y="797" width="500" height="34" rx="4" fill="#E7298A" opacity="0.16"/>
+<text class="code" x="96" y="66" fill="#1b2733">library(readxl)</text>
+<text class="code" x="96" y="100" fill="#1b2733">library(janitor)</text>
+<text class="code" x="96" y="168" fill="#1b2733">data &lt;- read_excel(...)</text>
+<text class="code" x="96" y="202" fill="#1b2733">the_names &lt;- names(data)</text>
+<text class="code" x="96" y="236" fill="#1b2733">the_names[1] &lt;- "state"</text>
+<text class="code" x="96" y="304" fill="#1b2733">library(dplyr)</text>
+<text class="code" x="96" y="338" fill="#1b2733">library(tidyr)</text>
+<text class="code" x="96" y="372" fill="#1b2733">data_studying &lt;- data |&gt;</text>
+<text class="code" x="127" y="406" fill="#1b2733">slice(4:11) |&gt;</text>
+<text class="code" x="127" y="440" fill="#1b2733">pivot_longer(...)</text>
+<text class="code" x="96" y="508" fill="#1b2733">data_population &lt;- data |&gt;</text>
+<text class="code" x="127" y="542" fill="#1b2733">slice(24:31) |&gt;</text>
+<text class="code" x="127" y="576" fill="#1b2733">pivot_longer(...)</text>
+<text class="code" x="96" y="644" fill="#1b2733">library(forcats)</text>
+<text class="code" x="96" y="678" fill="#1b2733">data_joined &lt;- ... |&gt;</text>
+<text class="code" x="127" y="712" fill="#1b2733">left_join(...)</text>
+<text class="code" x="96" y="780" fill="#1b2733">library(ggplot2)</text>
+<text class="code" x="96" y="814" fill="#1b2733">ggplot(data_joined, ...)</text>
+<rect x="600" y="48" width="185.6" height="26" rx="13" fill="#D95F02" opacity="0.12"/>
+<text class="pill" x="692.8" y="66" text-anchor="middle" fill="#C25502">Attach the packages</text>
+<rect x="600" y="150" width="194" height="26" rx="13" fill="#1B9E77" opacity="0.12"/>
+<text class="pill" x="697" y="168" text-anchor="middle" fill="#178665">Read the spreadsheet</text>
+<rect x="600" y="354" width="210.8" height="26" rx="13" fill="#7570B3" opacity="0.12"/>
+<text class="pill" x="705.4" y="372" text-anchor="middle" fill="#736EB2">Prepare education rows</text>
+<rect x="600" y="490" width="219.2" height="26" rx="13" fill="#A6761D" opacity="0.12"/>
+<text class="pill" x="709.6" y="508" text-anchor="middle" fill="#9B6E1B">Prepare population rows</text>
+<rect x="600" y="660" width="194" height="26" rx="13" fill="#E7298A" opacity="0.12"/>
+<text class="pill" x="697" y="678" text-anchor="middle" fill="#E0197F">Join it up, and plot</text>
+<text class="head" x="600" y="760" fill="#666666">Five ideas</text>
+<text class="desc" x="600" y="784" fill="#4a5160">One colour, five places.</text>
 </svg>
