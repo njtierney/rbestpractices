@@ -33,7 +33,7 @@ book:
     - "writing-readable-code.qmd"
     - "writing-functions.qmd"
     - "writing-a-reprex-getting-unstuck.qmd"
-    - "putting-it-all-together.qmd"
+    # - "putting-it-all-together.qmd"
   appendices:
     # Split out of "Writing functions" on 4 Aug 2026. Chapter 4 was running at
     # 132 minutes against a 60 minute slot, and its second half taught
