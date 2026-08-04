@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Nicholas Tierney">
-<meta name="dcterms.date" content="2026-02-17">
 
-<title>R Best Practices</title>
+<title>Appendix C — Working closer to the speed of thought – R Best Practices</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -38,7 +36,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./setup.html" rel="next">
+<link href="./appendix-pipes.html" rel="next">
+<link href="./appendix-anonymous-functions.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -89,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix-designing-functions.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix-speed-of-thought.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -120,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
@@ -183,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./appendix-speed-of-thought.html" class="sidebar-item-text sidebar-link">
+  <a href="./appendix-speed-of-thought.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></span></a>
   </div>
 </li>
@@ -211,46 +210,32 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
-  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course materials</a></li>
-  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#typing-and-the-speed-of-thought" id="toc-typing-and-the-speed-of-thought" class="nav-link" data-scroll-target="#typing-and-the-speed-of-thought"><span class="header-section-number">C.1</span> Typing, and the speed of thought</a></li>
+  <li><a href="#shortcuts-worth-learning-first" id="toc-shortcuts-worth-learning-first" class="nav-link" data-scroll-target="#shortcuts-worth-learning-first"><span class="header-section-number">C.2</span> Shortcuts worth learning first</a></li>
+  <li><a href="#sec-addins" id="toc-sec-addins" class="nav-link" data-scroll-target="#sec-addins"><span class="header-section-number">C.3</span> RStudio addins</a>
   <ul class="collapse">
-  <li><a href="#project-organisation" id="toc-project-organisation" class="nav-link" data-scroll-target="#project-organisation">Project Organisation</a></li>
-  <li><a href="#code-style-and-readability" id="toc-code-style-and-readability" class="nav-link" data-scroll-target="#code-style-and-readability">Code style and readability</a></li>
-  <li><a href="#writing-readable-code" id="toc-writing-readable-code" class="nav-link" data-scroll-target="#writing-readable-code">Writing readable code</a></li>
-  <li><a href="#writing-functions" id="toc-writing-functions" class="nav-link" data-scroll-target="#writing-functions">Writing Functions</a></li>
-  <li><a href="#writing-a-reprex-getting-unstuck" id="toc-writing-a-reprex-getting-unstuck" class="nav-link" data-scroll-target="#writing-a-reprex-getting-unstuck">Writing a reprex / getting unstuck</a></li>
-  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together">Putting It All Together</a></li>
-  <li>Links</li>
+  <li><a href="#binding-one-to-a-key" id="toc-binding-one-to-a-key" class="nav-link" data-scroll-target="#binding-one-to-a-key">Binding one to a key</a></li>
+  <li><a href="#the-ones-i-actually-use" id="toc-the-ones-i-actually-use" class="nav-link" data-scroll-target="#the-ones-i-actually-use">The ones I actually use</a></li>
+  <li><a href="#a-word-of-warning" id="toc-a-word-of-warning" class="nav-link" data-scroll-target="#a-word-of-warning">A word of warning</a></li>
   </ul></li>
+  <li>Links</li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/appendix-speed-of-thought.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix-designing-functions.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix-speed-of-thought.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">R Best Practices</h1>
+<h1 class="title"><span id="sec-speed-of-thought" class="quarto-section-identifier">Appendix C — Working closer to the speed of thought</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Nicholas Tierney </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 17, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -260,105 +245,225 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1 unnumbered">
-<h1 class="unnumbered">Welcome</h1>
-<p>Welcome to R Best Practices! This course covers essential best practices for writing clear, maintainable, and reproducible R code.</p>
-</section>
-<section id="course-materials" class="level1 unnumbered">
-<h1 class="unnumbered">Course materials</h1>
-<p>Materials will be added here as we progress through the course.</p>
-<p><a href="https://r-best-practices.njtierney.com" class="uri">https://r-best-practices.njtierney.com</a></p>
-<p><strong>Prerequisites</strong></p>
+<blockquote class="blockquote">
+<p>“The tools we use have a profound (and devious!) influence on our thinking habits, and therefore on our thinking abilities.”</p>
+<p>– Edsger W. Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD498.html">How do we tell truths that might hurt?</a></p>
+</blockquote>
+<p>The rest of this book is about making code readable once it is written. This appendix is about how it gets written in the first place, and it is the one thing here you can start on today.</p>
+<p>None of it is required to write good R. But tools that let you work with less resistance are good, and typing is the one nobody teaches you.</p>
+<section id="overview" class="level2 unnumbered overview">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
+<p><strong>Duration</strong> 15 minutes, or a few minutes a day for a couple of months</p>
+<p><strong>Questions</strong></p>
 <ul>
-<li>Basic R programming experience</li>
-<li>Familiarity with writing R scripts</li>
-<li>Experience working on data analysis projects</li>
-</ul>
-<p><strong>Learning outcomes</strong></p>
-<ul>
-<li>How to name things effectively</li>
-<li>Using a style guide</li>
-<li>How to refactor your code</li>
-<li>How to review your code and others’</li>
-<li>How to lay out a project so others know how to run your code</li>
-<li>How to make a reproducible example (reprex)</li>
+<li>Why would typing speed matter for writing code?</li>
+<li>Which keyboard shortcuts are actually worth learning?</li>
+<li>What is an RStudio addin, and which ones earn their keyboard shortcut?</li>
 </ul>
 </section>
-<section id="schedule" class="level1">
-<h1>Schedule</h1>
-<section id="project-organisation" class="level2">
-<h2 class="anchored" data-anchor-id="project-organisation">Project Organisation</h2>
+<section id="typing-and-the-speed-of-thought" class="level2" data-number="C.1">
+<h2 data-number="C.1" class="anchored" data-anchor-id="typing-and-the-speed-of-thought"><span class="header-section-number">C.1</span> Typing, and the speed of thought</h2>
+<p>Here’s the jam: <strong>if you can type faster, you operate closer to the speed of thought.</strong> It’s not really about working faster. It’s about being able to clearly express what’s in your head. And when you can do that, you put yourself in a good position to enter the <a href="https://en.wikipedia.org/wiki/Flow_(psychology)">flow state</a>, being in the zone, completely absorbed, where things feel easy and make sense.</p>
+<p>When you type quickly and accurately, you aren’t making the small stumbling mistakes that pull you out of that state.</p>
+<p>Keyboard shortcuts do the same job. More of what’s in your head gets onto the screen without friction.</p>
+<p>I don’t think being a fast typist is <strong>necessary</strong> to be a better programmer. But tools that let you work with less resistance are good.</p>
+<p>I once switched to a new keyboard and felt like I was walking around with ankle weights and a large unwieldy backpack. I simply couldn’t get what was in my head onto the screen.</p>
+<p>So I spent a couple of months working on typing every day. It made my typing faster and more accurate, which made my coding faster. I ended up ditching the keyboard and keeping the skill.</p>
+<p>Two things worth knowing:</p>
 <ul>
-<li>Understanding file paths</li>
-<li>Pitfalls of organisation</li>
-<li>Common project structures</li>
-<li>Naming files</li>
-<li>“Good Enough”/Common Sense principles of project organisation</li>
-<li>Always have a README</li>
-<li>RStudio and positron set up</li>
+<li><strong>Accuracy first.</strong> There’s not much benefit in typing the wrong and unintelligible words very quickly. <a href="https://www.keybr.com/">keybr</a> is good for this, and I have heard good things about <a href="https://monkeytype.com/">monkeytype</a>.</li>
+<li><strong>You don’t need a new keyboard.</strong> I’ve spent a lot of time and money looking for a good one and I’m still not there. My favourite is still an old wireless Mac keyboard. Practising is a better use of your time than shopping. But if you want the keyboard, get the keyboard.</li>
 </ul>
 </section>
-<section id="code-style-and-readability" class="level2">
-<h2 class="anchored" data-anchor-id="code-style-and-readability">Code style and readability</h2>
+<section id="shortcuts-worth-learning-first" class="level2" data-number="C.2">
+<h2 data-number="C.2" class="anchored" data-anchor-id="shortcuts-worth-learning-first"><span class="header-section-number">C.2</span> Shortcuts worth learning first</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://imgs.xkcd.com/comics/xkeyboarcd.png" class="img-fluid figure-img" title="The key caps use LCD displays for all the vowels, so they can automatically adjust over the years to reflect ongoing vowel shifts while allowing you to keep typing phonetically." alt="An xkcd comic showing a keyboard where the vowel keys have LCD displays."></p>
+<figcaption>Sourced from <a href="https://xkcd.com/2150/">xkcd 2150</a></figcaption>
+</figure>
+</div>
+<p>You already use keyboard shortcuts every day without thinking about them. Saving with <code>Cmd / Ctrl + S</code>, or undoing with <code>Cmd / Ctrl + Z</code>.</p>
+<p>So this is not a new skill. It’s the same skill, pointed at the things you do most often in R.</p>
+<p>These are the ones that come up repeatedly in this course:</p>
 <ul>
-<li>Style is like grammar</li>
-<li>Layout, naming, and correctness are three different jobs</li>
-<li>Why we care about consistent names, spaces, and indentation</li>
-<li>Using the {air} formatter</li>
-<li>Using linters</li>
-<li>Bonus: typing skills and keyboard shortcuts</li>
+<li><code>Cmd / Ctrl + Enter</code> - run the current line</li>
+<li><code>Cmd / Ctrl + Shift + Enter</code> - run the whole script or chunk</li>
+<li><code>Cmd / Ctrl + Shift + F10</code> - restart R. We will use this a lot</li>
+<li><code>Cmd / Ctrl + S</code> - save, and with air set up, reformat</li>
+<li><code>Cmd / Ctrl + Shift + C</code> - comment or uncomment the current line</li>
+<li><code>Cmd / Ctrl</code> + click on a function - jump to where it is defined</li>
+<li><code>Ctrl</code> + <code>.</code> - go to a file or function by name</li>
+<li><code>Alt / Option + Shift + J</code> - jump to a section of the current file</li>
+<li><code>Cmd / Ctrl + Shift + F</code> - find in files, across a whole directory</li>
 </ul>
+<div class="callout callout-style-default callout-caution callout-titled" title="What about `Cmd / Ctrl + Shift + A`?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>What about <code>Cmd / Ctrl + Shift + A</code>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>That’s RStudio’s own “reformat section”, and it’s what people reached for before air existed.</p>
+<p>You can stop using it. Air does a better job, does it to the whole file, and does it on save without you asking.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="More shortcuts, once those are automatic">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>More shortcuts, once those are automatic
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Moving around</strong></p>
+<ul>
+<li><code>Alt + Left / Right</code> - move the cursor one word at a time. Add <code>Shift</code> to select</li>
+<li><code>Cmd / Ctrl + Left / Right</code> - jump to the start or end of the line</li>
+<li><code>Alt + Up / Down</code> - move the current line up or down</li>
+<li><code>Cmd / Ctrl + Alt + Up / Down</code> - copy the current line up or down</li>
+<li><code>Ctrl + Alt + Up / Down</code> - multiple cursors</li>
+<li><code>Cmd / Ctrl + D</code> - delete the current line</li>
+</ul>
+<p>Being able to move by word, or jump to the end of a line, matters more than it sounds. You stop leaning on the arrow key to get where you’re going.</p>
+<p><strong>Elsewhere on your machine</strong></p>
+<ul>
+<li><code>Cmd / Ctrl + Z</code>, then <code>Cmd / Ctrl + Shift + Z</code> - undo, then undo the undo</li>
+<li><code>Cmd / Ctrl + Tab</code> - change application</li>
+<li><code>Cmd + Space</code> - Spotlight on macOS</li>
+<li><code>Cmd / Ctrl + F</code> - search for a word. Works in nearly everything: PDFs, browsers, code</li>
+<li><code>Cmd / Ctrl + T</code> / <code>+ W</code> / <code>+ Shift + T</code> - new browser tab, close tab, reopen the tab you just closed</li>
+</ul>
+<p><strong>Finding and setting your own</strong></p>
+<p>In RStudio, <code>Alt + Shift + K</code> brings up a shortcut menu (<code>Esc</code> to dismiss), and Tools → Keyboard Shortcuts Help lets you see and change all of them.</p>
+<p>Some packages add their own commands, which you can then bind to a key. Those are addins, and they get <a href="#sec-addins">a section of their own below</a>.</p>
+<p><strong>Where to look things up</strong></p>
+<ul>
+<li>The <a href="https://rstudio.github.io/cheatsheets/html/rstudio-ide.html#keyboard-shortcuts">RStudio IDE cheat sheet</a> has an index of the lot.</li>
+<li>Posit’s guide to <a href="https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE">customising keyboard shortcuts</a> covers rebinding them.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Bring up the shortcut reference with <code>Alt / Option + Shift + K</code>, and find the shortcut for inserting a pipe (<code>|&gt;</code>).</li>
+<li>Pick two shortcuts from the list above that you do not currently use, and write them on something you will see tomorrow.</li>
+<li>Spend three minutes practising them on a script of your own.</li>
+<li>Spend five minutes on <a href="https://www.keybr.com/">keybr</a>. Note your accuracy, not your speed.</li>
+</ol>
+<p>Ask me to demonstrate a few of my favourite combos: multiple cursors, moving and copying lines, and jumping to a function by name. They are much easier to understand when you watch them than when you read about them.</p>
+</div>
+</div>
 </section>
-<section id="writing-readable-code" class="level2">
-<h2 class="anchored" data-anchor-id="writing-readable-code">Writing readable code</h2>
-<ul>
-<li>Where we are up to: what the tools fixed, and what they didn’t</li>
-<li>Good vs bad variable names</li>
-<li>De-chunking code</li>
-<li>What to look for: code smells, inputs and outputs, complexity, refactoring</li>
-<li>A process for reviewing code</li>
-<li>Reviewing someone else’s code</li>
-<li>Clean as you go</li>
-</ul>
+<section id="sec-addins" class="level2" data-number="C.3">
+<h2 data-number="C.3" class="anchored" data-anchor-id="sec-addins"><span class="header-section-number">C.3</span> RStudio addins</h2>
+<p>There is a menu in RStudio that most people never open, sitting in the toolbar next to the code and knit buttons. It says <strong>Addins</strong>.</p>
+<p>An addin is nothing exotic. It is an R function that a package has registered with RStudio, so that instead of typing the call, you pick it from a menu, or press a key.</p>
+<p>The reason they are interesting is not the menu. It is that <strong>anything in that menu can be bound to a keyboard shortcut</strong>, which turns a two minute task into a keypress.</p>
+<section id="binding-one-to-a-key" class="level3">
+<h3 class="anchored" data-anchor-id="binding-one-to-a-key">Binding one to a key</h3>
+<p>Tools → Modify Keyboard Shortcuts, then type “addin” into the filter box. You get a list of every addin you have installed. Click the shortcut column, press the keys you want, hit Apply.</p>
+<p>That’s the whole setup. It takes about twenty seconds, and I would do it for two addins rather than ten.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Addins are an RStudio feature">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Addins are an RStudio feature
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Positron does not run RStudio addins. If you use both editors, or you are thinking of moving, don’t build a habit on top of one.</p>
+<p>The things worth having usually exist as an ordinary function too. <code>reprex::reprex()</code> works anywhere, and the addin is a convenience on top of it.</p>
+</div>
+</div>
 </section>
-<section id="writing-functions" class="level2">
-<h2 class="anchored" data-anchor-id="writing-functions">Writing Functions</h2>
-<ul>
-<li>The problem functions solve</li>
-<li>Anatomy of a function</li>
-<li>Good (simple) function design</li>
-<li>Using {fnmate} to speed up creating functions</li>
-<li>How to use a debugger</li>
-</ul>
+<section id="the-ones-i-actually-use" class="level3">
+<h3 class="anchored" data-anchor-id="the-ones-i-actually-use">The ones I actually use</h3>
+<p><strong><a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a></strong> - “Render reprex”. Select some code, press the key, and a formatted reproducible example lands on your clipboard. Mine is bound to <code>Cmd / Ctrl + Shift + R</code>, and it is the addin I would give up last. See <a href="./writing-a-reprex-getting-unstuck.html">Writing a reprex / getting unstuck</a> for what it does.</p>
+<p><strong><a href="https://github.com/milesmcbain/fnmate"><code>{fnmate}</code></a></strong> by <a href="https://milesmcbain.micro.blog/">Miles McBain</a> - put your cursor on a call to a function that does not exist yet, press the key, and it writes the function definition for you, in the right file, with the arguments filled in.</p>
+<p>This one changed how I write code. It means you can write the call you <em>wish</em> existed, then make it exist, rather than stopping to define things before you know what you want. It accelerated my functional programming considerably.</p>
+<p><strong><a href="https://milesmcbain.github.io/datapasta/"><code>{datapasta}</code></a></strong>, also by Miles McBain - copy a block of cells from a spreadsheet, press the key, and it pastes into your script as a <code>tibble()</code> you can read.</p>
+<p>I use this constantly for small lookup tables. It is the fastest way I know to get twenty rows out of somebody’s email and into code where they can be version controlled.</p>
+<p><strong><a href="https://github.com/gadenbuie/shrtcts"><code>{shrtcts}</code></a></strong> by <a href="https://www.garrickadenbuie.com/">Garrick Aden-Buie</a> - for making your own. Write an R function, add a comment saying which key you want, and it becomes a shortcut. Good for the thing you do forty times a week that nobody has packaged.</p>
 </section>
-<section id="writing-a-reprex-getting-unstuck" class="level2">
-<h2 class="anchored" data-anchor-id="writing-a-reprex-getting-unstuck">Writing a reprex / getting unstuck</h2>
-<ul>
-<li>How to share problems</li>
-<li>Using {reprex}</li>
-<li>Practicing reprex</li>
-<li>Practical tips on debugging
-<ul>
-<li>Keep solving vs cleaning up</li>
-</ul></li>
-</ul>
-</section>
-<section id="putting-it-all-together" class="level2">
-<h2 class="anchored" data-anchor-id="putting-it-all-together">Putting It All Together</h2>
-<ul>
-<li>Take an existing project and provide code review</li>
-<li>Apply code linting, code styling, functions</li>
-<li>Discussion and Q &amp; A</li>
-</ul>
+<section id="a-word-of-warning" class="level3">
+<h3 class="anchored" data-anchor-id="a-word-of-warning">A word of warning</h3>
+<p>Addins are easy to collect and hard to remember.</p>
+<p>I have installed plenty that I used twice. The ones on this list stuck because they replace something I was doing by hand several times a day, and because I bound them to a key rather than leaving them in the menu.</p>
+<p>If it lives in the menu, you will forget it exists. So bind it, or skip it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Open the Addins menu. What is already in there from packages you installed for other reasons?</li>
+<li>Install <code>{fnmate}</code> or <code>{datapasta}</code>, and bind it to a key in Tools → Modify Keyboard Shortcuts.</li>
+<li>Use it once, today, on real work. If you don’t reach for it again this week, unbind it. That is a perfectly good outcome.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Read more">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Read more
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This appendix is adapted from my blog post <a href="https://www.njtierney.com/posts/2023-11-23-get-good-type-fast/">Get good with R: typing skills and shortcuts</a>, which has more detail, including a note on vim and emacs, and, importantly, how to get <em>out</em> of vim.</p>
+</div>
+</div>
 
 
+</section>
 </section>
 <section class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
 <ul>
-<li><a href="https://r-best-practices.njtierney.com" class="uri">https://r-best-practices.njtierney.com</a></li>
+<li><a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD498.html">How do we tell truths that might hurt?</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Flow_(psychology)">flow state</a></li>
+<li><a href="https://www.keybr.com/">keybr</a></li>
+<li><a href="https://monkeytype.com/">monkeytype</a></li>
+<li><a href="https://xkcd.com/2150/">xkcd 2150</a></li>
+<li><a href="#sec-addins">a section of their own below</a></li>
+<li><a href="https://rstudio.github.io/cheatsheets/html/rstudio-ide.html#keyboard-shortcuts">RStudio IDE cheat sheet</a></li>
+<li><a href="https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE">customising keyboard shortcuts</a></li>
+<li><a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a></li>
+<li><a href="./writing-a-reprex-getting-unstuck.html">Writing a reprex / getting unstuck</a></li>
+<li><a href="https://github.com/milesmcbain/fnmate"><code>{fnmate}</code></a></li>
+<li><a href="https://milesmcbain.micro.blog/">Miles McBain</a></li>
+<li><a href="https://milesmcbain.github.io/datapasta/"><code>{datapasta}</code></a></li>
+<li><a href="https://github.com/gadenbuie/shrtcts"><code>{shrtcts}</code></a></li>
+<li><a href="https://www.garrickadenbuie.com/">Garrick Aden-Buie</a></li>
+<li><a href="https://www.njtierney.com/posts/2023-11-23-get-good-type-fast/">Get good with R: typing skills and shortcuts</a></li>
 </ul>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -764,10 +869,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./appendix-anonymous-functions.html" class="pagination-link" aria-label="Anonymous functions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Anonymous functions</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./setup.html" class="pagination-link" aria-label="Setup">
-        <span class="nav-page-text">Setup</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./appendix-pipes.html" class="pagination-link" aria-label="How `|>` differs from `%>%`">
+        <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">How <code>|&gt;</code> differs from <code>%&gt;%</code></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -779,7 +887,7 @@ ul.task-list li input[type="checkbox"] {
     </div>   
     <div class="nav-footer-center">
 <p>Copyright 2026, Nicholas Tierney</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/appendix-speed-of-thought.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

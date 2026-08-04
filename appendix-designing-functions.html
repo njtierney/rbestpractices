@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Appendix A — Designing functions – R Best Practices</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./appendix-anonymous-functions.html" rel="next">
+<link href="./writing-a-reprex-getting-unstuck.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1815a5215514b86a9dbfb465bf846045.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix-designing-functions.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix-designing-functions.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Best Practices</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/njtierney/rbestpractices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./R-Best-Practices.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project-organisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-style-and-readability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-readable-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Writing functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-a-reprex-getting-unstuck.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-designing-functions.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-anonymous-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Anonymous functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-speed-of-thought.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-pipes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">How `|&gt;` differs from `%&gt;%`</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-curly-braces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">What <code>{}</code> really does</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#good-simple-function-design" id="toc-good-simple-function-design" class="nav-link" data-scroll-target="#good-simple-function-design"><span class="header-section-number">A.1</span> Good (simple) function design</a></li>
+  <li><a href="#sec-ozed-refactor" id="toc-sec-ozed-refactor" class="nav-link" data-scroll-target="#sec-ozed-refactor"><span class="header-section-number">A.2</span> Revisiting a script</a>
+  <ul class="collapse">
+  <li><a href="#one-chunk-at-a-time" id="toc-one-chunk-at-a-time" class="nav-link" data-scroll-target="#one-chunk-at-a-time">One chunk at a time</a></li>
+  <li><a href="#the-step-that-was-written-twice" id="toc-the-step-that-was-written-twice" class="nav-link" data-scroll-target="#the-step-that-was-written-twice">The step that was written twice</a></li>
+  <li><a href="#grouping-the-small-functions-into-bigger-ones" id="toc-grouping-the-small-functions-into-bigger-ones" class="nav-link" data-scroll-target="#grouping-the-small-functions-into-bigger-ones">Grouping the small functions into bigger ones</a></li>
+  <li><a href="#what-the-script-looks-like-now" id="toc-what-the-script-looks-like-now" class="nav-link" data-scroll-target="#what-the-script-looks-like-now">What the script looks like now</a></li>
+  </ul></li>
+  <li>Links</li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/appendix-designing-functions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix-designing-functions.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix-designing-functions.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-designing-functions" class="quarto-section-identifier">Appendix A — Designing functions</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p>“I want to get to a level where it works, and I can reason about it.”</p>
+<p>– Joe Cheng</p>
+</blockquote>
+<p>Chapter 4 was about what a function is and how to look inside one. This is the next question: given a piece of code, how do you decide what the function around it should be?</p>
+<p>It is not part of the six hour course, and you do not need it to get value from everything else. It is here because it is the material I would teach next, and because the hundred line script we have been carrying since chapter 3 deserves to be finished.</p>
+<section id="overview" class="level2 unnumbered overview">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
+<p><strong>Duration</strong> 50 minutes</p>
+<p><strong>Questions</strong></p>
+<ul>
+<li>What complexity is this function managing?</li>
+<li>How do I turn a chunk of code into a function, one step at a time?</li>
+<li>What does it look like to take a whole script apart?</li>
+<li>When is a function worth writing, if the code was never repeated?</li>
+</ul>
+</section>
+<section id="good-simple-function-design" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="good-simple-function-design"><span class="header-section-number">A.1</span> Good (simple) function design</h2>
+<p>Functions are <strong>tools for managing complexity</strong>. That is also called <em>abstraction</em>, or <em>abstracting away</em>.</p>
+<p>So the question when writing one is always: <strong>what complexity am I managing? What am I abstracting away?</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/good-functions.png" class="img-fluid figure-img" style="width:100.0%" alt="A question across the top, what complexity am I managing and what am I abstracting away, described as the question to ask of every function you write. Below it, four cards. Manages complexity: hides detail you do not need while reading this line. Expresses an idea: its name says what it is for, not how it works. Reasoned about alone: you can understand it without reading the rest of the script. Takes iteration: the first version is never the one you keep."></p>
+<figcaption>Four things that are true of a function worth keeping.</figcaption>
+</figure>
+</div>
+<p>Here is a real piece of analysis code. It asks whether temperature differs on days when ozone is missing, compared with days when it is not:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>is_different <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>when_missing_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(airquality<span class="sc">$</span>Ozone))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>when_complete_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(airquality<span class="sc">$</span>Ozone))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>is_different_miss <span class="ot">&lt;-</span> is_different[when_missing_index]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>is_different_complete <span class="ot">&lt;-</span> is_different[when_complete_index]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>result_ozone_temp <span class="ot">&lt;-</span> <span class="fu">t.test</span>(is_different_miss, is_different_complete)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That works. But you can’t use it on another pair of variables without editing it, and you can’t tell at a glance what it’s <em>for</em>.</p>
+<p><strong>Writing a function is writing.</strong> You don’t get it right on the first pass, and you’re not supposed to.</p>
+<p>Here’s the actual process.</p>
+<p><strong>Start with the bones.</strong> Make an empty function and paste the code into the body.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>misstest <span class="ot">&lt;-</span> <span class="cf">function</span>(Temp, Ozone) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>  <span class="co"># paste the text into the body</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Ask what you are interested in.</strong> Which parts change? Here it is the variable we are testing, and the variable whose missingness we are splitting on.</p>
+<p><strong>Work out what to name things.</strong> Replace the hard-coded <code>airquality$Temp</code> with an argument. Comment out the old line rather than deleting it, so you can see what you are replacing:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>misstest <span class="ot">&lt;-</span> <span class="cf">function</span>(is_different, when_missing) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>  <span class="co"># is_different &lt;- airquality$Temp</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>  when_missing_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(when_missing))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>  when_complete_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(when_missing))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a>  is_different_miss <span class="ot">&lt;-</span> is_different[when_missing_index]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a>  is_different_complete <span class="ot">&lt;-</span> is_different[when_complete_index]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a>  result_ozone_temp <span class="ot">&lt;-</span> <span class="fu">t.test</span>(is_different_miss, is_different_complete)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Naming is tricky, and it’s fine for it to take a few goes.</p>
+<p><strong>Return the last thing.</strong> The function currently assigns to <code>result_ozone_temp</code> and returns it invisibly. Put it on its own line at the end so the return is explicit to a reader:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>  result_ozone_temp <span class="ot">&lt;-</span> <span class="fu">t.test</span>(is_different_miss, is_different_complete)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>  result_ozone_temp</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a><span class="er">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Clean up the old lettuce.</strong> Remove the commented-out lines now that you no longer need them.</p>
+<p><strong>Name the function so it evokes the action.</strong> <code>misstest</code> was a placeholder. What does this actually do?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a>missingness_impact <span class="ot">&lt;-</span> <span class="cf">function</span>(is_different, when_missing) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>  when_missing_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(when_missing))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>  when_complete_index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(when_missing))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>  is_different_miss <span class="ot">&lt;-</span> is_different[when_missing_index]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>  is_different_complete <span class="ot">&lt;-</span> is_different[when_complete_index]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>  <span class="fu">t.test</span>(is_different_miss, is_different_complete)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Then use it</strong>, and write the output to a variable:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>temp_difference_ozone_missing <span class="ot">&lt;-</span> <span class="fu">missingness_impact</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>  <span class="at">when_missing =</span> airquality<span class="sc">$</span>Ozone,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a>  <span class="at">is_different =</span> airquality<span class="sc">$</span>Temp</span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The process, in short:</p>
+<ol type="1">
+<li><strong>Copy</strong> the text into the body.</li>
+<li><strong>Identify</strong> the complexity to manage.</li>
+<li><strong>Abstract</strong> that complexity.</li>
+<li><strong>Iterate</strong> - writing functions is iterative, just like regular writing.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/function-writing-process.png" class="img-fluid figure-img" style="width:100.0%" alt="Four steps stacked in a column, joined by arrows. Copy: paste the code into an empty function body and change nothing. Identify: work out which parts change between uses, because those are the arguments. Abstract: replace the hard-coded parts with argument names. Iterate: get it working first, then improve the names. A curved arrow labelled again runs from Iterate back up to Identify, because the middle two steps repeat."></p>
+<figcaption>Steps 2 and 3 are the loop. You only copy the code in once.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="DRY, and the better version of it">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>DRY, and the better version of it
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You will often be told <strong>DRY</strong>: <em>Don’t Repeat Yourself</em>. If you copy and paste the same code three times, write a function.</p>
+<p>That’s true, but it treats the symptom. The real problem is <strong>complex code</strong>.</p>
+<p>You only end up repeating yourself because you couldn’t <em>express</em> the idea. So the cause is expression and reasoning, not repetition.</p>
+<p>The version I prefer is <strong>DRRY</strong>: <em>Don’t Re-Read Yourself</em>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>The trigger is not “have I typed this three times”. It is “have I had to read this block again to work out what it does, and what is different about it this time”. That happens on the <em>first</em> copy, not the third, and it happens plenty of times when there is no copy at all.</p>
+<p>A function isn’t only needed when you repeat code. It’s needed when you have an idea worth naming.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Earlier you wrote down a sentence describing a chunk of your own code. Now build the function around it, using the process above.</p>
+<p>If you don’t have one to hand, use one of these. Both do the same thing more than once, with something small changed each time.</p>
+<p><strong>One</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>adelie <span class="ot">&lt;-</span> penguins[penguins<span class="sc">$</span>species <span class="sc">==</span> <span class="st">"Adelie"</span>, ]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a>adelie_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(adelie<span class="sc">$</span>body_mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-label="3"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-label="4"></a>gentoo <span class="ot">&lt;-</span> penguins[penguins<span class="sc">$</span>species <span class="sc">==</span> <span class="st">"Gentoo"</span>, ]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-label="5"></a>gentoo_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(gentoo<span class="sc">$</span>body_mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-label="6"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-label="7"></a>chinstrap <span class="ot">&lt;-</span> penguins[penguins<span class="sc">$</span>species <span class="sc">==</span> <span class="st">"Chinstrap"</span>, ]</span>
+<span id="cb7-8"><a href="#cb7-8" aria-label="8"></a>chinstrap_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(chinstrap<span class="sc">$</span>body_mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Two</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a>ozone_high <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Ozone <span class="sc">&gt;</span> <span class="dv">30</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>ozone_pct <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">sum</span>(ozone_high, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(ozone_high)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>temp_high <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp <span class="sc">&gt;</span> <span class="dv">80</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a>temp_pct <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">sum</span>(temp_high, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(temp_high)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The second one has two things changing rather than one, so it needs two arguments. Work out which they are before you start typing.</p>
+<ol type="1">
+<li><strong>Copy.</strong> Make an empty function, and paste the chunk into the body. Don’t change anything yet.</li>
+<li><strong>Identify.</strong> Which parts of it change between uses? Those are your arguments.</li>
+<li><strong>Abstract.</strong> Replace the hard-coded parts with argument names. Comment the old lines out rather than deleting them, so you can see what you are replacing.</li>
+<li><strong>Iterate.</strong> Get it working first, then go back and improve the names. The first name you pick is rarely the one you keep.</li>
+</ol>
+<p>Then call your function, and check you get the same answer you got before you started. That check matters. It is very easy to tidy something into a different result.</p>
+<p>If you don’t have a chunk of your own to hand, use <code>06-bad-style/messy-analysis.R</code> from the course repository. The loop at the bottom is doing the same thing to each species, one at a time.</p>
+</div>
+</div>
+</section>
+<section id="sec-ozed-refactor" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="sec-ozed-refactor"><span class="header-section-number">A.2</span> Revisiting a script</h2>
+<p>Everything so far has been one function at a time. Let’s do a whole script, because that is what you will actually be handed.</p>
+<p>This is the hundred line script from <a href="./writing-readable-code.html#sec-de-chunking">What is each chunk for?</a>. We left it with six comments in it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="co"># 1. read the raw spreadsheet for one year</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a><span class="co"># 2. fix the column names Excel gave us</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a><span class="co"># 3. pull out the education rows, make them long, drop the wide age bands</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a><span class="co"># 4. pull out the population rows, make them long, drop the wide age bands</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-label="5"></a><span class="co"># 5. join them, and work out the proportion studying</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-label="6"></a><span class="co"># 6. plot it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That list is a to-do list. Each line is a function waiting to be given a name, and we already know steps 3 and 4 are the same idea twice.</p>
+<p>So let’s work down it.</p>
+<section id="one-chunk-at-a-time" class="level3">
+<h3 class="anchored" data-anchor-id="one-chunk-at-a-time">One chunk at a time</h3>
+<p>Step 1 was this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>  <span class="at">path =</span> <span class="st">"data/Education and work, 2023, Datacube 2 (Table 11).xlsx"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a>  <span class="at">sheet =</span> <span class="st">"2014"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>  <span class="at">skip =</span> <span class="dv">4</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-label="5"></a>  <span class="at">n_max =</span> <span class="dv">32</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-label="6"></a>  <span class="at">.name_repair =</span> make_clean_names</span>
+<span id="cb10-7"><a href="#cb10-7" aria-label="7"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Same process as before. Copy it into a function body, ask what changes between uses, and make that an argument.</p>
+<p>The only thing that changes between uses is the year. It is a sheet in the same workbook.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a>read_raw_education_data <span class="ot">&lt;-</span> <span class="cf">function</span>(path, year) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>  <span class="fu">read_excel</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a>    <span class="at">path =</span> path,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a>    <span class="at">sheet =</span> year,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-label="5"></a>    <span class="at">skip =</span> <span class="dv">4</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-label="6"></a>    <span class="at">n_max =</span> <span class="dv">32</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-label="7"></a>    <span class="at">.name_repair =</span> make_clean_names</span>
+<span id="cb11-8"><a href="#cb11-8" aria-label="8"></a>  )</span>
+<span id="cb11-9"><a href="#cb11-9" aria-label="9"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The year changes between calls, so it is an argument. The path changes too - not today, but the day the ABS publishes the 2024 datacube, or the day you point this at a different spreadsheet entirely. A function that reads a file should be told which file.</p>
+<p>The script gets one line shorter, and one problem smaller:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>raw_data_2014 <span class="ot">&lt;-</span> <span class="fu">read_raw_education_data</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>  <span class="at">path =</span> <span class="fu">here</span>(<span class="st">"data/Education and work, 2023, Datacube 2 (Table 11).xlsx"</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>  <span class="at">year =</span> <span class="st">"2014"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Notice what just happened to the request that started all this. “Can you add another year?” is now <code>read_raw_education_data(year = "2015")</code>. We are not finished, but the hard-coded <code>2014</code> has stopped being a fact buried in line 12 and started being an argument.</p>
+<p><code>here()</code> snuck in there too, from <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>. Building the path with <code>here()</code> means the call works the same whether R is sitting in the project root or somewhere else entirely.</p>
+</section>
+<section id="the-step-that-was-written-twice" class="level3">
+<h3 class="anchored" data-anchor-id="the-step-that-was-written-twice">The step that was written twice</h3>
+<p>Steps 3 and 4 were forty lines between them, doing one idea to two different sets of rows. Here they are side by side, with the pivot and filter trimmed out so the shape is visible:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="co"># step 3: the education rows</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a>data_subset <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>  <span class="fu">slice</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>  <span class="fu">set_names</span>(the_names2)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>data_studying <span class="ot">&lt;-</span> data_subset <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-label="7"></a>  <span class="fu">pivot_longer</span>(...,  <span class="at">values_to =</span> <span class="st">"n_studying"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-label="8"></a>  <span class="fu">arrange</span>(state_territory, age_group) <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-label="9"></a>  <span class="fu">filter</span>(...)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-label="10"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-label="11"></a><span class="co"># step 4: the population rows</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-label="12"></a>data_population <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-label="13"></a>  <span class="fu">slice</span>(<span class="dv">24</span><span class="sc">:</span><span class="dv">31</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-label="14"></a>  <span class="fu">set_names</span>(the_names2)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-label="15"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-label="16"></a>data_population <span class="ot">&lt;-</span> data_population <span class="sc">|&gt;</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-label="17"></a>  <span class="fu">pivot_longer</span>(..., <span class="at">values_to =</span> <span class="st">"population"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-label="18"></a>  <span class="fu">arrange</span>(state_territory, age_group) <span class="sc">|&gt;</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-label="19"></a>  <span class="fu">filter</span>(...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Same <code>slice()</code>, same <code>set_names()</code>, same <code>pivot_longer()</code>, same <code>arrange()</code>, same five-line <code>filter()</code>. Two things differ: which rows get sliced, and what the value column is called.</p>
+<p>Pull out the shared shape first:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>extract_rows_set_names <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_data, row_numbers, names) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a>  raw_data <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-label="3"></a>    <span class="fu">slice</span>(row_numbers) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-label="4"></a>    <span class="fu">set_names</span>(names)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-label="5"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>And now both callers are one line each:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>educated_raw <span class="ot">&lt;-</span> <span class="fu">extract_rows_set_names</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-label="2"></a>  raw_data_2014,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-label="3"></a>  <span class="at">row_numbers =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-label="4"></a>  <span class="at">names =</span> new_names</span>
+<span id="cb15-5"><a href="#cb15-5" aria-label="5"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-label="6"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-label="7"></a>population_raw <span class="ot">&lt;-</span> <span class="fu">extract_rows_set_names</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-label="8"></a>  raw_data_2014,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-label="9"></a>  <span class="at">row_numbers =</span> <span class="dv">24</span><span class="sc">:</span><span class="dv">31</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-label="10"></a>  <span class="at">names =</span> new_names</span>
+<span id="cb15-11"><a href="#cb15-11" aria-label="11"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Those two lines are worth staring at, because they say something the original script could not. The education rows and the population rows are <em>the same kind of thing</em>, pulled from different parts of one spreadsheet. Forty lines of near-identical pipeline never said that. Two calls to one function say it immediately.</p>
+</section>
+<section id="grouping-the-small-functions-into-bigger-ones" class="level3">
+<h3 class="anchored" data-anchor-id="grouping-the-small-functions-into-bigger-ones">Grouping the small functions into bigger ones</h3>
+<p>Once each chunk has a name, the chunks themselves start to group:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>prepare_education <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_data) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>  new_names <span class="ot">&lt;-</span> <span class="fu">extract_education_col_names</span>(raw_data)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-label="4"></a>  educated_raw <span class="ot">&lt;-</span> <span class="fu">extract_rows_set_names</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-label="5"></a>    raw_data,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-label="6"></a>    <span class="at">row_numbers =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-label="7"></a>    <span class="at">names =</span> new_names</span>
+<span id="cb16-8"><a href="#cb16-8" aria-label="8"></a>  )</span>
+<span id="cb16-9"><a href="#cb16-9" aria-label="9"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-label="10"></a>  <span class="fu">pivot_longer_educated</span>(educated_raw)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-label="11"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Three small functions inside one slightly bigger one, and the bigger one reads like the comment it came from: get the names, pull out the rows, make it long.</p>
+<p>Do the same for population and for the join, and the whole hundred lines collapse into one:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a>read_educated_population <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">year =</span> <span class="st">"2014"</span>) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-label="2"></a>  raw_data <span class="ot">&lt;-</span> <span class="fu">read_raw_education_data</span>(<span class="at">year =</span> year)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-label="3"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-label="4"></a>  educated <span class="ot">&lt;-</span> <span class="fu">prepare_education</span>(raw_data)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-label="5"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-label="6"></a>  population <span class="ot">&lt;-</span> <span class="fu">prepare_population</span>(raw_data)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-label="7"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-label="8"></a>  <span class="fu">combine_educated_population</span>(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-label="9"></a>    <span class="at">education =</span> educated,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-label="10"></a>    <span class="at">population =</span> population,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-label="11"></a>    <span class="at">year =</span> year</span>
+<span id="cb17-12"><a href="#cb17-12" aria-label="12"></a>  )</span>
+<span id="cb17-13"><a href="#cb17-13" aria-label="13"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Read that function. It is the six comments, in order, as code.</p>
+</section>
+<section id="what-the-script-looks-like-now" class="level3">
+<h3 class="anchored" data-anchor-id="what-the-script-looks-like-now">What the script looks like now</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="fu">source</span>(<span class="st">"packages.R"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-label="2"></a><span class="fu">lapply</span>(<span class="fu">list.files</span>(<span class="st">"./R"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>), source)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-label="3"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-label="4"></a>educated_population_2014 <span class="ot">&lt;-</span> <span class="fu">read_educated_population</span>(<span class="at">year =</span> <span class="st">"2014"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-label="5"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-label="6"></a><span class="fu">ggplot</span>(educated_population_2014, <span class="fu">aes</span>(<span class="at">x =</span> prop_studying, <span class="at">y =</span> state_territory)) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-label="7"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-label="8"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>age_group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ninety lines to six. The other eighty-four did not disappear, they moved into <code>R/</code>, one file per function, exactly the layout from <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>.</p>
+<p>And here is the bit I find genuinely satisfying. The original request was one more year of data. Now it is one more call:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a>educated_population_2015 <span class="ot">&lt;-</span> <span class="fu">read_educated_population</span>(<span class="at">year =</span> <span class="st">"2015"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In the hundred line version, that was eighty lines copied and pasted, with five numbers to edit inside them and no way to be sure you got them all.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Extension: all ten years at once">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Extension: all ten years at once
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Not required, and we may not get to this in the session. But it is where the whole chapter has been heading.</p>
+<p>Once adding <em>one</em> year is one call, adding <em>ten</em> is <code>map()</code>, which we met back in <a href="writing-functions.html#anatomy-of-a-function">Anatomy of a function</a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-label="3"></a>study_years <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="dv">2014</span><span class="sc">:</span><span class="dv">2023</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-label="4"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-label="5"></a>educated_population <span class="ot">&lt;-</span> study_years <span class="sc">|&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-label="6"></a>  <span class="fu">map</span>(\(year) <span class="fu">read_educated_population</span>(<span class="at">year =</span> year)) <span class="sc">|&gt;</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-label="7"></a>  <span class="fu">list_rbind</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ten years, three lines. <code>map()</code> gives you a list with one data frame per year, and <code>list_rbind()</code> stacks them into one.</p>
+<p>The thing to notice is that none of this was available before. You cannot <code>map()</code> over the original script, because there is no function to map. Every bit of work above is what bought you these three lines.</p>
+<p>You may meet <code>map_dfr()</code> in older code, which did the mapping and the stacking in one call. purrr superseded it in version 1.0.0, in favour of the two steps above.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Read the whole thing">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Read the whole thing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The full progression lives in the <a href="https://github.com/njtierney/ozed">ozed repo</a>, one script per step: <code>script_00.R</code> is the starting point, and <code>script_03.R</code> is the ten year version. Every intermediate step is there too, so you can see it happen a chunk at a time rather than as a before and after.</p>
+<p>It is not finished, and I have left it that way on purpose. <code>pivot_longer_educated()</code> and <code>pivot_longer_population()</code> are still nearly the same function, differing in one argument. That is the next thing I would fix, and you can see exactly why by putting them side by side.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Take the script you chunked in the last chapter. Turn the <em>first</em> chunk into a function. Only the first. That is the <code>read_excel()</code> call at the top, the one commented <code># 1. read the raw spreadsheet for one year</code> - the same chunk we turned into <code>read_raw_education_data()</code> above.</li>
+<li>Run the script again. Same answer?</li>
+<li>Now look at your list of chunks. Are any two of them the same idea on different data? That pair is the one worth doing next, and it is where most of the gain is.</li>
+<li>Stop there. A script with two of its six chunks named is better than the one you started with, and you do not have to finish today.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Going faster with {fnmate}">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Going faster with {fnmate}
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The process above has one annoying step. You write the call you <em>wish</em> existed, then go and create the function somewhere else, with the right arguments, and switch back.</p>
+<p><a href="https://github.com/milesmcbain/fnmate"><code>{fnmate}</code></a> by Miles McBain removes that step. Write the call you want:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>temp_difference <span class="ot">&lt;-</span> <span class="fu">missingness_impact</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a>  <span class="at">when_missing =</span> airquality<span class="sc">$</span>Ozone,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>  <span class="at">is_different =</span> airquality<span class="sc">$</span>Temp</span>
+<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Put your cursor on it, trigger <code>{fnmate}</code>, and it generates the function definition - correctly named, with the right argument names - in your <code>R/</code> directory, ready for you to fill in the body.</p>
+<p>This matters more than a keystroke saving. It makes the <strong>outside-in</strong> approach cheap. You imagine the interface you want first, then write the thing that satisfies it. Without tooling, outside-in is enough extra effort that most people default to inside-out.</p>
+<p><strong>Worth trying, with or without the package.</strong> Install it with <code>remotes::install_github("milesmcbain/fnmate")</code> - and if the install gives you trouble, skip it, because it is the habit that matters rather than the package.</p>
+<ol type="1">
+<li>Think of something you want to do but haven’t written yet. Write <strong>only the call</strong>, with the argument names you wish existed.</li>
+<li>Read what you wrote back. Could someone else tell what it does from the call alone? If not, rename things now, while it costs you nothing.</li>
+<li>Now generate the function, with <code>{fnmate}</code> or by hand, and fill in the body.</li>
+</ol>
+<p>Notice the order you just worked in. You designed the interface first and the implementation second, which is the opposite of how most of us write code.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+<section class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
+<ul>
+<li><a href="https://milesmcbain.xyz/">Miles McBain</a></li>
+<li><a href="./writing-readable-code.html#sec-de-chunking">What is each chunk for?</a></li>
+<li><a href="writing-functions.html#anatomy-of-a-function">Anatomy of a function</a></li>
+<li><a href="https://github.com/njtierney/ozed">ozed repo</a></li>
+<li><a href="https://github.com/milesmcbain/fnmate"><code>{fnmate}</code></a></li>
+</ul>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Naming credit to <a href="https://milesmcbain.xyz/">Miles McBain</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r-best-practices\.njtierney\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./writing-a-reprex-getting-unstuck.html" class="pagination-link" aria-label="Writing a reprex / getting unstuck">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./appendix-anonymous-functions.html" class="pagination-link" aria-label="Anonymous functions">
+        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Anonymous functions</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, Nicholas Tierney</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/appendix-designing-functions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

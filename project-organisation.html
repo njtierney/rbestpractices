@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-cd562747a821bcd71e1fae8341a609dc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1815a5215514b86a9dbfb465bf846045.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -182,6 +182,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Writing functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-a-reprex-getting-unstuck.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-designing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-anonymous-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Anonymous functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-speed-of-thought.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-pipes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">How `|&gt;` differs from `%&gt;%`</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-curly-braces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">What <code>{}</code> really does</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -195,14 +248,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up"><span class="header-section-number">1.1</span> Set up</a>
   <ul class="collapse">
-  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio"><span class="header-section-number">1.1.1</span> RStudio</a></li>
-  <li><a href="#positron" id="toc-positron" class="nav-link" data-scroll-target="#positron"><span class="header-section-number">1.1.2</span> Positron</a></li>
+  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio">RStudio</a></li>
+  <li><a href="#positron" id="toc-positron" class="nav-link" data-scroll-target="#positron">Positron</a></li>
   </ul></li>
   <li><a href="#a-common-problem-file-paths" id="toc-a-common-problem-file-paths" class="nav-link" data-scroll-target="#a-common-problem-file-paths"><span class="header-section-number">1.2</span> A common problem: file paths</a>
   <ul class="collapse">
-  <li><a href="#files-directories-paths" id="toc-files-directories-paths" class="nav-link" data-scroll-target="#files-directories-paths"><span class="header-section-number">1.2.1</span> Files, directories, paths</a></li>
-  <li><a href="#reading-files" id="toc-reading-files" class="nav-link" data-scroll-target="#reading-files"><span class="header-section-number">1.2.2</span> Reading files</a></li>
-  <li><a href="#what-does-setwd-do" id="toc-what-does-setwd-do" class="nav-link" data-scroll-target="#what-does-setwd-do"><span class="header-section-number">1.2.3</span> What does <code>setwd()</code> do?</a></li>
+  <li><a href="#files-directories-paths" id="toc-files-directories-paths" class="nav-link" data-scroll-target="#files-directories-paths">Files, directories, paths</a></li>
+  <li><a href="#reading-files" id="toc-reading-files" class="nav-link" data-scroll-target="#reading-files">Reading files</a></li>
+  <li><a href="#what-does-setwd-do" id="toc-what-does-setwd-do" class="nav-link" data-scroll-target="#what-does-setwd-do">What does <code>setwd()</code> do?</a></li>
   </ul></li>
   <li><a href="#project-oriented-workflow" id="toc-project-oriented-workflow" class="nav-link" data-scroll-target="#project-oriented-workflow"><span class="header-section-number">1.3</span> Project oriented workflow</a></li>
   <li><a href="#sec-rbp-exercises-ch1" id="toc-sec-rbp-exercises-ch1" class="nav-link" data-scroll-target="#sec-rbp-exercises-ch1"><span class="header-section-number">1.4</span> Get course exercise materials on your machine</a></li>
@@ -210,11 +263,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#organise-your-project-with-a-readme" id="toc-organise-your-project-with-a-readme" class="nav-link" data-scroll-target="#organise-your-project-with-a-readme"><span class="header-section-number">1.6</span> Organise your project with a README</a></li>
   <li><a href="#pitfalls-of-organisation" id="toc-pitfalls-of-organisation" class="nav-link" data-scroll-target="#pitfalls-of-organisation"><span class="header-section-number">1.7</span> Pitfalls of organisation</a>
   <ul class="collapse">
-  <li><a href="#everything-in-one-folder" id="toc-everything-in-one-folder" class="nav-link" data-scroll-target="#everything-in-one-folder"><span class="header-section-number">1.7.1</span> Everything in one folder</a></li>
-  <li><a href="#no-clear-entry-point" id="toc-no-clear-entry-point" class="nav-link" data-scroll-target="#no-clear-entry-point"><span class="header-section-number">1.7.2</span> No clear entry point</a></li>
-  <li><a href="#file-names-encode-history-not-content" id="toc-file-names-encode-history-not-content" class="nav-link" data-scroll-target="#file-names-encode-history-not-content"><span class="header-section-number">1.7.3</span> File names encode history, not content</a></li>
-  <li><a href="#editing-raw-data-in-place" id="toc-editing-raw-data-in-place" class="nav-link" data-scroll-target="#editing-raw-data-in-place"><span class="header-section-number">1.7.4</span> Editing raw data in place</a></li>
-  <li><a href="#outputs-mixed-in-with-inputs" id="toc-outputs-mixed-in-with-inputs" class="nav-link" data-scroll-target="#outputs-mixed-in-with-inputs"><span class="header-section-number">1.7.5</span> Outputs mixed in with inputs</a></li>
+  <li><a href="#everything-in-one-folder" id="toc-everything-in-one-folder" class="nav-link" data-scroll-target="#everything-in-one-folder">Everything in one folder</a></li>
+  <li><a href="#no-clear-entry-point" id="toc-no-clear-entry-point" class="nav-link" data-scroll-target="#no-clear-entry-point">No clear entry point</a></li>
+  <li><a href="#file-names-encode-history-not-content" id="toc-file-names-encode-history-not-content" class="nav-link" data-scroll-target="#file-names-encode-history-not-content">File names encode history, not content</a></li>
+  <li><a href="#editing-raw-data-in-place" id="toc-editing-raw-data-in-place" class="nav-link" data-scroll-target="#editing-raw-data-in-place">Editing raw data in place</a></li>
+  <li><a href="#outputs-mixed-in-with-inputs" id="toc-outputs-mixed-in-with-inputs" class="nav-link" data-scroll-target="#outputs-mixed-in-with-inputs">Outputs mixed in with inputs</a></li>
   </ul></li>
   <li><a href="#good-enough-project-organisation" id="toc-good-enough-project-organisation" class="nav-link" data-scroll-target="#good-enough-project-organisation"><span class="header-section-number">1.8</span> “Good enough” project organisation</a></li>
   <li><a href="#how-to-name-files" id="toc-how-to-name-files" class="nav-link" data-scroll-target="#how-to-name-files"><span class="header-section-number">1.9</span> How to name files</a></li>
@@ -297,8 +350,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Let’s talk about some easy-wins in how you set up RStudio and Positron, to make it easier to make things reproducible.</p>
-<section id="rstudio" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="rstudio"><span class="header-section-number">1.1.1</span> RStudio</h3>
+<section id="rstudio" class="level3">
+<h3 class="anchored" data-anchor-id="rstudio">RStudio</h3>
 <p>We want to go to global options, like so:</p>
 <p>Tools → Global Options (or <code>Cmd + ,</code> on macOS) → General.</p>
 <p>Under <strong>Workspace</strong>:</p>
@@ -373,8 +426,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="positron" class="level3" data-number="1.1.2">
-<h3 data-number="1.1.2" class="anchored" data-anchor-id="positron"><span class="header-section-number">1.1.2</span> Positron</h3>
+<section id="positron" class="level3">
+<h3 class="anchored" data-anchor-id="positron">Positron</h3>
 <p>The same settings live under Settings → Extensions → R. The equivalent behaviour is off by default, so there is usually nothing to change - but it is worth looking, so you know where it is.</p>
 <p>Positron also has the command palette! The same command as RStudio.</p>
 <ul>
@@ -469,8 +522,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Chances are <strong>you</strong> know exactly where the file is, and now you need to get into the mind of R, to understand <strong>why it cannot find the file</strong>.</p>
 <p>We can resolve these errors if we keep our <strong>files</strong>, <strong>paths</strong>, and <strong>directories</strong> ordered. This goes together with a <strong>workflow</strong> for clearly, and portably letting R know where these are. This practice is sometimes referred to as <strong>good file path hygiene</strong>.</p>
 <p>Let’s define a few of these terms: files, directories, and paths.</p>
-<section id="files-directories-paths" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="files-directories-paths"><span class="header-section-number">1.2.1</span> Files, directories, paths</h3>
+<section id="files-directories-paths" class="level3">
+<h3 class="anchored" data-anchor-id="files-directories-paths">Files, directories, paths</h3>
 <p>Below we show some examples of a folder structure, of directories, and files</p>
 <pre><code>Users/                                  ← Directory
 └── njtierney/                          ← Directory
@@ -522,8 +575,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>/Users/njtierney/Desktop/analysis-2026/data/penguins.csv</code></pre>
 <p>Nothing else in the tree is part of it. That is the whole idea - a path names one route down through the folders, and ignores everything it walks past.</p>
 <p>Let’s talk a bit more about files, directories and paths.</p>
-<section id="files" class="level4" data-number="1.2.1.1">
-<h4 data-number="1.2.1.1" class="anchored" data-anchor-id="files"><span class="header-section-number">1.2.1.1</span> Files 📄</h4>
+<section id="files" class="level4">
+<h4 class="anchored" data-anchor-id="files">Files 📄</h4>
 <ul>
 <li>Files are something I can open.</li>
 <li>These are all files: “explore.R”, “eda-document.docx”, “graph.png”, “README.md”, “penguins.csv”</li>
@@ -537,16 +590,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ul>
 </section>
-<section id="directories" class="level4" data-number="1.2.1.2">
-<h4 data-number="1.2.1.2" class="anchored" data-anchor-id="directories"><span class="header-section-number">1.2.1.2</span> Directories 📁</h4>
+<section id="directories" class="level4">
+<h4 class="anchored" data-anchor-id="directories">Directories 📁</h4>
 <ul>
 <li>Also known as folders (files inside a folder)</li>
 <li>A directory contains files</li>
 <li>A directory can also contain directories</li>
 </ul>
 </section>
-<section id="paths" class="level4" data-number="1.2.1.3">
-<h4 data-number="1.2.1.3" class="anchored" data-anchor-id="paths"><span class="header-section-number">1.2.1.3</span> Paths 🛣️</h4>
+<section id="paths" class="level4">
+<h4 class="anchored" data-anchor-id="paths">Paths 🛣️</h4>
 <p>A path, or “file path”, or “directory path” is the machine-readable directions to where files on your computer live. Kind of like a street address. “Machine readable” just means your computer can read it easily:</p>
 <ul>
 <li>Machine readable:
@@ -565,8 +618,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="figs/project-org-file-explorer.png" class="img-fluid" alt="Example of file and folder structure"></p>
 </section>
 </section>
-<section id="reading-files" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="reading-files"><span class="header-section-number">1.2.2</span> Reading files</h3>
+<section id="reading-files" class="level3">
+<h3 class="anchored" data-anchor-id="reading-files">Reading files</h3>
 <p>So to read CSV in R, you can put the path of penguins.csv in <code>read_csv()</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026/data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In our diagram, that is this file:</p>
@@ -623,8 +676,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-2"><a href="#cb14-2" aria-label="2"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/penguins.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Let’s talk about why this is <strong>not a good idea</strong>.</p>
 </section>
-<section id="what-does-setwd-do" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="what-does-setwd-do"><span class="header-section-number">1.2.3</span> What does <code>setwd()</code> do?</h3>
+<section id="what-does-setwd-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-setwd-do">What does <code>setwd()</code> do?</h3>
 <p>Sometimes the first line of a script looks like this:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="fu">setwd</span>(<span class="st">"/Users/njtierney/Desktop/analysis-2026"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This says:</p>
@@ -910,8 +963,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>There are a few patterns that make picking up a new project hard. I am guilty of all of these. I am not judging you if these are how you work now. What I am saying is there are some ways you can improve.</p>
 <p>You can see these patterns in the course exercises you downloaded earlier: <a href="https://github.com/njtierney/rbp-exercises" class="uri">https://github.com/njtierney/rbp-exercises</a></p>
 <p>We will quickly move through these now.</p>
-<section id="everything-in-one-folder" class="level3" data-number="1.7.1">
-<h3 data-number="1.7.1" class="anchored" data-anchor-id="everything-in-one-folder"><span class="header-section-number">1.7.1</span> Everything in one folder</h3>
+<section id="everything-in-one-folder" class="level3">
+<h3 class="anchored" data-anchor-id="everything-in-one-folder">Everything in one folder</h3>
 <pre><code>01-everything-in-one-folder/
 ├── Rplot.png
 ├── Screen Shot 2026-03-14 at 10.23.45 am.png
@@ -1066,8 +1119,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="no-clear-entry-point" class="level3" data-number="1.7.2">
-<h3 data-number="1.7.2" class="anchored" data-anchor-id="no-clear-entry-point"><span class="header-section-number">1.7.2</span> No clear entry point</h3>
+<section id="no-clear-entry-point" class="level3">
+<h3 class="anchored" data-anchor-id="no-clear-entry-point">No clear entry point</h3>
 <pre><code>02-no-clear-entry-point/
 ├── analysis.R
 ├── clean.R
@@ -1127,8 +1180,8 @@ showing the above file preview
 </div>
 </div>
 </section>
-<section id="file-names-encode-history-not-content" class="level3" data-number="1.7.3">
-<h3 data-number="1.7.3" class="anchored" data-anchor-id="file-names-encode-history-not-content"><span class="header-section-number">1.7.3</span> File names encode history, not content</h3>
+<section id="file-names-encode-history-not-content" class="level3">
+<h3 class="anchored" data-anchor-id="file-names-encode-history-not-content">File names encode history, not content</h3>
 <pre><code>04-names-encode-history/
 ├── analysis.R
 ├── analysis2.R
@@ -1176,8 +1229,8 @@ showing the above file preview
 </div>
 </div>
 </section>
-<section id="editing-raw-data-in-place" class="level3" data-number="1.7.4">
-<h3 data-number="1.7.4" class="anchored" data-anchor-id="editing-raw-data-in-place"><span class="header-section-number">1.7.4</span> Editing raw data in place</h3>
+<section id="editing-raw-data-in-place" class="level3">
+<h3 class="anchored" data-anchor-id="editing-raw-data-in-place">Editing raw data in place</h3>
 <!-- note - TODO - show a directory with .xlsx raw data -->
 <p>You might have some data provided for analysis and there might be instructions to go through by hand to fix typos, or add new data. You should not make hand edits to the file, as this changes the history and increases the chances of a non-repeatable change. You can make a critical error by accidentally hitting the wrong key. From experience, having accidentally sorted a single column in an excel sheet and not realising this, I essentially turned a meaningful data source into random noise.</p>
 <ul>
@@ -1209,8 +1262,8 @@ showing the above file preview
 <p>Every correction is now a line of code. You can read it, re-run it, and disagree with it in six months. The typo fix that used to be a keystroke nobody saw is now <code>mutate(species = if_else(species == "Adelei", "Adelie", species))</code>, sitting in a script with the raw file beside it.</p>
 <p>And it survives the thing that hand editing cannot: the data arriving again next year, slightly different. Re-run the script.</p>
 </section>
-<section id="outputs-mixed-in-with-inputs" class="level3" data-number="1.7.5">
-<h3 data-number="1.7.5" class="anchored" data-anchor-id="outputs-mixed-in-with-inputs"><span class="header-section-number">1.7.5</span> Outputs mixed in with inputs</h3>
+<section id="outputs-mixed-in-with-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="outputs-mixed-in-with-inputs">Outputs mixed in with inputs</h3>
 <pre><code>03-outputs-mixed-with-inputs/
 ├── 01-clean.R
 ├── 02-model.R

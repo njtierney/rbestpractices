@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Writing a reprex / getting unstuck – R Best Practices</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./appendix-designing-functions.html" rel="next">
+<link href="./writing-functions.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1815a5215514b86a9dbfb465bf846045.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./writing-a-reprex-getting-unstuck.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Best Practices</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/njtierney/rbestpractices" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./R-Best-Practices.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project-organisation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Project organisation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-style-and-readability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Code style and readability</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-readable-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Writing functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-a-reprex-getting-unstuck.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-designing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-anonymous-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Anonymous functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-speed-of-thought.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-pipes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">How `|&gt;` differs from `%&gt;%`</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-curly-braces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">What <code>{}</code> really does</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#what-is-a-reprex" id="toc-what-is-a-reprex" class="nav-link" data-scroll-target="#what-is-a-reprex"><span class="header-section-number">5.1</span> What is a reprex?</a></li>
+  <li><a href="#using-reprex" id="toc-using-reprex" class="nav-link" data-scroll-target="#using-reprex"><span class="header-section-number">5.2</span> Using {reprex}</a></li>
+  <li><a href="#a-reprex-isnt-only-for-when-things-break" id="toc-a-reprex-isnt-only-for-when-things-break" class="nav-link" data-scroll-target="#a-reprex-isnt-only-for-when-things-break"><span class="header-section-number">5.3</span> A reprex isn’t only for when things break</a></li>
+  <li><a href="#cutting-a-problem-down" id="toc-cutting-a-problem-down" class="nav-link" data-scroll-target="#cutting-a-problem-down"><span class="header-section-number">5.4</span> Cutting a problem down</a></li>
+  <li><a href="#sec-silent-bug" id="toc-sec-silent-bug" class="nav-link" data-scroll-target="#sec-silent-bug"><span class="header-section-number">5.5</span> A bug with no error</a>
+  <ul class="collapse">
+  <li><a href="#the-setup" id="toc-the-setup" class="nav-link" data-scroll-target="#the-setup">The setup</a></li>
+  <li><a href="#reducing-it" id="toc-reducing-it" class="nav-link" data-scroll-target="#reducing-it">Reducing it</a></li>
+  <li><a href="#the-reprex" id="toc-the-reprex" class="nav-link" data-scroll-target="#the-reprex">The reprex</a></li>
+  <li><a href="#fixing-it" id="toc-fixing-it" class="nav-link" data-scroll-target="#fixing-it">Fixing it</a></li>
+  </ul></li>
+  <li><a href="#some-known-error-patterns" id="toc-some-known-error-patterns" class="nav-link" data-scroll-target="#some-known-error-patterns"><span class="header-section-number">5.6</span> Some known error patterns</a>
+  <ul class="collapse">
+  <li><a href="#could-not-find-function" id="toc-could-not-find-function" class="nav-link" data-scroll-target="#could-not-find-function"><code>could not find function</code></a></li>
+  <li><a href="#there-is-no-package-called" id="toc-there-is-no-package-called" class="nav-link" data-scroll-target="#there-is-no-package-called"><code>there is no package called</code></a></li>
+  <li><a href="#object-x-not-found" id="toc-object-x-not-found" class="nav-link" data-scroll-target="#object-x-not-found"><code>object 'x' not found</code></a></li>
+  <li><a href="#object-of-type-closure-is-not-subsettable" id="toc-object-of-type-closure-is-not-subsettable" class="nav-link" data-scroll-target="#object-of-type-closure-is-not-subsettable"><code>object of type 'closure' is not subsettable</code></a></li>
+  <li><a href="#operator-is-invalid-for-atomic-vectors" id="toc-operator-is-invalid-for-atomic-vectors" class="nav-link" data-scroll-target="#operator-is-invalid-for-atomic-vectors"><code>$ operator is invalid for atomic vectors</code></a></li>
+  <li><a href="#cannot-open-file-...-no-such-file-or-directory" id="toc-cannot-open-file-...-no-such-file-or-directory" class="nav-link" data-scroll-target="#cannot-open-file-...-no-such-file-or-directory"><code>cannot open file ... : No such file or directory</code></a></li>
+  <li><a href="#unexpected-symbol-unexpected-unexpected-end-of-input" id="toc-unexpected-symbol-unexpected-unexpected-end-of-input" class="nav-link" data-scroll-target="#unexpected-symbol-unexpected-unexpected-end-of-input"><code>unexpected symbol</code>, <code>unexpected ')'</code>, <code>unexpected end of input</code></a></li>
+  <li><a href="#the-one-with-no-error-at-all" id="toc-the-one-with-no-error-at-all" class="nav-link" data-scroll-target="#the-one-with-no-error-at-all">The one with no error at all</a></li>
+  </ul></li>
+  <li><a href="#practical-tips-on-debugging" id="toc-practical-tips-on-debugging" class="nav-link" data-scroll-target="#practical-tips-on-debugging"><span class="header-section-number">5.7</span> Practical tips on debugging</a>
+  <ul class="collapse">
+  <li><a href="#keep-solving-vs-cleaning-up" id="toc-keep-solving-vs-cleaning-up" class="nav-link" data-scroll-target="#keep-solving-vs-cleaning-up">Keep solving vs cleaning up</a></li>
+  </ul></li>
+  <li>Links</li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/writing-a-reprex-getting-unstuck.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Everyone gets stuck. The skill isn’t avoiding it, it’s getting unstuck quickly, and being able to ask for help in a way that actually gets you an answer.</p>
+<p>This section is about the <strong>reprex</strong>, which is short for <strong>repr</strong>oducible <strong>ex</strong>ample. We start with the smallest one there is, use it to share code that works perfectly well, and then turn it on code that doesn’t.</p>
+<p>By learning to build a represx, you will will often solve the problem before you ask anybody else.</p>
+<section id="overview" class="level2 unnumbered overview">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
+<p><strong>Duration</strong> 45 minutes</p>
+<p><strong>Questions</strong></p>
+<ul>
+<li>What is a reprex, and why would I want one?</li>
+<li>Does something have to be broken before a reprex is useful?</li>
+<li>How do I cut a broken script down to something someone else can run, and why does that so often solve it?</li>
+<li>How do I find a bug that never errors?</li>
+<li>Which errors am I going to hit over and over, and what do they mean?</li>
+</ul>
+</section>
+<section id="what-is-a-reprex" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="what-is-a-reprex"><span class="header-section-number">5.1</span> What is a reprex?</h2>
+<p>A reprex is code, plus the output that code produced, in a form somebody else can run.</p>
+<p>That is the whole idea. Here is one:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">mean</span>(airquality<span class="sc">$</span>Ozone)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>Hmmm, how can the mean be NA?</p>
+<p>You can read what I ran, you can see what I got, and you can paste it into your own R session and get the same thing.</p>
+<p>Now think about what happens without that.</p>
+<p>You could send somebody just the code. But then they have to run it to see what you saw, and they have to guess which packages you had loaded.</p>
+<p>You could send a screenshot of your console instead. Now they can see the output, but they can’t run it, and they can’t copy a line out of it to try something.</p>
+<p>You could send both, by hand, every time. And now it’s on you to make sure the code and the output actually match.</p>
+<p>It gets worse with a plot. If the interesting thing is a chart, the code on its own doesn’t show it, and the picture on its own can’t be run.</p>
+<p>So what you want is both, together, and correct. Which is fiddly to do by hand, and is why the package exists.</p>
+</section>
+<section id="using-reprex" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="using-reprex"><span class="header-section-number">5.2</span> Using {reprex}</h2>
+<p>You can do all of that by hand. You make sure the environment is clean, the right packages are loaded, the code is formatted, and any images come out at a sensible size.</p>
+<p>If your problem is tightly defined that might take a couple of minutes.</p>
+<p>Other times it takes far longer. Say, when you’ve got a variable sitting in your environment that you’ve forgotten how you created, and didn’t realise was load-bearing. <em>OH GOD HOW DID I EVEN DO THIS.</em> Ahem.</p>
+<p>So, after some sensible swearing, you might ask:</p>
+<blockquote class="blockquote">
+<p>Surely there is an easy, reproducible way to make reproducible examples?</p>
+</blockquote>
+<p>There is: the <a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a> package, by Jenny Bryan.</p>
+<p>The workflow is four steps:</p>
+<ol type="1">
+<li>Copy your code to the clipboard.</li>
+<li>Run <code>reprex()</code> and wait a moment for it to execute.</li>
+<li><code>{reprex}</code> shows you an HTML preview of the code <em>and its output</em>.</li>
+<li>A markdown version is placed on your clipboard, ready to paste.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>reprex<span class="sc">::</span><span class="fu">reprex</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>By default the output is formatted for GitHub, which is also what you want for Slack, email, or pasting into a message to a colleague.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/reprex-fresh-session.png" class="img-fluid figure-img" style="width:100.0%" alt="Two panels side by side. On the left, your session: everything today has left lying around, listing a package loaded at nine in the morning, an object made an hour ago, and a working directory you set. An arrow labelled clipboard leads right to a second panel, a fresh R session, which has no packages, no objects, and just your code. Below both, a band showing what comes back: the code and the output it actually produced, as markdown on your clipboard."></p>
+<figcaption>None of the things holding your code up exist on the other side.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Why this actually works">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why this actually works
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>{reprex}</code> takes your copied code and runs <code>rmarkdown::render()</code> on it, <strong>in a fresh R session</strong>.</p>
+<p>That’s the whole trick. It means <code>{reprex}</code> will <strong>fail hard and fail early</strong> if your example isn’t reproducible.</p>
+<p>Try both of these. They work perfectly in your session, and neither survives a fresh one.</p>
+<p><strong>Forgot a <code>library()</code> call.</strong> Copy this and <code>reprex()</code> it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>penguins <span class="sc">|&gt;</span> <span class="fu">count</span>(species)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="co">#&gt; Error in count(penguins, species) : could not find function "count"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Obvious once you see it. Not obvious at all when you have had <code>{dplyr}</code> loaded since nine o’clock this morning.</p>
+<p><strong>Relying on something you made an hour ago.</strong> Make an object, then copy only the line that uses it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a>my_data <span class="ot">&lt;-</span> penguins[penguins<span class="sc">$</span>species <span class="sc">==</span> <span class="st">"Gentoo"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a>my_data <span class="sc">|&gt;</span> <span class="fu">count</span>(species)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a><span class="co">#&gt; Error: object 'my_data' not found</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Your session knows what <code>my_data</code> is. Nobody else’s does, and neither does the fresh one <code>{reprex}</code> starts.</p>
+<p>So when <code>reprex()</code> gives you a working example, you <em>know</em> it works. Not because you were careful, but because it was run somewhere your local mess doesn’t exist.</p>
+</div>
+</div>
+<p>And it handles plots. If your example makes a chart, the chart comes out the other side along with the code that made it, which is the bit that was hardest to do by hand.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Start as small as it goes.</p>
+<ol type="1">
+<li>Copy these three lines to your clipboard:</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="cn">NA</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol start="2" type="1">
+<li>Run <code>reprex::reprex()</code>.</li>
+<li>Look at the preview. Then paste what landed on your clipboard into a fresh R script, and check it runs.</li>
+</ol>
+<p>That’s a reprex. Everything else in this chapter is that, on harder code.</p>
+</div>
+</div>
+</section>
+<section id="a-reprex-isnt-only-for-when-things-break" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="a-reprex-isnt-only-for-when-things-break"><span class="header-section-number">5.3</span> A reprex isn’t only for when things break</h2>
+<p>Almost everything written about reprexes is about asking for help with a bug. That is how I first learned about them, and it left me with the idea that a reprex is a thing you make when something has gone wrong.</p>
+<p>It isn’t. A reprex is just a small, runnable piece of code with its output attached, and there are plenty of reasons to want one of those.</p>
+<p><strong>“Here’s how I’d do it.”</strong> Someone asks how to count the rows in each group. You could describe <code>count()</code>. It’s faster to show them:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>  <span class="fu">count</span>(species, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-label="6"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-label="7"></a><span class="co">#&gt;   species     n</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-label="9"></a><span class="co">#&gt; 1 Human      35</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-label="10"></a><span class="co">#&gt; 2 Droid       6</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-label="11"></a><span class="co">#&gt; 3 &lt;NA&gt;        4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>“Is there a nicer way to write this?”</strong> Nothing is broken. You just suspect there is a neater version, and a reprex is how you ask without making somebody clone your project.</p>
+<p><strong>“Look at this, it’s great.”</strong> I send these constantly. A function I have just found, a bit of syntax I did not know about. Code with its output is how you show somebody something works.</p>
+<p><strong>Notes to yourself.</strong> I keep a file of these. Six months later, the code and its output together tell me what I worked out, and I don’t have to run anything to remember.</p>
+<p>The nice thing about starting here is that there is no pressure. Nothing is wrong, so there is nothing to diagnose. You are only practising the workflow.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Find something in your own recent code that works, and that you would be happy to show somebody. Three or four lines.</li>
+<li><code>reprex()</code> it.</li>
+<li>Send it to the person next to you, and have them paste it into their R session. Does it run?</li>
+</ol>
+<p>If it doesn’t run on their machine, you have just learned something about your code that you did not know a minute ago.</p>
+</div>
+</div>
+</section>
+<section id="cutting-a-problem-down" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="cutting-a-problem-down"><span class="header-section-number">5.4</span> Cutting a problem down</h2>
+<p>Now the harder use, and the one reprexes are famous for.</p>
+<p>When you hit an error you cannot solve by tinkering, it is worth spending some time building a small example of the code that breaks.</p>
+<p>This takes practice. But the thing I really like is:</p>
+<p><strong>In the process of reducing the problem to its core, you’ll often solve it yourself.</strong></p>
+<p>It’s the same experience as describing a problem out loud to a colleague and arriving at the answer before they’ve said anything.</p>
+<p>So this isn’t only a way to ask for help. It’s a debugging technique that happens to produce something shareable.</p>
+<p>Let’s tear one down. Say we are summarising the <code>diamonds</code> data:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a>  <span class="fu">mutate</span>(<span class="at">price_per_carat =</span> price <span class="sc">/</span> carat) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-label="5"></a>  <span class="fu">group_by</span>(cut) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-label="6"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" aria-label="7"></a>    <span class="at">price_mean =</span> <span class="fu">mean</span>(price_per_carat),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-label="8"></a>    <span class="at">price_sd =</span> <span class="fu">sd</span>(price_per_carat),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-label="9"></a>    <span class="at">mean_color =</span> <span class="fu">mean</span>(color)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-label="10"></a>  )</span>
+<span id="cb9-11"><a href="#cb9-11" aria-label="11"></a><span class="co">#&gt; Warning: There were 5 warnings in `summarise()`.</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-label="12"></a><span class="co">#&gt; The first warning was:</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-label="13"></a><span class="co">#&gt; ℹ In argument: `mean_color = mean(color)`.</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-label="14"></a><span class="co">#&gt; ℹ In group 1: `cut = Fair`.</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-label="15"></a><span class="co">#&gt; Caused by warning in `mean.default()`:</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-label="16"></a><span class="co">#&gt; ! argument is not numeric or logical: returning NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The warning gives us a clue: it is something about <code>mean_color</code>. So try just that:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">mean_color =</span> <span class="fu">mean</span>(color))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a><span class="co">#&gt; Warning: There was 1 warning in `mutate()`.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a><span class="co">#&gt; ℹ In argument: `mean_color = mean(color)`.</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-label="5"></a><span class="co">#&gt; Caused by warning in `mean.default()`:</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-label="6"></a><span class="co">#&gt; ! argument is not numeric or logical: returning NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Same warning, and we’ve dropped <code>group_by()</code> and <code>summarise()</code> entirely. Strip it further:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="fu">mean</span>(diamonds<span class="sc">$</span>color)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a><span class="co">#&gt; Warning in mean.default(diamonds$color): argument is not numeric or</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a><span class="co">#&gt; logical: returning NA</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Still the same. We are now down to one line. So what is in <code>color</code>?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">head</span>(diamonds<span class="sc">$</span>color)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a><span class="co">#&gt; [1] E E E I J J</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a><span class="co">#&gt; Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ah. Does it make sense to take the mean of some letters? Of course not.</p>
+<p>Notice what happened. We never needed to ask anyone.</p>
+<p>Each step made the example smaller, and the smaller it got, the more obvious the problem became.</p>
+<p>That’s the technique.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/reprex-reduction.png" class="img-fluid figure-img" style="width:100.0%" alt="Four steps. An eight line pipeline warns that an argument is not numeric or logical. Dropping group_by and summarise gives the same warning from two lines. Dropping mutate gives the same warning from one line. Finally, looking at the column shows it is a factor, so taking its mean was never going to work. The answer arrived without anyone being asked."></p>
+<figcaption>Cutting the example down until the problem is obvious.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here are two more that go wrong. Cut each one down the way we just did, one line at a time, until you can say what the problem is.</p>
+<p><strong>One</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(species)) <span class="sc">|&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>  <span class="fu">summarise</span>(<span class="at">mean_hair =</span> <span class="fu">mean</span>(hair_color))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Two</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-label="3"></a>msleep <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-label="4"></a>  <span class="fu">group_by</span>(vore) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-label="5"></a>  <span class="fu">summarise</span>(<span class="at">mean_rem =</span> <span class="fu">mean</span>(sleep_rem))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For each one:</p>
+<ol type="1">
+<li>What is the smallest piece of code that still shows the problem?</li>
+<li>Look at the column. What is actually in it?</li>
+<li>Say the problem in one sentence.</li>
+</ol>
+<p>The second one is the more interesting of the two, and it is worth noticing why: R never complains at all.</p>
+<p>Then, once you have them cut down:</p>
+<ol start="4" type="1">
+<li><code>reprex()</code> your reduced version of each. Does the preview show the warning?</li>
+<li>Now break one on purpose. Delete the <code>library(tidyverse)</code> line from your clipboard and <code>reprex()</code> it again. What happens?</li>
+</ol>
+<p>Step 5 is worth doing. <code>{reprex}</code> runs your code in a fresh session, so it finds the thing you forgot before your colleague does.</p>
+</div>
+</div>
+</section>
+<section id="sec-silent-bug" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-silent-bug"><span class="header-section-number">5.5</span> A bug with no error</h2>
+<p>The <code>diamonds</code> example had a warning to follow. Most real bugs do not.</p>
+<p>So let’s do a harder one, on the script we have been working on all course.</p>
+<section id="the-setup" class="level3">
+<h3 class="anchored" data-anchor-id="the-setup">The setup</h3>
+<p>At the end of <a href="writing-functions.html" class="quarto-xref">Writing functions&nbsp;<span>4</span></a> we had <code>read_educated_population()</code>, which read a tidy spreadsheet.</p>
+<p>Here is where that spreadsheet actually came from. Somebody sent over a folder of CSVs, one per year.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-label="2"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-label="3"></a>education_2014 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/raw_education_2014.csv"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-label="4"></a>education_2015 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/raw_education_2015.csv"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-label="5"></a>education_2016 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/raw_education_2016.csv"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-label="6"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-label="7"></a>education <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(education_2014, education_2015, education_2016)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That runs without complaint, and gives you 216 rows across the three years.</p>
+<p>Now the summary we came for. What proportion of people are studying, by age group?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-label="4"></a><span class="co">#&gt; # A tibble: 27 x 2</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-label="5"></a><span class="co">#&gt;    age_group prop_mean</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-label="6"></a><span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-label="7"></a><span class="co">#&gt;  1 15---19       0.813</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-label="8"></a><span class="co">#&gt;  2 15--19      -15.8</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-label="9"></a><span class="co">#&gt;  3 15-19         0.811</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-label="10"></a><span class="co">#&gt;  4 20---24     -19.5</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-label="11"></a><span class="co">#&gt;  5 20--24      -10.6</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-label="12"></a><span class="co">#&gt;  6 20-24         0.406</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-label="13"></a><span class="co">#&gt;  7 25---29      -9.73</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-label="14"></a><span class="co">#&gt;  8 25--29      -14.0</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-label="15"></a><span class="co">#&gt;  9 25-29         0.212</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-label="16"></a><span class="co">#&gt; 10 30---34     -14.0</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-label="17"></a><span class="co">#&gt; # i 17 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Sit with that for a second, because there is a lot wrong and R said nothing at all.</p>
+<p>There are <strong>27 age groups</strong>. There should be nine. And a <em>proportion</em> has come out as -15.8.</p>
+</section>
+<section id="reducing-it" class="level3">
+<h3 class="anchored" data-anchor-id="reducing-it">Reducing it</h3>
+<p>Two things are wrong here, so find them one at a time, and start with the smaller of the two.</p>
+<p><strong>How many age groups are there really?</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a><span class="fu">n_distinct</span>(education<span class="sc">$</span>age_group)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-label="2"></a><span class="co">#&gt; [1] 27</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-label="3"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-label="4"></a><span class="fu">sort</span>(<span class="fu">unique</span>(education<span class="sc">$</span>age_group))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-label="5"></a><span class="co">#&gt;  [1] "15---19" "15--19"  "15-19"   "20---24" "20--24"  "20-24"   "25---29"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-label="6"></a><span class="co">#&gt;  [8] "25--29"  "25-29"   "30---34" "30--34"  "30-34"   "35---39" "35--39"</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-label="7"></a><span class="co">#&gt; [15] "35-39"   "40---44" "40--44"  "40-44"   "45---49" "45--49"  "45-49"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-label="8"></a><span class="co">#&gt; [22] "50---54" "50--54"  "50-54"   "55---74" "55--74"  "55-74"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>There it is. <code>15-19</code> and <code>15--19</code> and <code>15---19</code> are the same age group typed three different ways, and <code>group_by()</code> has no way of knowing that. Nine real groups, spread across 27 spellings.</p>
+<p><strong>Now the other one. Why is a proportion negative?</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="fu">summary</span>(education<span class="sc">$</span>prop_studying)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-label="2"></a><span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-label="3"></a><span class="co">#&gt; -99.00000   0.04563   0.09626  -9.43312   0.20003   0.90308</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A minimum of -99, in a column that can only sit between 0 and 1.</p>
+<p><code>-99</code> is a missing value code. Somebody, at some point, decided that missing should be written as -99 rather than left blank. <code>read_csv()</code> has no way of knowing that, so it read it as the number minus ninety-nine.</p>
+</section>
+<section id="the-reprex" class="level3">
+<h3 class="anchored" data-anchor-id="the-reprex">The reprex</h3>
+<p>We are now down to two lines of it. Here is the whole thing, self-contained, with no data files and no packages beyond one:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-label="2"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-label="3"></a>age_group <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"15-19"</span>, <span class="st">"15--19"</span>, <span class="st">"15---19"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-label="4"></a>prop_studying <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.81</span>, <span class="sc">-</span><span class="dv">99</span>, <span class="fl">0.84</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-label="5"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-label="6"></a><span class="fu">tibble</span>(age_group, prop_studying) <span class="sc">|&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-label="7"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-label="8"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-label="9"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-label="10"></a><span class="co">#&gt;   age_group prop_mean</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-label="11"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-label="12"></a><span class="co">#&gt; 1 15---19        0.84</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-label="13"></a><span class="co">#&gt; 2 15--19       -99</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-label="14"></a><span class="co">#&gt; 3 15-19          0.81</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Three rows of made up data, and both bugs are visible at once: one age group has become three, and a proportion is -99.</p>
+<p>Three files and 216 rows, down to four lines somebody can run on their own machine in a second. That is the reduction, done on something real.</p>
+</section>
+<section id="fixing-it" class="level3">
+<h3 class="anchored" data-anchor-id="fixing-it">Fixing it</h3>
+<p>Both fixes are one line, now that you can see what you are fixing.</p>
+<p>The separators collapse with a regular expression that matches a <em>run</em> of anything that is not a digit:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">str_replace_all</span>(age_group, <span class="st">"[^0-9]+"</span>, <span class="st">"_"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>And the missing code becomes an actual missing value. <a href="https://naniar.njtierney.com/"><code>{naniar}</code></a> does this, and knowing what I know about that package’s author, I would say it is a reasonable choice:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">prop_studying =</span> <span class="sc">-</span><span class="dv">99</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Put the two together, and the summary finally says something sensible:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">str_replace_all</span>(age_group, <span class="st">"[^0-9]+"</span>, <span class="st">"_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-label="3"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">prop_studying =</span> <span class="sc">-</span><span class="dv">99</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-label="4"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-label="5"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-label="6"></a><span class="co">#&gt; # A tibble: 9 x 2</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-label="7"></a><span class="co">#&gt;   age_group prop_mean</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-label="9"></a><span class="co">#&gt; 1 15_19        0.810</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-label="10"></a><span class="co">#&gt; 2 20_24        0.407</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-label="11"></a><span class="co">#&gt; 3 25_29        0.198</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-label="12"></a><span class="co">#&gt; 4 30_34        0.131</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-label="13"></a><span class="co">#&gt; 5 35_39        0.113</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-label="14"></a><span class="co">#&gt; 6 40_44        0.0898</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-label="15"></a><span class="co">#&gt; 7 45_49        0.0647</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-label="16"></a><span class="co">#&gt; 8 50_54        0.0530</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-label="17"></a><span class="co">#&gt; 9 55_74        0.0189</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Nine groups, and every proportion sitting between 0 and 1.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/silent-failure.png" class="img-fluid figure-img" style="width:100.0%" alt="Four steps in a row, each ticked as having run without error or warning: read three CSVs, bind them into one table, summarise by age group, then plot. Below the chain, two outcomes. Straight on to the chart gives 27 bars, a proportion of minus 15.8, and no idea. Looking at it first, with summary, count, n_distinct or vis_dat, finds both problems in about a second. The steps are ticked green because every one of them really did succeed."></p>
+<figcaption>Every box is green. That is what makes this one frightening.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="This is the failure mode to be afraid of">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>This is the failure mode to be afraid of
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nothing errored. Nothing warned. Every step ran.</p>
+<p>If you had gone straight from reading the files to a plot, you would have got a chart with 27 bars on it and probably assumed the data was just messier than you remembered. If you had gone to a model, you would have got coefficients.</p>
+<p>The reason this got caught is that somebody looked at the intermediate object before using it. I would take that habit over any tool in this course.</p>
+<p><code>summary()</code>, <code>count()</code>, <code>n_distinct()</code>, and <code>visdat::vis_dat()</code> all take about a second, and any one of them would have found this.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn: the other three years">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn: the other three years
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You now have a fix that works on 2014 to 2016. Here is the rest of the folder.</p>
+<p>The files live in the <a href="https://github.com/njtierney/ozed">ozed repo</a>, under <code>data/raw/</code>. There are six years in there, not three: 2014 to 2019.</p>
+<ol type="1">
+<li>Read in all six years, and run your fix over the lot.</li>
+<li>Run <code>summary()</code> and <code>n_distinct()</code> again. Is it clean?</li>
+<li>It is not. Work out what changed, and when. Looking at one year at a time is much faster than staring at all 480 rows.</li>
+<li>Rewrite the fix so it works on all six years.</li>
+<li>Where would you put that fix? In the script, or inside the function that reads the file? What is the argument for each?</li>
+</ol>
+<p>Question 3 is the real exercise here. Whoever sent these files did not send you one problem.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="The answer, once you have had a go">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The answer, once you have had a go
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>year</th>
+<th>age separators</th>
+<th>missing written as</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2014 to 2016</td>
+<td><code>-</code>, <code>--</code>, <code>---</code></td>
+<td><code>-99</code></td>
+</tr>
+<tr class="even">
+<td>2017</td>
+<td><code>;</code>, <code>:</code>, <code>::</code></td>
+<td><code>-1</code></td>
+</tr>
+<tr class="odd">
+<td>2018</td>
+<td><code>.</code>, <code>..</code></td>
+<td><code>9999</code></td>
+</tr>
+<tr class="even">
+<td>2019</td>
+<td><code>\|</code>, <code>\|\|</code></td>
+<td><code>Inf</code></td>
+</tr>
+</tbody>
+</table>
+<p>The convention changed between years. A fix written by looking at 2014 will quietly not work on 2018, and nothing will tell you.</p>
+<p>The separator fix survives it, because <code>[^0-9]+</code> never cared which character it was. The missing value fix does not, because <code>-99</code> is a specific number.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="some-known-error-patterns" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="some-known-error-patterns"><span class="header-section-number">5.6</span> Some known error patterns</h2>
+<p>Before you build a reprex, it is worth checking whether you have hit one of the handful of errors that everyone hits.</p>
+<p>R’s error messages have a reputation for being unhelpful. I think that reputation is only half deserved. A lot of them are perfectly clear once you have seen them once, and the trouble is that nobody sits you down and shows you the once.</p>
+<p>So here are the ones I see most, in roughly the order you will meet them.</p>
+<section id="could-not-find-function" class="level3">
+<h3 class="anchored" data-anchor-id="could-not-find-function"><code>could not find function</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a><span class="co">#&gt; Error in select(starwars, name, height) : could not find function "select"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is the most common error in R, and it almost always means the same thing:</p>
+<p><strong>You have not run <code>library()</code> yet.</strong></p>
+<p>The function exists. It is sitting on your computer right now. R just has not been told to go and look in that package.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It usually happens in one of three ways:</p>
+<ol type="1">
+<li>You restarted R, and forgot the <code>library()</code> calls are gone with the session.</li>
+<li>You are running the script from the middle, and the <code>library()</code> calls are at the top.</li>
+<li>You sent the code to someone else, and they don’t have the same packages attached that you do.</li>
+</ol>
+<p>That third one is why <code>{reprex}</code> runs your code in a fresh session. It catches this before your colleague does.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="A habit that removes this one entirely">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A habit that removes this one entirely
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Restart R and run your script from the top, often. <code>Cmd / Ctrl + Shift + F10</code> restarts R in both RStudio and Positron.</p>
+<p>If it runs from a clean session, it will run on someone else’s machine. If it only runs from <em>your</em> session, you have a dependency on something you cannot see, and you would much rather find that now than in a fortnight.</p>
+</div>
+</div>
+</section>
+<section id="there-is-no-package-called" class="level3">
+<h3 class="anchored" data-anchor-id="there-is-no-package-called"><code>there is no package called</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-label="2"></a><span class="co">#&gt; Error in library(dplyr) : there is no package called 'dplyr'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Different error, and it is easy to confuse with the last one.</p>
+<p>That one meant “installed, but not attached”. This one means <strong>not installed</strong>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The way to tell them apart: <code>could not find function</code> complains about a <em>function</em>, and <code>there is no package called</code> complains about a <em>package</em>.</p>
+</section>
+<section id="object-x-not-found" class="level3">
+<h3 class="anchored" data-anchor-id="object-x-not-found"><code>object 'x' not found</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="fu">mean</span>(penguin_data<span class="sc">$</span>body_mass_g)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-label="2"></a><span class="co">#&gt; Error: object 'penguin_data' not found</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>R does not know about a thing by that name. Almost always one of:</p>
+<ul>
+<li>A typo. <code>penguin_data</code> and <code>penguins_data</code> are different names.</li>
+<li>You have not run the line that creates it yet.</li>
+<li>You restarted R, and it was only ever in your environment, never in the script.</li>
+</ul>
+<p>The last one is worth dwelling on, because it is the reason for the blank slate settings back in <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>. If your script only works because of an object you made three days ago and never wrote down, your script does not work.</p>
+</section>
+<section id="object-of-type-closure-is-not-subsettable" class="level3">
+<h3 class="anchored" data-anchor-id="object-of-type-closure-is-not-subsettable"><code>object of type 'closure' is not subsettable</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-label="1"></a>mean<span class="sc">$</span>x</span>
+<span id="cb28-2"><a href="#cb28-2" aria-label="2"></a><span class="co">#&gt; Error in mean$x : object of type 'closure' is not subsettable</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This one is famous for being baffling, to the point that Jenny Bryan named <a href="https://www.youtube.com/watch?v=vgYS-F8opgE">an entire keynote</a> after it.</p>
+<p>Translated: <strong>a closure is a function, and you tried to pull a column out of one.</strong></p>
+<p>Nearly always you have a name collision with a function that already exists. Someone writes <code>df &lt;- data.frame(...)</code>, then restarts R, then runs <code>df$x</code> before the line that makes <code>df</code>. There is a <code>df()</code> function in <code>{stats}</code>, so R finds <em>that</em>, and tells you you cannot subset it.</p>
+<p>The fix is the fix for the error above: run the line that makes your object. The lesson is not to name your data after a function.</p>
+</section>
+<section id="operator-is-invalid-for-atomic-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="operator-is-invalid-for-atomic-vectors"><code>$ operator is invalid for atomic vectors</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-label="1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)<span class="sc">$</span>a</span>
+<span id="cb29-2"><a href="#cb29-2" aria-label="2"></a><span class="co">#&gt; Error in c(1, 2, 3)$a : $ operator is invalid for atomic vectors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You used <code>$</code> on something that has no columns. A plain vector has no names to reach for, so there is nothing for <code>$</code> to do.</p>
+<p>Usually this means the thing you have is not the thing you thought you had. Check with <code>class()</code> before you check anything else.</p>
+</section>
+<section id="cannot-open-file-...-no-such-file-or-directory" class="level3">
+<h3 class="anchored" data-anchor-id="cannot-open-file-...-no-such-file-or-directory"><code>cannot open file ... : No such file or directory</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a><span class="fu">read.csv</span>(<span class="st">"data/penguins.csv"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-label="2"></a><span class="co">#&gt; Error in file(file, "rt") : cannot open file 'data/penguins.csv': No such file or directory</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-label="3"></a><span class="co">#&gt; In addition: Warning message: cannot open file 'data/penguins.csv': No such file or directory</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The file is not where you said it was, <em>relative to where R currently is</em>.</p>
+<p>Two questions, in this order:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-label="1"></a><span class="fu">getwd</span>()          <span class="co"># where does R think it is?</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-label="2"></a>fs<span class="sc">::</span><span class="fu">dir_ls</span>()     <span class="co"># what can it actually see from there?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Nine times in ten the answer is that your working directory is not the project root, which is the entire argument for projects and <code>here()</code> in <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>.</p>
+</section>
+<section id="unexpected-symbol-unexpected-unexpected-end-of-input" class="level3">
+<h3 class="anchored" data-anchor-id="unexpected-symbol-unexpected-unexpected-end-of-input"><code>unexpected symbol</code>, <code>unexpected ')'</code>, <code>unexpected end of input</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-label="2"></a><span class="co">#&gt; Error in parse(text = ...) : &lt;text&gt;:2:0: unexpected end of input</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-label="3"></a><span class="co">#&gt; 1: mean(c(1,2)</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-label="4"></a><span class="co">#&gt;    ^</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These are the ones where R could not even read your code, let alone run it. A bracket, a quote or a comma is missing.</p>
+<p>The useful trick is that <strong>the caret points at where R gave up, not at where you went wrong</strong>. The mistake is usually a line or two <em>above</em> the mark.</p>
+<p>Two things that make these mostly go away:</p>
+<ul>
+<li>Turn on rainbow parentheses, which we set up in <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>. A missing bracket becomes a colour you can see.</li>
+<li>Run <code>air format .</code>. A formatter cannot format code it cannot parse, so it will land you on the broken line straight away.</li>
+</ul>
+</section>
+<section id="the-one-with-no-error-at-all" class="level3">
+<h3 class="anchored" data-anchor-id="the-one-with-no-error-at-all">The one with no error at all</h3>
+<p>The worst pattern in this list produces no message.</p>
+<p>Two attached packages both export a function called <code>lag()</code>, R hands you the one from whichever package you attached last, and you get a column of plausible looking numbers that are wrong.</p>
+<p>That one gets a section of its own in <a href="./writing-readable-code.html#sec-conflicted">When two packages collide</a>, along with the one-line fix.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Restart R, then run the second half of a script you are working on. Which of the errors above did you get first?</li>
+<li>Reading the message alone, could you say which of the two “missing” errors it is: not installed, or not attached?</li>
+<li>Fix it by adding to the top of the script rather than by typing into the console. What is the difference between those two fixes?</li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="practical-tips-on-debugging" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="practical-tips-on-debugging"><span class="header-section-number">5.7</span> Practical tips on debugging</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>TODO: exercise for this section.</li>
+</ol>
+</div>
+</div>
+<section id="keep-solving-vs-cleaning-up" class="level3">
+<h3 class="anchored" data-anchor-id="keep-solving-vs-cleaning-up">Keep solving vs cleaning up</h3>
+<div class="callout callout-style-default callout-tip callout-titled" title="Read more">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Read more
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Parts of this chapter are adapted from my blog posts <a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a> and <a href="https://www.njtierney.com/posts/2019-01-11-magic-reprex/">Magic reprex</a>, the latter of which has gifs of the whole workflow in action.</p>
+</div>
+</div>
+
+
+</section>
+</section>
+<section class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
+<ul>
+<li><a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a></li>
+<li><a href="https://naniar.njtierney.com/"><code>{naniar}</code></a></li>
+<li><a href="https://github.com/njtierney/ozed">ozed repo</a></li>
+<li><a href="https://www.youtube.com/watch?v=vgYS-F8opgE">an entire keynote</a></li>
+<li><a href="./writing-readable-code.html#sec-conflicted">When two packages collide</a></li>
+<li><a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a></li>
+<li><a href="https://www.njtierney.com/posts/2019-01-11-magic-reprex/">Magic reprex</a></li>
+</ul>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/r-best-practices\.njtierney\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./writing-functions.html" class="pagination-link" aria-label="Writing functions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Writing functions</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./appendix-designing-functions.html" class="pagination-link" aria-label="Designing functions">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, Nicholas Tierney</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/writing-a-reprex-getting-unstuck.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

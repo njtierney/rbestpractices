@@ -2,26 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r-best-practices.njtierney.com/index.html</loc>
-    <lastmod>2026-08-03T23:57:03.724Z</lastmod>
+    <lastmod>2026-08-04T08:36:33.829Z</lastmod>
   </url>
   <url>
     <loc>https://r-best-practices.njtierney.com/setup.html</loc>
-    <lastmod>2026-08-03T23:57:03.725Z</lastmod>
+    <lastmod>2026-08-04T08:36:33.830Z</lastmod>
   </url>
   <url>
     <loc>https://r-best-practices.njtierney.com/project-organisation.html</loc>
-    <lastmod>2026-08-03T23:57:03.725Z</lastmod>
+    <lastmod>2026-08-04T08:36:33.830Z</lastmod>
   </url>
   <url>
     <loc>https://r-best-practices.njtierney.com/code-style-and-readability.html</loc>
-    <lastmod>2026-08-03T23:57:03.678Z</lastmod>
+    <lastmod>2026-08-04T08:36:33.779Z</lastmod>
   </url>
   <url>
     <loc>https://r-best-practices.njtierney.com/writing-readable-code.html</loc>
-    <lastmod>2026-08-03T23:57:03.725Z</lastmod>
+    <lastmod>2026-08-04T08:36:33.830Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/writing-functions.html</loc>
+    <lastmod>2026-08-04T08:36:33.830Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/writing-a-reprex-getting-unstuck.html</loc>
+    <lastmod>2026-08-04T08:36:33.830Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/appendix-designing-functions.html</loc>
+    <lastmod>2026-08-04T08:36:33.779Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/appendix-anonymous-functions.html</loc>
+    <lastmod>2026-08-04T08:36:33.779Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/appendix-speed-of-thought.html</loc>
+    <lastmod>2026-08-04T08:36:33.779Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/appendix-pipes.html</loc>
+    <lastmod>2026-08-04T08:36:33.779Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-best-practices.njtierney.com/appendix-curly-braces.html</loc>
+    <lastmod>2026-08-04T08:36:33.779Z</lastmod>
   </url>
   <url>
     <loc>https://r-best-practices.njtierney.com/R-Best-Practices.pdf</loc>
-    <lastmod>2026-08-03T23:59:50.072Z</lastmod>
+    <lastmod>2026-08-04T08:40:42.313Z</lastmod>
   </url>
 </urlset>

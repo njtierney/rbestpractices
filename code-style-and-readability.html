@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-b45b7b0fa9169e986df15f1ef60a279c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-cd562747a821bcd71e1fae8341a609dc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1815a5215514b86a9dbfb465bf846045.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -182,6 +182,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Writing readable code</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Writing functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./writing-a-reprex-getting-unstuck.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-designing-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-anonymous-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Anonymous functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-speed-of-thought.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Working closer to the speed of thought</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-pipes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">How `|&gt;` differs from `%&gt;%`</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-curly-braces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">What <code>{}</code> really does</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -195,33 +248,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#reading-things-that-are-hard-to-read-is-hard" id="toc-reading-things-that-are-hard-to-read-is-hard" class="nav-link" data-scroll-target="#reading-things-that-are-hard-to-read-is-hard"><span class="header-section-number">2.1</span> Reading things that are hard to read is hard</a>
   <ul class="collapse">
-  <li><a href="#cpu-cycles-vs-mental-cycles" id="toc-cpu-cycles-vs-mental-cycles" class="nav-link" data-scroll-target="#cpu-cycles-vs-mental-cycles"><span class="header-section-number">2.1.1</span> CPU cycles vs mental cycles</a></li>
-  <li><a href="#both-of-those-are-wrong" id="toc-both-of-those-are-wrong" class="nav-link" data-scroll-target="#both-of-those-are-wrong"><span class="header-section-number">2.1.2</span> Both of those are wrong</a></li>
+  <li><a href="#cpu-cycles-vs-mental-cycles" id="toc-cpu-cycles-vs-mental-cycles" class="nav-link" data-scroll-target="#cpu-cycles-vs-mental-cycles">CPU cycles vs mental cycles</a></li>
+  <li><a href="#both-of-those-are-wrong" id="toc-both-of-those-are-wrong" class="nav-link" data-scroll-target="#both-of-those-are-wrong">Both of those are wrong</a></li>
   </ul></li>
   <li><a href="#style-is-like-grammar" id="toc-style-is-like-grammar" class="nav-link" data-scroll-target="#style-is-like-grammar"><span class="header-section-number">2.2</span> Style is like grammar</a>
   <ul class="collapse">
-  <li><a href="#style-layout-naming-correctness" id="toc-style-layout-naming-correctness" class="nav-link" data-scroll-target="#style-layout-naming-correctness"><span class="header-section-number">2.2.1</span> Style: layout, naming, correctness</a></li>
+  <li><a href="#style-layout-naming-correctness" id="toc-style-layout-naming-correctness" class="nav-link" data-scroll-target="#style-layout-naming-correctness">Style: layout, naming, correctness</a></li>
   </ul></li>
   <li><a href="#layout" id="toc-layout" class="nav-link" data-scroll-target="#layout"><span class="header-section-number">2.3</span> Layout</a>
   <ul class="collapse">
-  <li><a href="#the-one-line-special" id="toc-the-one-line-special" class="nav-link" data-scroll-target="#the-one-line-special"><span class="header-section-number">2.3.1</span> The one line special</a></li>
+  <li><a href="#the-one-line-special" id="toc-the-one-line-special" class="nav-link" data-scroll-target="#the-one-line-special">The one line special</a></li>
   </ul></li>
   <li><a href="#naming" id="toc-naming" class="nav-link" data-scroll-target="#naming"><span class="header-section-number">2.4</span> Naming</a></li>
   <li><a href="#read-a-style-guide-once" id="toc-read-a-style-guide-once" class="nav-link" data-scroll-target="#read-a-style-guide-once"><span class="header-section-number">2.5</span> Read a style guide, once</a></li>
   <li><a href="#do-i-have-to-do-all-this-by-hand" id="toc-do-i-have-to-do-all-this-by-hand" class="nav-link" data-scroll-target="#do-i-have-to-do-all-this-by-hand"><span class="header-section-number">2.6</span> Do I have to do all this by hand?</a></li>
   <li><a href="#using-the-air-formatter" id="toc-using-the-air-formatter" class="nav-link" data-scroll-target="#using-the-air-formatter"><span class="header-section-number">2.7</span> Using the {air} formatter</a>
   <ul class="collapse">
-  <li><a href="#checking-air-is-installed" id="toc-checking-air-is-installed" class="nav-link" data-scroll-target="#checking-air-is-installed"><span class="header-section-number">2.7.1</span> Checking air is installed</a></li>
-  <li><a href="#if-you-cant-install-air-use-styler" id="toc-if-you-cant-install-air-use-styler" class="nav-link" data-scroll-target="#if-you-cant-install-air-use-styler"><span class="header-section-number">2.7.2</span> If you can’t install air, use {styler}</a></li>
+  <li><a href="#checking-air-is-installed" id="toc-checking-air-is-installed" class="nav-link" data-scroll-target="#checking-air-is-installed">Checking air is installed</a></li>
+  <li><a href="#if-you-cant-install-air-use-styler" id="toc-if-you-cant-install-air-use-styler" class="nav-link" data-scroll-target="#if-you-cant-install-air-use-styler">If you can’t install air, use {styler}</a></li>
   </ul></li>
   <li><a href="#format-on-save-aka-magic" id="toc-format-on-save-aka-magic" class="nav-link" data-scroll-target="#format-on-save-aka-magic"><span class="header-section-number">2.8</span> Format on save (aka magic)</a>
   <ul class="collapse">
-  <li><a href="#formatting-a-file-or-a-whole-project" id="toc-formatting-a-file-or-a-whole-project" class="nav-link" data-scroll-target="#formatting-a-file-or-a-whole-project"><span class="header-section-number">2.8.1</span> Formatting a file, or a whole project</a></li>
+  <li><a href="#formatting-a-file-or-a-whole-project" id="toc-formatting-a-file-or-a-whole-project" class="nav-link" data-scroll-target="#formatting-a-file-or-a-whole-project">Formatting a file, or a whole project</a></li>
   </ul></li>
   <li><a href="#using-linters" id="toc-using-linters" class="nav-link" data-scroll-target="#using-linters"><span class="header-section-number">2.9</span> Using linters</a>
   <ul class="collapse">
-  <li><a href="#jarl" id="toc-jarl" class="nav-link" data-scroll-target="#jarl"><span class="header-section-number">2.9.1</span> jarl</a></li>
-  <li><a href="#if-you-cant-install-jarl-use-flir" id="toc-if-you-cant-install-jarl-use-flir" class="nav-link" data-scroll-target="#if-you-cant-install-jarl-use-flir"><span class="header-section-number">2.9.2</span> If you can’t install jarl, use {flir}</a></li>
+  <li><a href="#jarl" id="toc-jarl" class="nav-link" data-scroll-target="#jarl">jarl</a></li>
+  <li><a href="#if-you-cant-install-jarl-use-flir" id="toc-if-you-cant-install-jarl-use-flir" class="nav-link" data-scroll-target="#if-you-cant-install-jarl-use-flir">If you can’t install jarl, use {flir}</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li>Links</li>
@@ -329,8 +382,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Re-reading the sentence, it sounds backwards.</li>
 </ul>
 <p>Our energy and our attention are finite resources, and if we spend them on these smaller things, then we will spend less energy on the goal: understanding the meaning.</p>
-<section id="cpu-cycles-vs-mental-cycles" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="cpu-cycles-vs-mental-cycles"><span class="header-section-number">2.1.1</span> CPU cycles vs mental cycles</h3>
+<section id="cpu-cycles-vs-mental-cycles" class="level3">
+<h3 class="anchored" data-anchor-id="cpu-cycles-vs-mental-cycles">CPU cycles vs mental cycles</h3>
 <p>A computer has CPU cycles, and we spend real effort saving them - avoiding a copy of a big object, shaving milliseconds off something that runs a thousand times.</p>
 <p>You have <strong>mental cycles</strong> too, and yours are far more expensive.</p>
 <p>So: terse code saves the machine a tenth of a second, and then you spend an extra minute reading it every time you come back. Nothing got faster. The work moved off the machine, which has cycles to spare, and onto you, who does not.</p>
@@ -395,8 +448,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>But you care about these things - every stray space, and every inconsistent name is one more small correction you make before you can get at what the code is trying to do.</p>
 <p>You are spending your mental cycles on this problem. It would be nice if you didn’t have to do that.</p>
 </section>
-<section id="both-of-those-are-wrong" class="level3" data-number="2.1.2">
-<h3 data-number="2.1.2" class="anchored" data-anchor-id="both-of-those-are-wrong"><span class="header-section-number">2.1.2</span> Both of those are wrong</h3>
+<section id="both-of-those-are-wrong" class="level3">
+<h3 class="anchored" data-anchor-id="both-of-those-are-wrong">Both of those are wrong</h3>
 <p>Let’s look closely at that last column. Every diet is above the overall mean. Weird? This happens because the overall mean is taken from <code>ChickWeight</code> <strong>before</strong> the filter. It is the average weight across every day of the study - day 0 chicks included, when they weighed about 40 grams. Every day 21 chick clears that easily.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="fu">mean</span>(ChickWeight<span class="sc">$</span>weight) <span class="co"># every day</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -421,8 +474,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.</p>
 </blockquote>
-<section id="style-layout-naming-correctness" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="style-layout-naming-correctness"><span class="header-section-number">2.2.1</span> Style: layout, naming, correctness</h3>
+<section id="style-layout-naming-correctness" class="level3">
+<h3 class="anchored" data-anchor-id="style-layout-naming-correctness">Style: layout, naming, correctness</h3>
 <p>It helps to split “style” into two parts, because they need very different things from you.</p>
 <p><strong>Layout.</strong> Where the spaces go, where the line breaks go, how deep the indentation is, how a long function call gets split across lines.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="co"># layout</span></span>
@@ -616,8 +669,8 @@ Levels: high low other</code></pre>
 </ol>
 </div>
 </div>
-<section id="the-one-line-special" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="the-one-line-special"><span class="header-section-number">2.3.1</span> The one line special</h3>
+<section id="the-one-line-special" class="level3">
+<h3 class="anchored" data-anchor-id="the-one-line-special">The one line special</h3>
 <p>I once saw someone writing code where the goal, as far as I could tell, was to have as few lines as possible.</p>
 <p>Not fewer <em>steps</em>. Fewer <em>lines</em>.</p>
 <p>It was an entire analysis. Read the data in, reshape it, fit a model, draw a plot, save it. Four lines.</p>
@@ -770,8 +823,8 @@ Levels: high low other</code></pre>
 <h2 data-number="2.7" class="anchored" data-anchor-id="using-the-air-formatter"><span class="header-section-number">2.7</span> Using the {air} formatter</h2>
 <p><a href="https://posit-dev.github.io/air/">Air</a> is an R formatter from Posit. You point it at your code, and it lays it out properly. It is basically magic.</p>
 <p>Once you have it wired into your editor, you stop thinking about layout. You type whatever comes out of your head, hit save, and it comes out tidy. You don’t need to spend another moment going over your code tweaking spaces.</p>
-<section id="checking-air-is-installed" class="level3" data-number="2.7.1">
-<h3 data-number="2.7.1" class="anchored" data-anchor-id="checking-air-is-installed"><span class="header-section-number">2.7.1</span> Checking air is installed</h3>
+<section id="checking-air-is-installed" class="level3">
+<h3 class="anchored" data-anchor-id="checking-air-is-installed">Checking air is installed</h3>
 <p>You installed air in the setup chapter - <a href="./setup.html#sec-code-formatters">Code formatters</a>. We just need to check it is there, and find out where it lives.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn: check air is installed">
 <div class="callout-header d-flex align-content-center">
@@ -793,8 +846,8 @@ Levels: high low other</code></pre>
 </div>
 </div>
 </section>
-<section id="if-you-cant-install-air-use-styler" class="level3" data-number="2.7.2">
-<h3 data-number="2.7.2" class="anchored" data-anchor-id="if-you-cant-install-air-use-styler"><span class="header-section-number">2.7.2</span> If you can’t install air, use {styler}</h3>
+<section id="if-you-cant-install-air-use-styler" class="level3">
+<h3 class="anchored" data-anchor-id="if-you-cant-install-air-use-styler">If you can’t install air, use {styler}</h3>
 <p>If you can’t install {air} because of network issues, use <a href="https://styler.r-lib.org/"><code>{styler}</code></a>. This is an R package that pre dates {air}. Install it with:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"styler"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>It follows the same tidyverse style guide air does, so the output is very close.</p>
@@ -881,8 +934,8 @@ Levels: high low other</code></pre>
 <p>I want you to do it repeatedly, because you don’t have to tidy your own code, and that’s awesome.</p>
 </div>
 </div>
-<section id="formatting-a-file-or-a-whole-project" class="level3" data-number="2.8.1">
-<h3 data-number="2.8.1" class="anchored" data-anchor-id="formatting-a-file-or-a-whole-project"><span class="header-section-number">2.8.1</span> Formatting a file, or a whole project</h3>
+<section id="formatting-a-file-or-a-whole-project" class="level3">
+<h3 class="anchored" data-anchor-id="formatting-a-file-or-a-whole-project">Formatting a file, or a whole project</h3>
 <p>You don’t need format on save, or even an editor. Both tools will format one file, or everything at once.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">air</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">styler</a></li></ul>
@@ -987,8 +1040,8 @@ Levels: high low other</code></pre>
 </div>
 </div>
 </div>
-<section id="jarl" class="level3" data-number="2.9.1">
-<h3 data-number="2.9.1" class="anchored" data-anchor-id="jarl"><span class="header-section-number">2.9.1</span> jarl</h3>
+<section id="jarl" class="level3">
+<h3 class="anchored" data-anchor-id="jarl">jarl</h3>
 <p><a href="https://jarl.etiennebacher.com/">Jarl</a>, which stands for Just Another R Linter, is a fast linter by <a href="https://www.etiennebacher.com/">Etienne Bacher</a>. It is built on top of Air, which is why the two feel like the same tool.</p>
 <p>Here is a script of the kind most of us have written. Nothing exotic. Read some data in, flag a few things, print a message.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-label="1"></a>penguins <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/penguins.csv"</span>)</span>
@@ -1146,8 +1199,8 @@ warning: redundant_equals
 </div>
 </div>
 </section>
-<section id="if-you-cant-install-jarl-use-flir" class="level3" data-number="2.9.2">
-<h3 data-number="2.9.2" class="anchored" data-anchor-id="if-you-cant-install-jarl-use-flir"><span class="header-section-number">2.9.2</span> If you can’t install jarl, use {flir}</h3>
+<section id="if-you-cant-install-jarl-use-flir" class="level3">
+<h3 class="anchored" data-anchor-id="if-you-cant-install-jarl-use-flir">If you can’t install jarl, use {flir}</h3>
 <p>Same story as air. Jarl is a command line tool, so the install can go wrong in all the same ways.</p>
 <p>Your backup is <a href="https://flir.etiennebacher.com/"><code>{flir}</code></a>, which is an ordinary R package:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"flir"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
