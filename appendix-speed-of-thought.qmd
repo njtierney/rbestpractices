@@ -1,0 +1,173 @@
+# Working closer to the speed of thought {#sec-speed-of-thought}
+
+> "The tools we use have a profound (and devious!) influence on our thinking habits, and therefore on our thinking abilities."
+>
+> -- Edsger W. Dijkstra, [How do we tell truths that might hurt?](https://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD498.html)
+
+The rest of this book is about making code readable once it is written. This appendix is about how it gets written in the first place, and it is the one thing here you can start on today.
+
+None of it is required to write good R. But tools that let you work with less resistance are good, and typing is the one nobody teaches you.
+
+::: {.overview}
+
+## Overview {.unnumbered}
+
+**Duration** 15 minutes, or a few minutes a day for a couple of months
+
+**Questions**
+
+- Why would typing speed matter for writing code?
+- Which keyboard shortcuts are actually worth learning?
+- What is an RStudio addin, and which ones earn their keyboard shortcut?
+
+:::
+
+## Typing, and the speed of thought
+
+Here's the jam: **if you can type faster, you operate closer to the speed of thought.** It's not really about working faster. It's about being able to clearly express what's in your head. And when you can do that, you put yourself in a good position to enter the [flow state](https://en.wikipedia.org/wiki/Flow_(psychology)), being in the zone, completely absorbed, where things feel easy and make sense.
+
+When you type quickly and accurately, you aren't making the small stumbling mistakes that pull you out of that state.
+
+Keyboard shortcuts do the same job. More of what's in your head gets onto the screen without friction.
+
+I don't think being a fast typist is **necessary** to be a better programmer. But tools that let you work with less resistance are good.
+
+I once switched to a new keyboard and felt like I was walking around with ankle weights and a large unwieldy backpack. I simply couldn't get what was in my head onto the screen.
+
+So I spent a couple of months working on typing every day. It made my typing faster and more accurate, which made my coding faster. I ended up ditching the keyboard and keeping the skill.
+
+Two things worth knowing:
+
+- **Accuracy first.** There's not much benefit in typing the wrong and unintelligible words very quickly. [keybr](https://www.keybr.com/) is good for this, and I have heard good things about [monkeytype](https://monkeytype.com/).
+- **You don't need a new keyboard.** I've spent a lot of time and money looking for a good one and I'm still not there. My favourite is still an old wireless Mac keyboard. Practising is a better use of your time than shopping. But if you want the keyboard, get the keyboard.
+
+## Shortcuts worth learning first
+
+![Sourced from [xkcd 2150](https://xkcd.com/2150/)](https://imgs.xkcd.com/comics/xkeyboarcd.png){fig-alt="An xkcd comic showing a keyboard where the vowel keys have LCD displays." title="The key caps use LCD displays for all the vowels, so they can automatically adjust over the years to reflect ongoing vowel shifts while allowing you to keep typing phonetically."}
+
+You already use keyboard shortcuts every day without thinking about them. Saving with `Cmd / Ctrl + S`, or undoing with `Cmd / Ctrl + Z`.
+
+So this is not a new skill. It's the same skill, pointed at the things you do most often in R.
+
+These are the ones that come up repeatedly in this course:
+
+- `Cmd / Ctrl + Enter` - run the current line
+- `Cmd / Ctrl + Shift + Enter` - run the whole script or chunk
+- `Cmd / Ctrl + Shift + F10` - restart R. We will use this a lot
+- `Cmd / Ctrl + S` - save, and with air set up, reformat
+- `Cmd / Ctrl + Shift + C` - comment or uncomment the current line
+- `Cmd / Ctrl` + click on a function - jump to where it is defined
+- `Ctrl` + `.` - go to a file or function by name
+- `Alt / Option + Shift + J` - jump to a section of the current file
+- `Cmd / Ctrl + Shift + F` - find in files, across a whole directory
+
+::: {.callout-caution title="What about `Cmd / Ctrl + Shift + A`?"}
+
+That's RStudio's own "reformat section", and it's what people reached for before air existed.
+
+You can stop using it. Air does a better job, does it to the whole file, and does it on save without you asking.
+
+:::
+
+::: {.callout-tip title="More shortcuts, once those are automatic" collapse="true"}
+
+**Moving around**
+
+- `Alt + Left / Right` - move the cursor one word at a time. Add `Shift` to select
+- `Cmd / Ctrl + Left / Right` - jump to the start or end of the line
+- `Alt + Up / Down` - move the current line up or down
+- `Cmd / Ctrl + Alt + Up / Down` - copy the current line up or down
+- `Ctrl + Alt + Up / Down` - multiple cursors
+- `Cmd / Ctrl + D` - delete the current line
+
+Being able to move by word, or jump to the end of a line, matters more than it sounds. You stop leaning on the arrow key to get where you're going.
+
+**Elsewhere on your machine**
+
+- `Cmd / Ctrl + Z`, then `Cmd / Ctrl + Shift + Z` - undo, then undo the undo
+- `Cmd / Ctrl + Tab` - change application
+- `Cmd + Space` - Spotlight on macOS
+- `Cmd / Ctrl + F` - search for a word. Works in nearly everything: PDFs, browsers, code
+- `Cmd / Ctrl + T` / `+ W` / `+ Shift + T` - new browser tab, close tab, reopen the tab you just closed
+
+**Finding and setting your own**
+
+In RStudio, `Alt + Shift + K` brings up a shortcut menu (`Esc` to dismiss), and Tools → Keyboard Shortcuts Help lets you see and change all of them.
+
+Some packages add their own commands, which you can then bind to a key. Those are addins, and they get [a section of their own below](#sec-addins).
+
+**Where to look things up**
+
+- The [RStudio IDE cheat sheet](https://rstudio.github.io/cheatsheets/html/rstudio-ide.html#keyboard-shortcuts) has an index of the lot.
+- Posit's guide to [customising keyboard shortcuts](https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE) covers rebinding them.
+
+:::
+
+::: {.callout-note title="Your Turn"}
+
+1. Bring up the shortcut reference with `Alt / Option + Shift + K`, and find the shortcut for inserting a pipe (`|>`).
+2. Pick two shortcuts from the list above that you do not currently use, and write them on something you will see tomorrow.
+3. Spend three minutes practising them on a script of your own.
+4. Spend five minutes on [keybr](https://www.keybr.com/). Note your accuracy, not your speed.
+
+Ask me to demonstrate a few of my favourite combos: multiple cursors, moving and copying lines, and jumping to a function by name. They are much easier to understand when you watch them than when you read about them.
+
+:::
+
+## RStudio addins {#sec-addins}
+
+There is a menu in RStudio that most people never open, sitting in the toolbar next to the code and knit buttons. It says **Addins**.
+
+An addin is nothing exotic. It is an R function that a package has registered with RStudio, so that instead of typing the call, you pick it from a menu, or press a key.
+
+The reason they are interesting is not the menu. It is that **anything in that menu can be bound to a keyboard shortcut**, which turns a two minute task into a keypress.
+
+### Binding one to a key
+
+Tools → Modify Keyboard Shortcuts, then type "addin" into the filter box. You get a list of every addin you have installed. Click the shortcut column, press the keys you want, hit Apply.
+
+That's the whole setup. It takes about twenty seconds, and I would do it for two addins rather than ten.
+
+::: {.callout-important title="Addins are an RStudio feature"}
+
+Positron does not run RStudio addins. If you use both editors, or you are thinking of moving, don't build a habit on top of one.
+
+The things worth having usually exist as an ordinary function too. `reprex::reprex()` works anywhere, and the addin is a convenience on top of it.
+
+:::
+
+### The ones I actually use
+
+**[`{reprex}`](https://reprex.tidyverse.org/)** - "Render reprex". Select some code, press the key, and a formatted reproducible example lands on your clipboard. Mine is bound to `Cmd / Ctrl + Shift + R`, and it is the addin I would give up last. See [Writing a reprex / getting unstuck](writing-a-reprex-getting-unstuck.qmd) for what it does.
+
+**[`{fnmate}`](https://github.com/milesmcbain/fnmate)** by [Miles McBain](https://milesmcbain.micro.blog/) - put your cursor on a call to a function that does not exist yet, press the key, and it writes the function definition for you, in the right file, with the arguments filled in.
+
+This one changed how I write code. It means you can write the call you *wish* existed, then make it exist, rather than stopping to define things before you know what you want. It accelerated my functional programming considerably.
+
+**[`{datapasta}`](https://milesmcbain.github.io/datapasta/)**, also by Miles McBain - copy a block of cells from a spreadsheet, press the key, and it pastes into your script as a `tibble()` you can read.
+
+I use this constantly for small lookup tables. It is the fastest way I know to get twenty rows out of somebody's email and into code where they can be version controlled.
+
+**[`{shrtcts}`](https://github.com/gadenbuie/shrtcts)** by [Garrick Aden-Buie](https://www.garrickadenbuie.com/) - for making your own. Write an R function, add a comment saying which key you want, and it becomes a shortcut. Good for the thing you do forty times a week that nobody has packaged.
+
+### A word of warning
+
+Addins are easy to collect and hard to remember.
+
+I have installed plenty that I used twice. The ones on this list stuck because they replace something I was doing by hand several times a day, and because I bound them to a key rather than leaving them in the menu.
+
+If it lives in the menu, you will forget it exists. So bind it, or skip it.
+
+::: {.callout-note title="Your Turn"}
+
+1. Open the Addins menu. What is already in there from packages you installed for other reasons?
+2. Install `{fnmate}` or `{datapasta}`, and bind it to a key in Tools → Modify Keyboard Shortcuts.
+3. Use it once, today, on real work. If you don't reach for it again this week, unbind it. That is a perfectly good outcome.
+
+:::
+
+::: {.callout-tip title="Read more"}
+
+This appendix is adapted from my blog post [Get good with R: typing skills and shortcuts](https://www.njtierney.com/posts/2023-11-23-get-good-type-fast/), which has more detail, including a note on vim and emacs, and, importantly, how to get *out* of vim.
+
+:::

@@ -1,0 +1,108 @@
+# Anonymous functions {#sec-anonymous-functions}
+
+> "Everything that exists is an object. Everything that happens is a function call."
+>
+> -- John Chambers
+
+Chapter 4 makes the point that functions are values: you can hand one to another function without calling it. This appendix is the next question, which comes up every time someone reads a bit of tidyverse code.
+
+What is that `\(x)` doing there, why do older examples use `~ .x` instead, and where did any of it come from?
+
+::: {.overview}
+
+## Overview {.unnumbered}
+
+**Duration** 10 minutes
+
+**Questions**
+
+- When should a function have a name, and when should it not?
+- What is `\(x)` short for?
+- Why does older code use `~ .x`, and should I write it?
+
+
+## Functions without names
+
+The examples here use `map_dbl()`, so:
+
+```{r}
+library(purrr)
+```
+
+Everything so far has handed over a function that already had a name. Sometimes you want to hand over a function you will never need again, where naming it would just add clutter to the top of your script.
+
+You can write the function right there, in the argument:
+
+```{r}
+map_dbl(airquality, function(x) round(mean(x, na.rm = TRUE), 1))
+```
+
+That `function(x) round(mean(x, na.rm = TRUE), 1)` is an ordinary function. It simply never got a name, which is why it is called an **anonymous function**.
+
+It does the same job as this:
+
+```{r}
+mean_rounded <- function(x) {
+  round(mean(x, na.rm = TRUE), 1)
+}
+
+map_dbl(airquality, mean_rounded)
+```
+
+So which should you write? My rule is straightforward. If you would use it twice, or if a name would explain something, give it a name. Otherwise, leave it anonymous.
+
+While you are learning, name them. A named function is something you can call on its own and poke at, which makes it far easier to debug.
+
+**The shorthand: `\(x)`**
+
+Since R 4.1 you can write `\(x)` instead of `function(x)`:
+
+```{r}
+map_dbl(airquality, \(x) round(mean(x, na.rm = TRUE), 1))
+```
+
+Identical to the version above, just shorter. `\(x) x + 1` and `function(x) x + 1` are the same thing.
+
+You will see `\(x)` constantly in modern R code, so it is worth being able to read. When you are writing your own, use whichever you find clearer.
+
+:::
+
+::: {.callout-caution title="Some history: where the backslash comes from" collapse="true"}
+
+`\(x)` is written with a backslash because it looks a little like **λ**, the Greek letter lambda.
+
+That comes from [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus), a way of describing computation worked out by [Alonzo Church](https://en.wikipedia.org/wiki/Alonzo_Church) in the 1930s, where `λx.` means "a function of x".
+
+Plenty of programming languages borrowed the idea and the word, which is why you will hear anonymous functions called "lambdas" in Python, JavaScript and elsewhere.
+
+:::
+
+::: {.callout-caution title="Some history: older purrr code and the `~ .x` shorthand" collapse="true"}
+
+In older code, and in plenty of code still being written today, you will see this instead:
+
+```{r}
+map_dbl(airquality, ~ round(mean(.x, na.rm = TRUE), 1))
+```
+
+That `~` is a **formula**, and purrr treats it as a shorthand for a function. Inside it, `.x` stands for whatever is being passed in.
+
+So all three of these do the same thing:
+
+```r
+map_dbl(airquality, ~ round(mean(.x, na.rm = TRUE), 1))
+map_dbl(airquality, \(x) round(mean(x, na.rm = TRUE), 1))
+map_dbl(airquality, function(x) round(mean(x, na.rm = TRUE), 1))
+```
+
+The formula version came first, because until R 4.1 there was no short way to write a function, and `function(x)` every time got tiring. Now that `\(x)` exists, purrr's own documentation recommends it, and it is what I would write in new code.
+
+You still need to be able to **read** `~ .x`, because it is everywhere.
+
+Two more things you will meet alongside it. A bare `.` works in place of `.x`, and in two-argument functions like `map2()` the arguments are `.x` and `.y`:
+
+```{r}
+map2_dbl(1:3, 4:6, ~ .x * .y)
+```
+
+:::

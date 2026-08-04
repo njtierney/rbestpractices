@@ -1,0 +1,223 @@
+# What `{}` really does {#sec-curly-braces}
+
+> "To understand computations in R, two slogans are helpful: Everything that exists is an object. Everything that happens is a function call."
+>
+> -- John Chambers, quoted in [Advanced R](https://adv-r.hadley.nz/functions.html)
+
+You've been typing curly braces since your first function, and there is a decent chance nobody ever told you what they are.
+
+This appendix is short, and it will change how you read R.
+
+Braces aren't punctuation. They're a function, and once you see that, several things that looked like arbitrary rules turn into one rule.
+
+::: {.overview}
+
+## Overview {.unnumbered}
+
+**Duration** 10 minutes
+
+**Questions**
+
+- What is `{` actually doing?
+- Why does a function return its last line?
+- When do I need braces, and when are they optional?
+- What is `{{ }}`, and why do people write `{dplyr}`?
+
+:::
+
+## `{` is a function
+
+Here is the thing that surprises people:
+
+```r
+`{`
+#> .Primitive("{")
+```
+
+`{` is a function. You can call it like one:
+
+```r
+`{`(10, 20, 30)
+#> [1] 30
+```
+
+And that tells you what a braced block does. **It evaluates each expression in turn, and gives back the value of the last one.**
+
+Which is exactly what this does:
+
+```r
+x <- {
+  10
+  20
+  30
+}
+
+x
+#> [1] 30
+```
+
+The first two lines ran. Nothing kept their results, so they are gone. The last one is what came out.
+
+That's the entire behaviour, and everything below is a consequence of it.
+
+## Why a function returns its last line
+
+This is the one that pays off immediately.
+
+```r
+mean_center <- function(variable) {
+  variable - mean(variable, na.rm = TRUE)
+}
+```
+
+There's no `return()` in that function, and it still returns something.
+
+People often explain that as "R functions return their last line", as though it were a special rule about functions.
+
+It isn't. The body of that function **is** a braced block, and a braced block gives you its last value. The function hands back whatever its body evaluated to, and its body is a `{`.
+
+Which is also why this works, with no braces at all:
+
+```r
+mean_center <- function(variable) variable - mean(variable, na.rm = TRUE)
+```
+
+The body is a single expression. There is nothing to group, so there is nothing for `{` to do.
+
+::: {.callout-tip title="Going deeper: so when do I use braces in a function?" collapse="true"}
+
+The house rule for this course, and for my own code, is:
+
+**Use `\(x) ...` for a one line anonymous function. Use `function(x) { ... }` for everything else.**
+
+```r
+# fine
+purrr::map(my_list, \(x) x^2)
+
+# braces, because there are two steps and a name
+center_scale <- function(variable) {
+  centered <- mean_center(variable)
+  scale_sd(centered)
+}
+```
+
+I put braces on any function I have named and saved, even a one-liner, because the day it grows a second line I don't want to be editing its shape as well as its content.
+
+:::
+
+## Where braces are load-bearing
+
+`if`, `for` and `while` take **one** expression. Braces are how you give them more than one.
+
+Without braces, only the next expression belongs to the `if`:
+
+```r
+z <- 0
+
+if (TRUE)
+  z <- 1
+  z <- 2
+
+z
+#> [1] 2
+```
+
+Read that carefully, because it does not do what it looks like it does. Only `z <- 1` is inside the `if`. The line `z <- 2` is an ordinary next line, and it runs no matter what the condition was.
+
+This is a genuinely nasty bug, because the indentation says one thing and R does another.
+
+```r
+if (TRUE) {
+  z <- 1
+  z <- 2
+}
+```
+
+Now both lines are in the block, because the block is one expression.
+
+::: {.callout-important title="Always brace your `if` and your `for`"}
+
+Even when the body is one line, even when it fits.
+
+The cost is two characters. The bug it prevents is invisible, survives review, and is indistinguishable from correct code at a glance.
+
+A formatter won't save you here either. `air format .` lays out what you wrote, and what you wrote was valid.
+
+:::
+
+## Braces do not make a new scope
+
+This one trips up people arriving from other languages.
+
+In C, or Java, or JavaScript with `let`, a braced block has its own scope, and a variable made inside it stays inside it.
+
+In R it doesn't:
+
+```r
+y <- 1
+
+{
+  y <- 99
+}
+
+y
+#> [1] 99
+```
+
+The assignment reached straight out and changed `y`.
+
+`{` groups expressions. It does not build an environment. **Functions** build environments, which is why wrapping something in a function is how you keep its working variables to itself, and a bare block is not.
+
+## Braces in a pipe
+
+With `%>%`, a braced block lets you use the placeholder somewhere awkward:
+
+```r
+x %>% { f(.) + g(.) }
+```
+
+The base pipe does not support this. `|>` needs a function call on the right, and `{ ... }` is not one. The equivalent is an anonymous function:
+
+```r
+x |> (\(d) f(d) + g(d))()
+```
+
+Which is more typing, and it is also clearer about what is happening: you are making a small function and calling it. See [How `|>` differs from `%>%` -@sec-pipes] for the rest of that story.
+
+## The two other curly things
+
+Both of these are different from everything above, and both get confused with it.
+
+### `{{ }}` is not two blocks
+
+```r
+count_by <- function(data, var) {
+  data |> dplyr::count({{ var }})
+}
+
+count_by(palmerpenguins::penguins, species)
+```
+
+That is **embracing**, from [`{rlang}`](https://rlang.r-lib.org/), and it is how you write a function that takes a bare column name the way `{dplyr}` verbs do. It says "take what the caller typed, and use that".
+
+It is not a block inside a block. The doubled brace is deliberately chosen to be visually distinct, and it only means anything inside a tidy evaluation context.
+
+If you write functions that wrap `dplyr` verbs, you need it. If you don't, you can leave it entirely alone.
+
+### `{dplyr}` is just how we write package names
+
+Throughout this book you will see `{dplyr}`, `{here}`, `{air}`.
+
+That is a convention from the R community, not R syntax. It is a way of saying "this is a package, not a function", which matters when a package and its main function share a name. Compare "use here" with "use `{here}`".
+
+There is no code involved. You will see it in blog posts, on social media, and in this book.
+
+Nothing breaks if you don't use it.
+
+::: {.callout-note title="Your Turn"}
+
+1. Run `` `{`(1, 2, 3) ``. Which value comes back, and why?
+2. Find an `if` or a `for` in your own code with no braces. Add them.
+3. Take a function you have written that ends in `return(x)`. Remove the `return()` and check it still works. Do you prefer it?
+
+:::

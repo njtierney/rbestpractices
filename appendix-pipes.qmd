@@ -1,0 +1,243 @@
+# How `|>` differs from `%>%` {#sec-pipes}
+
+> "Ceci n'est pas un pipe."
+>
+> -- René Magritte, quoted in the DESCRIPTION file of the [{magrittr}](https://magrittr.tidyverse.org/) package
+
+This question comes up every time I teach anything with a pipe in it, and it's a fair question. R has two of them, they look like they do the same job, and nobody tells you which one to use.
+
+This appendix is the answer I give. Short version: use `|>`, and here is what you are giving up.
+
+::: {.overview}
+
+## Overview {.unnumbered}
+
+**Duration** 10 minutes
+
+**Questions**
+
+- Where did each pipe come from?
+- What can `%>%` do that `|>` cannot?
+- What is actually happening when R sees a pipe?
+- Which one should I use, and does it matter?
+
+:::
+
+## The short answer
+
+`x |> f()` is rewritten by R, before anything runs, into `f(x)`.
+
+`x %>% f()` is a function call. `%>%` is a real operator that a package defines, and it works out what to do with your code while the code is running.
+
+Almost every difference between them falls out of that one distinction.
+
+::: {.callout-caution title="Some history: where they both came from" collapse="true"}
+
+`%>%` arrived first, in the `{magrittr}` package by [Stefan Milton Bache](https://stefanbache.dk/), in 2014. The idea came from F#, which has had a `|>` operator for years, and there were a couple of earlier R attempts, including a `%.%` chain operator that did not stick.
+
+It caught on enormously. The tidyverse re-exported it, so for most people `%>%` arrived without them ever installing `{magrittr}`, and for the best part of a decade "the pipe" meant `%>%`.
+
+The name is a joke about [René Magritte](https://en.wikipedia.org/wiki/The_Treachery_of_Images), which is why the DESCRIPTION file says "Ceci n'est pas un pipe."
+
+The base R pipe, `|>`, came much later, in R 4.1.0 in May 2021, after a lot of discussion inside R Core. The `_` placeholder followed in 4.2.0 in April 2022, and `_$` extraction in 4.3.0 in April 2023.
+
+:::
+
+## What actually differs
+
+### `|>` needs the parentheses
+
+```r
+c(1, 2, 3) %>% mean     # fine
+c(1, 2, 3) |> mean      # error
+#> Error in mean :
+#>   The pipe operator requires a function call as RHS
+```
+
+`%>%` will accept a bare function name and call it for you. `|>` won't.
+
+I've come around to preferring this. `mean()` with the brackets says "this is a function call", and now the pipe reads the same way as every other line of R you write.
+
+### The placeholder is `_`, not `.`, and it is fussier
+
+Both pipes put the left hand side into the *first* argument by default. When you need it somewhere else, you use a placeholder.
+
+```r
+mtcars %>% lm(mpg ~ cyl, data = .)
+mtcars |> lm(mpg ~ cyl, data = _)
+```
+
+Three rules on `_` that `.` does not have:
+
+**It must be a named argument.**
+
+```r
+x |> f(_, y)
+#> Error: pipe placeholder can only be used as a named argument
+```
+
+**It can only appear once.**
+
+With `%>%` you can write `x %>% f(., .)`. With `|>` you can't.
+
+**It cannot be nested inside another call.**
+
+```r
+x |> f(g(_))
+#> Error: invalid use of pipe placeholder
+```
+
+`x %>% f(g(.))` is perfectly happy.
+
+This is the one I miss most, and it's the difference people hit first.
+
+Since R 4.3.0 there is one exception, which is extraction:
+
+```r
+mtcars |> _$mpg |> head()
+#> [1] 21.0 21.0 22.8 21.4 18.7 18.1
+```
+
+::: {.callout-important title="Only if you can require R 4.3.0"}
+
+`_$` needs R 4.3.0, released April 2023, and `_` at all needs 4.2.0.
+
+If you're writing anything other people will run, that's a real constraint, not a detail.
+
+Check what you are willing to require before you use either.
+
+:::
+
+### When you need something `_` cannot do
+
+Write an anonymous function. This is the general escape hatch, and it covers every case above:
+
+```r
+mtcars |> (\(d) f(g(d), d))()
+```
+
+That is not beautiful.
+
+It is explicit, though, and it doesn't need you to remember any placeholder rules.
+
+### `%>%` needs to be attached, `|>` does not
+
+`|>` is part of the language. It works in a vanilla R session, in a package, or in a script someone sends you with no libraries at all.
+
+`%>%` needs `{magrittr}`, or something that re-exports it like `{dplyr}`. Which means a script with `%>%` and no `library()` call is a script that doesn't run. See [could not find function](writing-a-reprex-getting-unstuck.qmd) for how that turns up.
+
+## Under the hood
+
+This is the bit I find genuinely delightful.
+
+`|>` is handled by the **parser**. By the time R runs anything, the pipe is gone:
+
+```r
+quote(x |> f())
+#> f(x)
+
+quote(x |> f(y))
+#> f(x, y)
+
+quote(x |> f(y = _))
+#> f(y = x)
+```
+
+Look at that output. There's no pipe in it. R read your code, rewrote it, and what runs is an ordinary nested call. The pipe is a way of *writing* code, not a thing that exists while it runs.
+
+`%>%` is the other kind of thing entirely. It is a function, it is still there at run time, and it appears in your call stack:
+
+```r
+f <- function(x) sys.calls()
+
+g1 <- function() 1 |> f()
+g1()
+#> 1: g1()
+#> 2: f(1)
+
+g2 <- function() 1 %>% f()
+g2()
+#> 1: g2()
+#> 2: 1 %>% f()
+#> 3: f(.)
+```
+
+One extra frame. That matters when you're reading a traceback at 5pm, because every frame is one more thing between you and the line that actually broke.
+
+To be fair to `{magrittr}`, this used to be much worse. Version 2.0 rewrote the internals and cut the stack down enormously. What you see above is the good version.
+
+::: {.callout-tip title="Going deeper: the same trick shows up in `\\()`" collapse="true"}
+
+`\(x) x + 1` is also a syntax transformation. R reads it and hands back an ordinary function:
+
+```r
+quote(\(x) x + 1)
+#> function(x) x + 1
+```
+
+Same idea as the pipe. A shorter way to write something, which stops existing the moment R has read it.
+
+:::
+
+## Is one faster?
+
+Yes, and it almost certainly doesn't matter.
+
+Because `|>` disappears at parse time, it costs nothing at run time. `%>%` is a function call that does some work every time it runs. Measured on my machine:
+
+```r
+x <- 42
+bench::mark(
+  "identity(x)"      = identity(x),
+  "x |> identity()"  = x |> identity(),
+  "x %>% identity()" = x %>% identity()
+)
+#> expression            min   median `itr/sec`
+#> identity(x)        40.9ns    123ns  8277082.
+#> x |> identity()      41ns     82ns  9333365.
+#> x %>% identity()    738ns    861ns  1119400.
+```
+
+So `%>%` is roughly ten times slower.
+
+Now be careful with that sentence, because it's exactly the kind of relative measurement that misleads people. Ten times slower is 800 nanoseconds. You'd need to run it a million times to lose a second.
+
+If your pipeline is slow, the pipe is not why.
+
+## Which one do I use?
+
+I use the base pipe.
+
+There's nothing in `%>%` that I need for the way I write code, and `|>` is one less thing to attach, one less frame in a traceback, and part of the language rather than a package.
+
+The honest caveat: if you already have a codebase full of `%>%` and it works, leave it.
+
+Rewriting a thousand pipes to save 800 nanoseconds each is not an afternoon well spent. Use `|>` in the new code.
+
+## What about in a package?
+
+I would use `|>`.
+
+R 4.1.0 came out in May 2021, and 4.2.0, which brought `_`, in April 2022. My own view is that requiring an R released three or more years ago is plenty conservative.
+
+If you want a stricter standpoint, the tidyverse team support the current version plus the previous four, which is a five year window. On that policy `|>` alone became safe in May 2026, and `_` becomes safe in April 2027.
+
+Either way, write down which R version your package requires, in `DESCRIPTION`, so the decision is visible rather than implied.
+
+::: {.callout-note title="Your Turn"}
+
+1. Take a `%>%` pipeline from your own code and rewrite it with `|>`. Which of the rules above did you hit?
+2. Run `quote()` on one of your pipelines. Does the code it prints look like what you expected to be running?
+3. Find a place where you used `.` more than once, or nested inside another call. What does the `\()` version look like, and do you prefer it?
+
+:::
+
+::: {.callout-tip title="Read more"}
+
+This appendix is adapted from my draft blog post on the two pipes. The pieces I found most useful while writing it:
+
+- [The tidyverse post on base vs magrittr pipes](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/), which is the definitive comparison.
+- [Albert Rapp's write-up](https://albert-rapp.de/posts/31_pipes_compared/31_pipes_compared).
+- [This Stack Overflow thread](https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-native-pipe-and-the-magrittr-pipe), which is remarkably comprehensive, and where I first found out about the experimental `=>` operator. That one is not in the NEWS file and is very much experimental, so treat it as a curiosity rather than something to use.
+
+:::

@@ -284,16 +284,22 @@ pre { line-height: 1.5; }
 // `!important` on the borders is load-bearing: Bootswatch themes set
 // their own per-type colour at `div.callout-note.callout`, specificity
 // (0,2,1), which beats a plain `.callout` rule.
+// `overflow` is deliberately NOT `hidden` here. It was, to stop the square
+// header background squaring off the rounded top corners, and it also
+// clipped the copy button of every code block inside a callout - the button
+// is parked past the block's right edge by the rule above, so a clipping
+// ancestor removes it entirely. Rounding the header's own top corners does
+// the same job without cutting anything off.
 .callout {
   border: 1px solid color-mix(in srgb, var(--cl) 30%, var(--bs-body-bg, white)) !important;
   border-left: 5px solid var(--cl) !important;
   border-radius: 8px;
   box-shadow: none;
-  overflow: hidden;
 }
 .callout .callout-header {
   background: color-mix(in srgb, var(--cl) 9%, var(--bs-body-bg, white)) !important;
   border-bottom: 1px solid color-mix(in srgb, var(--cl) 20%, var(--bs-body-bg, white));
+  border-radius: 7px 7px 0 0;
   padding: 0.5rem 0.9rem;
 }
 .callout .callout-title-container { color: var(--ct); font-weight: 700; }
