@@ -1,10 +1,8 @@
 # Writing a reprex / getting unstuck
 
-Everyone gets stuck. The skill isn't avoiding it, it's getting unstuck quickly, and being able to ask for help in a way that actually gets you an answer.
+Everyone gets stuck. While avoiding being stuck in the first place is ideal - one of the best skills to learn is to get unstuck quickly, and to be able to ask for help in a way that actually gets you an answer.
 
-This section is about the **reprex**, which is short for **repr**oducible **ex**ample. We start with the smallest one there is, use it to share code that works perfectly well, and then turn it on code that doesn't. 
-
-By learning to build a represx, you will will often solve the problem before you ask anybody else.
+This chapter is about the **reprex**, which is short for **repr**oducible **ex**ample. If you can demonstrate how you are stuck, you often solve the problem in the process of creating that demonstration. Then, if you can't, you have made it easier for someone else to see how your are stuck. That makes it easier for them to help you.
 
 ::: {.overview}
 
@@ -26,27 +24,30 @@ By learning to build a represx, you will will often solve the problem before you
 
 A reprex is code, plus the output that code produced, in a form somebody else can run.
 
-That is the whole idea. Here is one:
+Say we want to know why this is happening - how can this be NA?
 
 ```{r}
 mean(airquality$Ozone)
 ```
 
-Hmmm, how can the mean be NA?
-
 You can read what I ran, you can see what I got, and you can paste it into your own R session and get the same thing.
 
-Now think about what happens without that.
+There are other ways to share this:
 
-You could send somebody just the code. But then they have to run it to see what you saw, and they have to guess which packages you had loaded.
+- You could send somebody just the code, `mean(airquality$Ozone)`
+- But then they have to run it to see what you saw, and guess which packages you load.
 
-You could send a screenshot of your console instead. Now they can see the output, but they can't run it, and they can't copy a line out of it to try something.
+You could send a screenshot of your console instead:
 
-You could send both, by hand, every time. And now it's on you to make sure the code and the output actually match.
+![](figs/reprex-show-copy-mean.png)
 
-It gets worse with a plot. If the interesting thing is a chart, the code on its own doesn't show it, and the picture on its own can't be run.
+Now they can see the output, but they can't run it, and they can't copy a line out of it to try something.
 
-So what you want is both, together, and correct. Which is fiddly to do by hand, and is why the package exists.
+You could send both, by hand, every time - the code, AND the screenshot And now it's on you to make sure the code and the output actually match.
+
+It gets worse with a plot. If the interesting thing is a chart, the code on its own doesn't show it, and the picture on its own can't be ru
+
+So what you want is both, together, and correct. It is fiddly to do by hand, and is why the `reprex()` package exists.
 
 ## Using {reprex}
 
@@ -119,7 +120,7 @@ And it handles plots. If your example makes a chart, the chart comes out the oth
 
 Start as small as it goes.
 
-1. Copy these three lines to your clipboard:
+1. Copy these two lines to your clipboard:
 
 ```r
 x <- c(1, 2, 3, NA)
@@ -129,7 +130,38 @@ mean(x)
 2. Run `reprex::reprex()`.
 3. Look at the preview. Then paste what landed on your clipboard into a fresh R script, and check it runs.
 
-That's a reprex. Everything else in this chapter is that, on harder code.
+That's a reprex.
+
+**Now make it a keypress with a shortcut.**
+
+Copying to the clipboard and then typing `reprex::reprex()` is three separate actions. 
+
+So bind it to a key while you are here. There is a second function, `reprex::reprex_selection()`, which reprexes whatever is *selected* in your editor, with no clipboard step at all.
+
+**In RStudio.** Tools → Modify Keyboard Shortcuts (or - Command Pallete, and type "Modify keyboard", and click "modiy keyboard shortcuts") then type `reprex` in the filter box. You get two: **Render reprex**, which opens a little window of options, and **Reprex selection**, which just goes. Click the shortcut column next to **Reprex selection**, press `Cmd / Ctrl + Shift + R`, and hit Apply.
+
+That combination is already taken by Insert Section - RStudio noted this. Just overwrite it - or pick another combination for your reprexes.
+
+**In Positron.** Open the command palette with `Cmd / Ctrl + Shift + P`, run **Open Keyboard Shortcuts (JSON)**, and add this:
+
+```json
+{
+  "key": "Cmd+Shift+R",
+  "command": "workbench.action.executeCode.console",
+  "when": "editorTextFocus",
+  "args": {
+    "langId": "r",
+    "code": "reprex::reprex_selection()",
+    "focus": true
+  }
+}
+```
+
+Use `"Ctrl+Shift+R"` on Windows or Linux. This one is lifted straight from [Positron's own documentation](https://positron.posit.co/keyboard-shortcuts.html), where reprex is the worked example. If you'd rather not bind anything, the palette also has **R: Run RStudio Addin**, which lists reprex alongside every other addin you have installed.
+
+**Then use it.** Select those same two lines in your editor and press your new shortcut. Same reprex, one keypress, and nothing to copy first.
+
+Everything else in this chapter is that, on harder code.
 
 :::
 
@@ -157,9 +189,9 @@ starwars |>
 
 **"Is there a nicer way to write this?"** Nothing is broken. You just suspect there is a neater version, and a reprex is how you ask without making somebody clone your project.
 
-**"Look at this, it's great."** I send these constantly. A function I have just found, a bit of syntax I did not know about. Code with its output is how you show somebody something works.
+**"Look at this, it's great."** A function I have just found, a bit of syntax I did not know about. Code with its output is how you show somebody something works. Put it on a github gist.
 
-**Notes to yourself.** I keep a file of these. Six months later, the code and its output together tell me what I worked out, and I don't have to run anything to remember.
+**Notes to yourself.** I keep these on a github gist. Six months later, the code and its output together tell me what I worked out, and I don't have to run anything to remember.
 
 The nice thing about starting here is that there is no pressure. Nothing is wrong, so there is nothing to diagnose. You are only practising the workflow.
 
@@ -175,21 +207,21 @@ If it doesn't run on their machine, you have just learned something about your c
 
 ## Cutting a problem down
 
-Now the harder use, and the one reprexes are famous for.
+The harder skill, which you might have come across, is to cut down reprexes into the smallest unit.
 
 When you hit an error you cannot solve by tinkering, it is worth spending some time building a small example of the code that breaks.
 
 This takes practice. But the thing I really like is:
 
-**In the process of reducing the problem to its core, you'll often solve it yourself.**
+**In the process of reducing the problem to its core, you often solve it.**
 
-It's the same experience as describing a problem out loud to a colleague and arriving at the answer before they've said anything.
+It is sort of the same experience as describing a problem out loud to a colleague, and then by the time you've explained it, you manage to solve it. This is a whole concept called ["rubber duck debugging"](https://en.wikipedia.org/wiki/Rubber_duck_debugging) I have a rubby ducky on my desk for this purpose. You take your rubber ducky and explain the problem to then.
 
 So this isn't only a way to ask for help. It's a debugging technique that happens to produce something shareable.
 
 Let's tear one down. Say we are summarising the `diamonds` data:
 
-```r
+```{r}
 library(tidyverse)
 
 diamonds |>
@@ -200,40 +232,25 @@ diamonds |>
     price_sd = sd(price_per_carat),
     mean_color = mean(color)
   )
-#> Warning: There were 5 warnings in `summarise()`.
-#> The first warning was:
-#> ℹ In argument: `mean_color = mean(color)`.
-#> ℹ In group 1: `cut = Fair`.
-#> Caused by warning in `mean.default()`:
-#> ! argument is not numeric or logical: returning NA
 ```
 
 The warning gives us a clue: it is something about `mean_color`. So try just that:
 
-```r
+```{r}
 diamonds |>
   mutate(mean_color = mean(color))
-#> Warning: There was 1 warning in `mutate()`.
-#> ℹ In argument: `mean_color = mean(color)`.
-#> Caused by warning in `mean.default()`:
-#> ! argument is not numeric or logical: returning NA
 ```
 
 Same warning, and we've dropped `group_by()` and `summarise()` entirely. Strip it further:
 
-```r
+```{r}
 mean(diamonds$color)
-#> Warning in mean.default(diamonds$color): argument is not numeric or
-#> logical: returning NA
-#> [1] NA
 ```
 
 Still the same. We are now down to one line. So what is in `color`?
 
-```r
+```{r}
 head(diamonds$color)
-#> [1] E E E I J J
-#> Levels: D < E < F < G < H < I < J
 ```
 
 Ah. Does it make sense to take the mean of some letters? Of course not.
@@ -300,15 +317,20 @@ At the end of [Writing functions -@sec-writing-functions] we had `read_educated_
 
 Here is where that spreadsheet actually came from. Somebody sent over a folder of CSVs, one per year.
 
+(This is run inside the ozed project)
+
 ```r
 library(tidyverse)
+library(here)
 
-education_2014 <- read_csv("data/raw/raw_education_2014.csv")
-education_2015 <- read_csv("data/raw/raw_education_2015.csv")
-education_2016 <- read_csv("data/raw/raw_education_2016.csv")
+education_2014 <- read_csv(here("data/raw/raw_education_2014.csv"))
+education_2015 <- read_csv(here("data/raw/raw_education_2015.csv"))
+education_2016 <- read_csv(here("data/raw/raw_education_2016.csv"))
 
 education <- bind_rows(education_2014, education_2015, education_2016)
 ```
+
+(Note, there are a couple of ways we can run this code in one line)
 
 That runs without complaint, and gives you 216 rows across the three years.
 
@@ -334,9 +356,9 @@ education |>
 #> # i 17 more rows
 ```
 
-Sit with that for a second, because there is a lot wrong and R said nothing at all.
+There is a lot wrong here - R said nothing at all.
 
-There are **27 age groups**. There should be nine. And a *proportion* has come out as -15.8.
+There are **27 age groups**. There should be nine. And a *proportion* has come out as -15.8. No good.
 
 ### Reducing it
 
@@ -404,6 +426,8 @@ The separators collapse with a regular expression that matches a *run* of anythi
 education |>
   mutate(age_group = str_replace_all(age_group, "[^0-9]+", "_"))
 ```
+
+<!-- NOTE: code practice up to here -->
 
 And the missing code becomes an actual missing value. [`{naniar}`](https://naniar.njtierney.com/) does this, and knowing what I know about that package's author, I would say it is a reasonable choice:
 

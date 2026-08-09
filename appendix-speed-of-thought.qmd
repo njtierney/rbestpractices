@@ -124,15 +124,19 @@ The reason they are interesting is not the menu. It is that **anything in that m
 
 ### Binding one to a key
 
-Tools → Modify Keyboard Shortcuts, then type "addin" into the filter box. You get a list of every addin you have installed. Click the shortcut column, press the keys you want, hit Apply.
+In RStudio: Tools → Modify Keyboard Shortcuts, then type "addin" into the filter box. You get a list of every addin you have installed. Click the shortcut column, press the keys you want, hit Apply.
 
 That's the whole setup. It takes about twenty seconds, and I would do it for two addins rather than ten.
 
-::: {.callout-important title="Addins are an RStudio feature"}
+Positron asks a bit more of you, because there's no list to click. You write the binding yourself, in `keybindings.json`. There's a worked example of that, for reprex, in [Writing a reprex / getting unstuck](writing-a-reprex-getting-unstuck.qmd).
 
-Positron does not run RStudio addins. If you use both editors, or you are thinking of moving, don't build a habit on top of one.
+::: {.callout-important title="Addins in Positron"}
 
-The things worth having usually exist as an ordinary function too. `reprex::reprex()` works anywhere, and the addin is a convenience on top of it.
+Addins started life as an RStudio feature, and for a while that is all they were. Positron runs them now. Open the command palette and run **R: Run RStudio Addin**, and you get the same list, grouped by the package it came from.
+
+There is a catch. Positron doesn't implement every method in the RStudio API, so an addin that reaches for one it hasn't got will fall over. If you write your own, `rstudioapi::hasFun()` tells you whether a method is there before you call it.
+
+Either way, it's worth knowing the function underneath. `reprex::reprex()` works anywhere, and the addin is a convenience on top of it.
 
 :::
 
@@ -160,8 +164,8 @@ If it lives in the menu, you will forget it exists. So bind it, or skip it.
 
 ::: {.callout-note title="Your Turn"}
 
-1. Open the Addins menu. What is already in there from packages you installed for other reasons?
-2. Install `{fnmate}` or `{datapasta}`, and bind it to a key in Tools → Modify Keyboard Shortcuts.
+1. Open the Addins menu, or run **R: Run RStudio Addin** from the Positron command palette. What is already in there from packages you installed for other reasons?
+2. Install `{fnmate}` or `{datapasta}`, and bind it to a key. Tools → Modify Keyboard Shortcuts in RStudio, or a line in `keybindings.json` in Positron.
 3. Use it once, today, on real work. If you don't reach for it again this week, unbind it. That is a perfectly good outcome.
 
 :::

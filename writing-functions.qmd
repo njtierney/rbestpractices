@@ -4,7 +4,7 @@
 >
 > -- Hadley Wickham, Mine Çetinkaya-Rundel and Garrett Grolemund, [R for Data Science](https://r4ds.hadley.nz/functions.html)
 
-At some point you notice you have written this, or something like it:
+At some point you notice you have written code that looks something like the following:
 
 ```{r}
 #| output: false
@@ -28,7 +28,16 @@ chinstrap_mean <- penguins |>
   mean(na.rm = TRUE)
 ```
 
-The same line three times, with one word changed. That is a function waiting to happen.
+The issue with this is that you are repeating the same code three times, but changing only one part. In this case, only one part is changing:
+
+```{r}
+#| eval: false
+filter(species == "Adelie")
+filter(species == "Gentoo")
+filter(species == "Chinstrap") 
+```
+
+We can express this idea more clearly with a function, comparing the result above the function:
 
 ```{r}
 species_body_mass_mean <- function(species_name){
@@ -47,7 +56,7 @@ chinstrap_mean
 species_body_mass_mean("Chinstrap")
 ```
 
-This section is about noticing that moment, and knowing what to do about it. We look at the problem functions solve, what a good small function looks like, and how to get inside one when it misbehaves.
+In this chapter we discuss how to notice these moments of repition, and how to convert these into functions, so you can clearly express your ideas. We will also work through how to get inside a function when it misbehaves.
 
 ::: {.overview}
 
@@ -66,15 +75,17 @@ This section is about noticing that moment, and knowing what to do about it. We 
 
 ## The problem functions solve
 
-I do not think I can overstate this: learning to write functions changed how I think about code, and how I think about solving problems. It takes time to develop, and the payoff is enormous.
+I do not think I can overstate this: learning to write functions changed how I think about code, and how I think about solving problems. It does take time to develop, but the payoff is enormous.
 
-A function isn't only a way to avoid typing something twice. It's a way to take an idea, give it a name, and then think in terms of that name rather than the twenty lines underneath it.
+A function isn't only a way to avoid typing something twice. It's a way to take complexity and express it in ways that you can reason with.
 
-Once you can do that, you can hold a bigger problem in your head. That is why I would call functions a thinking tool rather than a typing tool.
+Once you can do that, you can hold a bigger problem in your head. It's like when you know a new word for a concept:
 
-Let me tell you how I got there, because I got there slowly.
+> Benighted: Unexpectedly caught out in the dark
 
-In 2013 I was writing code to calculate a t-test from scratch. At the top of my script was something like:
+> Scrumping: To steal fruit such as apples from trees
+
+My journey into functions started in 2013. I was writing code to calculate a t-test from scratch. I had my reasons! At the top of my script was something like:
 
 ```r
 var_1 <- data$x1
@@ -85,7 +96,7 @@ and then a pile of code that computed the result.
 
 ::: {.callout-tip title="The whole script, if you want to see it" collapse="true"}
 
-This is roughly what the rest of it looked like. You do not need to read it closely. The thing I want you to notice is how much of it there is, and where the two lines I kept editing are.
+This is roughly what the code looked like. What I want you to notice is how much of it there is, and where the two lines I kept editing are.
 
 ```r
 var_1 <- data$x1                                              # <1>
@@ -117,17 +128,9 @@ p_value
 
 Every time I wanted to look at a different pair of variables, I went back to the top, changed those two lines, and ran the whole script again.
 
-Two lines out of twenty. The other eighteen never changed, and I re-ran all of them, by hand, every single time.
+Two lines out of twenty changed - and I re-ran all of them, by hand, every single time. Something felt off to me!
 
 ![Four runs of the same script. Two bars change colour.](figs/two-lines-of-twenty.png){fig-alt="Four copies of the same script side by side, drawn as rows of grey bars rather than readable code. In every copy the top two rows are coloured, a different colour in each copy, and the remaining eighteen rows are identical grey. A label underneath reads: two lines changed, the other eighteen ran again anyway, every single time." width=100%}
-
-Here is what I actually wanted, and could not yet write:
-
-```r
-t_test(var_1 = data$x1, var_2 = data$x2)
-```
-
-One line. The eighteen that never changed go inside it, once, and stop being something I have to look at. The two that do change become arguments, which is the whole job of an argument.
 
 Something about this felt wrong at the time. But I didn't have the words for it.
 
@@ -135,7 +138,7 @@ What I was reaching for sounded something like:
 
 > I want to run this script, but get the top couple of lines to change depending on which variables I specify.
 
-What I needed was a function. I just didn't know it.
+What I needed was a function, but I just didn't have the words for it.
 
 I had been **taught** functions by then. And I had been **using** functions the whole time, things like `lm()`, `table()`, `subset()`, and `read.csv()`. I used them every day without ever thinking about where they came from, or that I could make my own.
 
@@ -149,20 +152,13 @@ So rather than argue that, let me show you.
 
 What does this code do?
 
-We'll use `penguins`, which comes with R.
+We'll use `penguins`
 
-```r
+```{r}
 head(penguins)
-#>   species    island bill_len bill_dep flipper_len body_mass    sex year
-#> 1  Adelie Torgersen     39.1     18.7         181      3750   male 2007
-#> 2  Adelie Torgersen     39.5     17.4         186      3800 female 2007
-#> 3  Adelie Torgersen     40.3     18.0         195      3250 female 2007
-#> 4  Adelie Torgersen       NA       NA          NA        NA   <NA> 2007
-#> 5  Adelie Torgersen     36.7     19.3         193      3450 female 2007
-#> 6  Adelie Torgersen     39.3     20.6         190      3650   male 2007
 ```
 
-```r
+```{r}
 bill_len <- penguins$bill_len
 bill_dep <- penguins$bill_dep
 
@@ -202,7 +198,7 @@ And there **is** an error.
 
 Look at the second line again. For `bill_dep_0`, I divide by the standard deviation of **`bill_len`**, not `bill_dep`.
 
-That's a copy-paste bug, it's completely silent, and it produces numbers that look entirely plausible. If you found it, well done. If you didn't, that is exactly what worries me, and it is why I would rather not rely on either of us spotting it.
+That's a copy-paste bug, it's completely silent, and it produces numbers that look entirely plausible. If you found it, well done. If you didn't, that is why I would rather not rely on either of us spotting it.
 
 A function fixes this by **abstracting away** the need to write the variable in each time. Break it into two steps:
 
@@ -250,7 +246,7 @@ bill_len_0 <- center_scale(bill_len)
 bill_dep_0 <- center_scale(bill_dep)
 ```
 
-The bug I planted above isn't just fixed in the second version. It's become almost impossible to write.
+Now you can't even write the bug, the function has removed that possibility, by clearly expressing the problem.
 
 ::: {.callout-tip title="Someone has probably done this already"}
 
@@ -277,9 +273,9 @@ At worst you find nobody has solved your problem, which is an opportunity. Usual
 
 ## Anatomy of a function
 
-Every function in R has the same few parts. Once you can point at them, functions stop looking like magic.
+Every function in R has the same few parts. 
 
-The reason to learn the names is practical. When you know a thing is called a "default argument", you can search for it, read the help page about it, and ask someone a question that gets you a useful answer. Without the words, you are stuck describing the shape of the problem and hoping.
+The reason to learn the names is practical. For example, knowing a term like a "default argument", means you can search for it, read the help page about it, and ask someone a question that gets you a useful answer. Without the words, you are stuck describing the shape of the problem and hoping.
 
 We'll use two small functions here. The first counts how many values are missing:
 
@@ -291,7 +287,7 @@ n_missing <- function(x) {
 n_missing(airquality$Ozone)
 ```
 
-The second uses that one to work out what **proportion** is missing, which is usually the first thing I want to know about a dataset I have been handed:
+The second uses that one to work out what **proportion** is missing:
 
 ```{r}
 prop_missing <- function(x, digits = 2) {
@@ -302,15 +298,15 @@ prop_missing <- function(x, digits = 2) {
 prop_missing(airquality$Ozone)
 ```
 
-Notice that `prop_missing()` calls `n_missing()`. That is worth pointing at, because it is how most real code gets built. You write a small function that does one thing, and then you use it inside the next one, instead of writing `sum(is.na(x))` again and hoping you type it the same way.
+Notice `prop_missing()` calls `n_missing()`. You write a small function that does one thing, and then you use it inside the next one, instead of writing `sum(is.na(x))` again and hoping you type it the same way.
 
 ![The parts of a function.](figs/function-anatomy.png){fig-alt="The function prop_missing defined with function(x, digits = 2), with six parts highlighted in colour: the name, the function keyword, the argument x, the default digits = 2, the body, and the return value." width=100%}
 
 Taking the parts one at a time:
 
-- **The name.** `prop_missing`. This is how you call it later, so it is worth the two minutes it takes to pick a good one. There is more on that just below.
-- **`function()`.** This is the bit that actually creates a function. `prop_missing <-` just binds it to a name, the same way you would bind any other value.
-- **The arguments.** `x` and `digits`. These are the things that change each time you call it. They are the answer to "what did I keep editing at the top of my script?"
+- **The name.** `prop_missing`. This is how you call it later, so it is worth spending time to pick a good one. More on that just below.
+- **`function()`.** This creates a function. `prop_missing <-` just gives it a name, the same way you would bind any other value.
+- **The arguments.** `x` and `digits`. These are the what change each time you call the function. They are the answer to "what did I keep editing at the top of my script?"
 - **A default.** `digits = 2`. If the caller doesn't supply `digits`, it is 2. Defaults let you make a function easy to call in the common case, without giving up control in the uncommon one.
 - **The body.** Everything between the braces. This is the code that runs.
 - **The return value.** R returns the **last thing evaluated**, so here that's the rounded proportion. You can write `return()` explicitly, and sometimes should for an early exit, but you don't have to.
@@ -384,7 +380,16 @@ This one is really about the vocabulary. Once you can say "the third argument ha
 
 These are worth knowing about eventually. Skip them for now if you are still getting the hang of the parts above.
 
-**Side effects.** Anything a function does **other** than return a value. Printing to the console, writing a file, drawing a plot, setting an option. Side effects are not bad, and plenty of useful functions have them. But a function that both returns something useful **and** quietly writes a file is harder to reason about than one that does a single one of those things.
+**Side effects.** Anything a function does **other** than return a value:
+
+- Printing to the console (`summary(lm_fit)`)
+- Writing a file (e.g., a CSV, .rds, .png)
+- Drawing a plot (e.g., `ggplot(...)` or `plot(...)`)
+- Setting an option. 
+
+Side effects are not bad. Plenty of useful functions have them.
+
+But the issue is with reasoning - if a function returns something useful (a value) **and** quietly writes a file, it is harder to reason about than one that does a single one of those things.
 
 **Functions are values.** An argument can be a function. Here is the situation where you would want that.
 
@@ -410,8 +415,6 @@ library(purrr)
 
 map_int(airquality, n_missing)
 ```
-
-One line, and it does not care how many columns there are or what they are called.
 
 Look closely at how `n_missing` is written there. **No brackets.** We are not calling it, we are handing it over, the same way we would hand over a number or a data frame. That is what "functions are values" means.
 
@@ -445,70 +448,63 @@ Handing over a function you will only use once, without naming it, is worth know
 
 ## Other things worth turning into a function
 
-Centering and scaling is one kind of job. Here are a few others, so the idea doesn't get stuck to that one example.
+Here are a few more ideas that you might turn into a function.
 
 **A calculation you keep redoing.** Body mass index, a rate per thousand, a unit conversion.
 
-```r
+```{r}
 bmi <- function(weight_kg, height_m) {
   weight_kg / height_m^2
 }
 ```
 
-Read that definition and you can check the units are right without knowing the formula. The argument names do it for you.
+The function helps you know the units are right. The argument names do it for you.
 
-```r
+```{r}
 bmi(weight_kg = 70, height_m = 1.75)
-#> [1] 22.85714
 ```
 
-Unit conversions are the same idea, and they are the most boring functions in the world. I write them constantly.
+Unit conversions are the same idea:
 
-`penguins` records body mass in grams, and I think about penguins in kilograms:
+`penguins` records body mass in grams, we can state `input_to_output()`:
 
-```r
+```{r}
 grams_to_kg <- function(grams) {
   grams / 1000
 }
+library(dplyr)
+penguins |> 
+  mutate(body_mass_kg = grams_to_kg(body_mass),
+         .after = body_mass) |> 
+  head()
 
-penguins$body_mass_kg <- grams_to_kg(penguins$body_mass)
-
-head(penguins[c("species", "body_mass", "body_mass_kg")], 4)
-#>   species body_mass body_mass_kg
-#> 1  Adelie      3750         3.75
-#> 2  Adelie      3800         3.80
-#> 3  Adelie      3250         3.25
-#> 4  Adelie        NA           NA
 ```
 
-One line, and it is obvious what it does. Written inline as `penguins$body_mass / 1000` it is a magic number you have to decode every time you meet it.
+- Also note that nice `.after` argument of `mutate()`
 
 **A check you want to run on every dataset that comes in.** We built one of these a moment ago: `n_missing()`, in [Anatomy of a function](#anatomy-of-a-function).
 
-None of these are clever. That is deliberate. It's OK if the function is three lines long and doing something boring. Most of mine are, and they are still what makes the analysis readable.
+It's OK if the function is three lines long and doing something boring, or something repetitive. If they help express an idea more clearly, it is worth it.
 
 ::: {.callout-tip title="Small functions add up" collapse="true"}
 
 Here is one more of the same kind, to go with the two we already have:
 
-```r
+```{r}
 n_complete <- function(x) {
   sum(!is.na(x))
 }
 
 n_complete(airquality$Ozone)
-#> [1] 116
 ```
 
-Three things to notice across the set of them.
+A couple of things to notice across these.
 
-`prop_missing()` **calls** `n_missing()` rather than writing `sum(is.na(x))` out a second time. Fix one and you have fixed both.
+- `prop_missing()` **calls** `n_missing()` rather than writing `sum(is.na(x))` out a second time. Fix a bug in one, and you have fixed both.
 
-They are **named for the question they answer**, not for how they answer it. `prop_missing()`, not `round_na_ratio()`.
+- They are **named for the question they answer**, not for how they answer it. `prop_missing()`, not `round_na_ratio()`.
 
-`prop_missing()` takes a **default** for the one thing people argue about, so the common call stays short and you can still override it.
-
-We come back to `prop_missing()` in the very next section, when we put a bug in it and go looking with a debugger.
+We come back to `prop_missing()` soon.
 
 :::
 
@@ -517,48 +513,61 @@ We come back to `prop_missing()` in the very next section, when we put a bug in 
 
 Look at your most recent analysis script.
 
-1. Find a chunk of code you have written more than once, with something small changed each time.
+1. Find a chunk of code you have written more than once, with something small changed each time
 2. Write down, in one sentence, what that chunk is **for**.
-3. That sentence is the name of a function you haven't written yet. Don't write it yet, just note it down.
+3. That sentence is the name of the function - the idea. Don't write it yet, just note it down.
 
 :::
 
 ## How to use a debugger
 
-R is interactive. You run some code, you see the output immediately, and when something goes wrong you can poke around and look at it. It is a lovely way to do data analysis.
+R is interactive. You run some code, you see the output immediately, and when something goes wrong you can poke around and look at it. R was designed as an interactive language - and this is distinct and different to scripted languages like C, C++, and Rust. The interactivity it special, and makes doing data analysis interactive. It is good.
 
-Functions break that. A function is a box, and by default you can't see inside it while it runs.
+Functions break that interactivity a little bit. A function is a box - you put code in, and return an output. By default you can't see inside a function while it runs.
 
-Here is what I mean. Give `prop_missing()` an intermediate value on its way to the answer:
+For example, give `prop_missing()` an intermediate value on its way to the answer:
 
-```r
+```{r}
 prop_missing <- function(x, digits = 2) {
   prop <- n_missing(x) / length(x)
   round(prop, digits)
 }
 
 prop_missing(airquality$Ozone)
-#> [1] 0.24
 ```
 
-Now go and have a look at `prop`:
+We cannot look at `prop`:
 
-```r
+```{r}
 prop
-#> Error: object 'prop' not found
 ```
 
-It existed. The function could not have given you an answer without it. But it lived inside the box, for a moment, and there is no way to reach it from out here.
+We know it existed! The function could not have given you an answer without it. But it lived inside the box, for a moment, and there is no way to reach it from out here.
 
-Every debugging trick you already know stops working. You can't print it, you can't `View()` it, you can't check its class.
+We are used to interactively checking through code, but you can't print it, you can't `View()` it, you can't check its class.
 
-To look inside, you need a debugger.
+To look inside, you need a special thing called a "debugger".
 
 ::: {.callout-caution title="A confession"}
 
-If you have ever copied the internals of a function into a new script, hard-coded the arguments at the top, and run it line by line - this section is for you.
+If you have ever copied a function into a new script, commented out function definition, then hard-coded the arguments at the top:
 
-I say that as someone who did exactly that for years.
+```{r}
+# prop_missing <- function(x, digits = 2) {
+n_missing <- function(x) sum(is.na(x))
+
+x <- airquality$Ozone
+digits <- 2
+prop <-  n_missing(x) / length(x)
+
+round(prop, digits)
+# }
+# prop_missing(airquality$Ozone)
+```
+
+And run it line by line - this section is for you.
+
+I say that as someone who did that for years.
 
 :::
 
@@ -568,67 +577,58 @@ Small functions do not need one. `mean_center()` is two lines, and you can read 
 
 It gets harder the moment functions call other functions. Here is `prop_missing()` from earlier in the chapter:
 
-```r
+```{r}
 n_missing <- function(x) {
   sum(is.na(x))
 }
 
 prop_missing <- function(x, digits = 2) {
-  round(n_missing(x) / length(x), digits)
+  prop <- n_missing(x) / length(x)
+  round(prop, digits)
 }
 ```
 
 When `prop_missing()` gives you a number you don't believe, the problem could be in either function, and `x` inside `n_missing()` is not an object you can look at. It exists for a moment, in the middle of a call you did not make directly, and then it is gone.
 
-Later in this chapter we take a hundred line script apart, and end up with functions that have the same problem three levels deep instead of two:
-
-```
-read_educated_population()
-└── prepare_education()
-    └── extract_rows_set_names()
-```
-
-`extract_rows_set_names()` is where the slicing happens, and it is also called **twice**, once for the education rows and once for the population rows, with different arguments each time. When something comes out wrong, you cannot see which call did it.
-
-That is what a debugger is for.
-
 ### Debugging with `browser()`
 
-Let's give ourselves something to find. Here is `prop_missing()` again, with one small change:
+Let's give ourselves something to find. Here is `prop_missing()` again:
 
-```r
+```{r}
 n_missing <- function(x) {
   sum(is.na(x))
 }
 
 prop_missing <- function(x, digits = 2) {
-  round(n_missing(x) / length(na.omit(x)), digits)
+  prop <- n_missing(x) / length(x)
+  round(prop, digits)
 }
 
 prop_missing(airquality$Ozone)
-#> [1] 0.32
+prop_missing(airquality)
 ```
 
-It runs. Nothing errors, nothing warns, and `0.32` is a perfectly believable proportion of missing values.
+It runs. Nothing errors, for `airquality$Ozone` it looks right, but then for `airquality` you get a proportion of `r prop_missing(airquality)`. That's stange. And wrong.
 
-It's also wrong. Earlier in the chapter, that same column gave us `0.24`.
+Let's go and look.
 
-So which of the two functions is lying? Nothing on screen tells you, and neither one is long enough to be obviously at fault. Let's go and look.
+**`browser()` is like a stop sign that you put inside a function.** 
 
-**`browser()` is a stop sign you put inside a function.** Write it on the line you want to stop at:
+You write it on the line you want to stop at:
 
 ```r
 prop_missing <- function(x, digits = 2) {
+  prop <- n_missing(x) / length(x)
   browser()
-  round(n_missing(x) / length(na.omit(x)), digits)
+  round(prop, digits)
 }
 ```
 
 Now call the function the way you normally would:
 
 ```r
-prop_missing(airquality$Ozone)
-#> Called from: prop_missing(airquality$Ozone)
+prop_missing(airquality)
+#> Called from: prop_missing(airquality)
 #> Browse[1]>
 ```
 
@@ -636,22 +636,21 @@ That `Browse[1]>` is an R console, and it is standing **inside** the function. E
 
 ```r
 Browse[1]> length(x)
-#> [1] 153
-
-Browse[1]> length(na.omit(x))
-#> [1] 116
+#> [1] 6
 
 Browse[1]> n_missing(x)
-#> [1] 37
+#> [1] 44
 ```
 
-There it is, and `n_missing()` was innocent all along.
+There it is! `length(x)` gives us 6. Because length(data.frame()) returns the number of columns, not the number of elements.
 
-`na.omit()` has thrown away the very rows we are trying to count, so we divided 37 by 116 instead of by 153. A proportion has to divide by everything, not by what is left over.
+We we divided 44 by 6 instead of the number of elements - rows x cols. A proportion has to divide by everything.
 
-Notice how little work that took. Three questions, asked of real objects, in the place where they actually exist.
+That didn't take too much work! Just a few questions.
 
-A few commands are worth knowing at that prompt:
+The trick is a little bit more complex - and I think I'd like you to have a go at solving this in the next exercise.
+
+A few commands are worth knowing at that prompt of `browser()`:
 
 | type this | and it does |
 |-----------|-------------|
@@ -682,8 +681,8 @@ Editing a function to add `browser()`, saving, sourcing, and then remembering to
 ```r
 debugonce(prop_missing)
 
-prop_missing(airquality$Ozone)
-#> debugging in: prop_missing(airquality$Ozone)
+prop_missing(airquality)
+#> debugging in: prop_missing(airquality)
 #> Browse[1]>
 ```
 
@@ -705,9 +704,9 @@ So of the two, reach for `debugonce()`.
 
 ::: {.callout-note title="Your Turn"}
 
-Your turn to find one. This set also runs, also warns about nothing, and also gives you a plausible number.
+I want you to write n_missing(), n_complete(), and prop_complete(), so that they all work on a column, or a data.frame. Here's some starting code:
 
-```r
+```{r}
 n_missing <- function(x) {
   sum(is.na(x))
 }
@@ -716,21 +715,17 @@ n_complete <- function(x) {
   sum(!is.na(x))
 }
 
-prop_complete <- function(x, digits = 2) {
-  round(n_missing(x) / length(x), digits)
+prop_missing <- function(x, digits = 2) {
+  prop <- n_missing(x) / length(x)
+  round(prop, digits)
 }
-
-prop_complete(airquality$Ozone)
-#> [1] 0.24
 ```
 
-1. Before you run anything. `airquality$Ozone` has 153 values and 37 of them are missing. Does `0.24` look like the proportion that is **complete**?
-2. Run `debugonce(prop_complete)`, then call it again. You will land inside the function.
-3. Ask it questions. `length(x)`, then `n_missing(x)`, then `n_complete(x)`. Which two of those belong in this calculation?
+1. Start by using `browser()` inside prop_missing - play around inside it.
+2. Now run `debugonce(prop_complete)`, then call it again. You will land inside the function.
+3. Ask it questions - how can you get the number of elements? Are there existing functions inside of R you can use to get the total elements?
 4. Type `Q` to quit, fix the function, and run it again. You should get `0.76`.
 5. Do it once more, and this time step through with `n` rather than quitting.
-
-Three functions, and the broken one is not the one doing the arithmetic you would suspect.
 
 Then do the same on a function of your own that you don't entirely trust.
 
@@ -776,10 +771,10 @@ Getting there is a whole chapter of its own, and it is [Designing functions -@se
 
 ## Summary {.unnumbered}
 
-1. Functions are for taking something complicated and giving it a clear name.
+1. Functions are managing complexity so you can reason with it.
 2. Name a function for what it does, not how it does it. `celcius_to_fahrenheit()`, not `myfun()`.
-3. The parts that change between uses are the arguments. The parts that usually don't are defaults.
+3. The parts that change between uses are the arguments. The parts that don't change are often defaults.
 4. Small functions build on each other. `prop_missing()` calls `n_missing()` rather than repeating it.
-5. When a function surprises you, look inside it with `debugonce()`.
+5. When a function surprises you, look inside it with `browser()` or `debugonce()`.
 
-If you remember nothing else from this chapter, remember the first one. **Functions are for taking something complicated and giving it a clear name.**
+If you remember nothing else from this chapter, remember this: **Functions are managing complexity so you can reason with it.**
