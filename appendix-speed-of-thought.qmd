@@ -1,18 +1,10 @@
 # Working closer to the speed of thought {#sec-speed-of-thought}
 
-> "The tools we use have a profound (and devious!) influence on our thinking habits, and therefore on our thinking abilities."
->
-> -- Edsger W. Dijkstra, [How do we tell truths that might hurt?](https://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD498.html)
-
-The rest of this book is about making code readable once it is written. This appendix is about how it gets written in the first place, and it is the one thing here you can start on today.
-
-None of it is required to write good R. But tools that let you work with less resistance are good, and typing is the one nobody teaches you.
-
 ::: {.overview}
 
 ## Overview {.unnumbered}
 
-**Duration** 15 minutes, or a few minutes a day for a couple of months
+**Duration** 15 minutes, then a 5-10 minutes a day for a couple of months
 
 **Questions**
 

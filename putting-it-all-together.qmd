@@ -52,7 +52,11 @@ This might feel like a lot! That's OK. Remember, nobody else read this file befo
 
 ::: {.callout-note title="Your Turn: review it out loud"}
 
-One person drives, sharing their screen. Everyone else watches and chips in.
+One person drives, sharing their screen. Everyone else watches, and can chip in.
+
+You should be able to answer this question:
+
+> **What is this script for, in a sentence?**
 
 1. **The cheap pass.** 
     - Run `air format .`. 
@@ -62,20 +66,16 @@ One person drives, sharing their screen. Everyone else watches and chips in.
 
 2. **The thinking pass.** Now go back over the marks.
 
-1. Read the names out. 
-  - What do they tell you?
-2. What is each chunk of code for?
-3. Does everything it computes get used?
-4. Is anything here being done twice?
+  1. Read the names out - what do they tell you?
+  2. What is each chunk of code for?
+  3. Does everything it computes get used?
+  4. Is anything here being done twice?
 
 3. **The tidy-up pass.** 
     - Where would you move things
     - What would you delete?
     - What does the linter tell you?
 
-Then the question underneath all of it: 
-
-> **can you say what this script is for, in a sentence?**
 
 :::
 
@@ -143,7 +143,9 @@ That last one should sound familiar from the naming section.
 
 Everything in this course has been about the code itself. But a lot of getting good at R has nothing to do with typing R. 
 
-I've got a lot of thoughts on how to get better, and a lot of this is general advice. You don't have to follow all of these, but I think some of them will be useful. These are taken off of a blog post I wrote, called: [How to get good with R](https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/)).
+I've got a lot of thoughts on how to get better, and a lot of this is general advice. You don't have to follow all of these, but I think some of them will be useful. These are taken off of a blog post I wrote, ["How to get good with R"](https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/).
+
+- **Learn how to type fast**. If you can type fast, you can operate closer to the speed of thought. See more on my blogpost, ["Get Good with R: Typing Skills and Shortcuts"](https://www.njtierney.com/posts/2023-11-23-get-good-type-fast/), and the appendix, [Working closer to the speed of thought](appendix-speed-of-thought.qmd).
 
 - **Find a community of people who use R.** A local useR group, an online community, a Slack or Discord, a reading group at work. You will learn faster with people who are also learning.
 
