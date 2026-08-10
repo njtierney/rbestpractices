@@ -539,6 +539,7 @@ prop_missing(airquality$Ozone)
 We cannot look at `prop`:
 
 ```{r}
+#| error: true
 prop
 ```
 
