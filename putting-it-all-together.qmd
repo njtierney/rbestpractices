@@ -1,0 +1,169 @@
+# Putting it all together
+
+This is the part where you turn everything from this course loose on some real code.
+
+We have some options! We can review:
+
+1. Together, on some code I will share.
+2. In pairs, on code you brought with you
+
+::: {.overview}
+
+## Overview {.unnumbered}
+
+**Duration** 60 minutes
+
+**Questions**
+
+- What do the three passes look like when somebody talks through them?
+- Can I review code I have never seen before, in front of other people?
+- How do I review someone else's code without it going badly?
+- What do I do next, once the course is over?
+
+:::
+
+## The three passes
+
+Everything in this session runs on the process built upon earlier in [Writing readable code](writing-readable-code.qmd). Here is a summary:
+
+1. The cheap pass:
+    - `air format .` (or just Ctrl/Cmd + S to save!)
+    - read it top to bottom marking `TODO` and `NOTE`
+    - run it from a clean session
+2. The thinking pass:
+    - check the names
+    - work out what each chunk is for, 
+    - ask what it needs
+    - Ask whether there is a simpler way
+3. The tidy up pass:
+    - Put like with like
+    - throw out the dead code
+    - run the code linter, interpret and explore these
+
+You might not finish - that is OK! Doing *some* of it is the whole idea.
+
+## Reviewing together
+
+Open `06-bad-style/messy-analysis.R` from the course repository at <https://github.com/njtierney/rbp-exercises/blob/main/06-bad-style/messy-analysis.R>.
+
+Somebody can share their screen, and walk us through it, out loud, while the rest of us watch.
+
+This might feel like a lot! That's OK. Remember, nobody else read this file before either. And, often the most useful part of this review is hearing where someone slows down, backtracks, and changes their mind.
+
+::: {.callout-note title="Your Turn: review it out loud"}
+
+One person drives, sharing their screen. Everyone else watches and chips in.
+
+1. **The cheap pass.** 
+    - Run `air format .`. 
+    - Then read it top to bottom, out loud, marking anything that makes you pause with `TODO` or `NOTE`. 
+    - Fix nothing yet.
+    - Run it from a clean session.
+
+2. **The thinking pass.** Now go back over the marks.
+
+1. Read the names out. 
+  - What do they tell you?
+2. What is each chunk of code for?
+3. Does everything it computes get used?
+4. Is anything here being done twice?
+
+3. **The tidy-up pass.** 
+    - Where would you move things
+    - What would you delete?
+    - What does the linter tell you?
+
+Then the question underneath all of it: 
+
+> **can you say what this script is for, in a sentence?**
+
+:::
+
+If you are reading this on your own rather than sitting in the session, do it anyway, and say it out loud to an empty room. The talking is what makes you notice you cannot explain something.
+
+## Round two: review each other's code
+
+When you review someone else's code the questions are the same. What changes is that there is a person who can tell you things the code cannot.
+
+1. **Ask what they want first.**
+    - *what kind of feedback are you looking for?* Someone who wants to know whether the statistics are right does not want thirty comments about variable names.
+    - *what is this code meant to do?* Find the intention before you review the implementation, because half of what looks like a mistake turns out to be a decision you did not have the context for.
+
+2. **Review the code, not the person.**
+    - "This function is doing three things" is useful. "You always overcomplicate things" is not.
+
+3. **Say what is good, specifically.**
+    - This is not politeness. If you only ever name problems, people learn what to avoid and never what to aim for.
+
+4. **Run it, don't just read it.**
+    - Reading tells you whether code is comprehensible. Running it on something unfamiliar surfaces the assumptions the author did not know they were making.
+
+**This will be slow at first, and that is fine.** Reading code you did not write is a skill, and it is slower than writing your own for quite a while. It gets faster. Nobody is quick at this on their first go.
+
+::: {.callout-note title="Your Turn: swap code"}
+
+Pair up, and use something of your own. A recent script, or something from other a year ago can be good, too.
+
+1. Say what your code is meant to do, and what feedback you actually want.
+2. Swap. Work the three passes on your partner's code.
+3. Give three pieces of feedback. At least one should be something that is working well.
+4. Swap back and talk about it.
+
+<!-- If you did not bring anything, say so and I will hand you something to work on. -->
+
+:::
+
+::: {.callout-tip title="When it breaks and you cannot see why"}
+
+Cut it down. Remove everything not needed to make it fail, one piece at a time, until what's left is small enough to see through.
+
+That is a review technique, and it is also exactly how you make a **reprex**. We covered it in [Writing a reprex / getting unstuck](writing-a-reprex-getting-unstuck.qmd).
+
+:::
+
+::: {.callout-tip title="If we can see your code, we can trust it"}
+
+Version control is not part of this course. It has its own.
+
+But the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history. Review is much easier when the reviewer can see not just what the code is, but how it got that way.
+
+:::
+
+::: {.callout-tip title="If you want to see this done at full scale" collapse="true"}
+
+Open software peer review is the most developed version of this practice, and it is all public. [rOpenSci's reviewer guide](https://devguide.ropensci.org/softwarereview_reviewer.html) sets out what a reviewer is asked to look at, and their [review template](https://devguide.ropensci.org/reviewtemplate.html) is the checklist itself. Reviews happen in the open on GitHub and are signed, so you can read hundreds of real ones.
+
+Two things there are worth stealing for a small analysis project. Reviews are explicitly **non-adversarial**, because the goal is better software rather than a verdict. And reviewers are asked about things a checklist cannot capture, such as whether the argument names read well and autocomplete sensibly.
+
+That last one should sound familiar from the naming section.
+
+:::
+
+## Getting better, beyond the code
+
+Everything in this course has been about the code itself. But a lot of getting good at R has nothing to do with typing R. 
+
+I've got a lot of thoughts on how to get better, and a lot of this is general advice. You don't have to follow all of these, but I think some of them will be useful. These are taken off of a blog post I wrote, called: [How to get good with R](https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/)).
+
+- **Find a community of people who use R.** A local useR group, an online community, a Slack or Discord, a reading group at work. You will learn faster with people who are also learning.
+
+- **Read other people's code.** Pick a package you use and read its source. You will find things you did not know were possible, and you will find things that look wrong to you - both are useful.
+
+- **Practise reading the documentation.** Help files (`?function`) have a consistent structure, and once you can navigate one quickly you can navigate all of them. This is a skill, and it improves the most you use it. Read the examples.
+
+- **Read books and learning material.** [R for Data Science](https://r4ds.hadley.nz/) and [Advanced R](https://adv-r.hadley.nz/) are both free online.
+
+- **Offload ideas and tasks somewhere outside your head.** GitHub issues, a notebook, a task list - anything that means an idea does not have to be carried around. We are good at having ideas, less good at holding on to them.
+
+- **Ask yourself how relevant what you are doing right now is to the problem you set out to solve.** I get distracted often. Asking this question is how I redirect. It is remarkable how frequently the honest answer is "not very".
+
+- **Write about your work publicly.** Knowing that someone might read it forced me to clean up my code and keep a tidy ship, and I have learnt a lot in the process of explaining things to others.
+
+- **Have a strong desire to improve.** I cannot give you this one. But if you are reading this at the end of a course you chose to take, you probably already have it.
+
+## Not the end
+
+There is more to all of this, and I do not have all the answers.
+
+I am a decent R programmer. I am also still learning all the time, and I make mistakes a lot. I am not perfect, far from it. But I hope some of this helps you on your own journey of improving at R.
+
