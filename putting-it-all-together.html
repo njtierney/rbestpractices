@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Nicholas Tierney">
-<meta name="dcterms.date" content="2026-02-17">
 
-<title>R Best Practices</title>
+<title>6&nbsp; Putting it all together – R Best Practices</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -38,7 +36,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./setup.html" rel="next">
+<link href="./appendix-designing-functions.html" rel="next">
+<link href="./writing-a-reprex-getting-unstuck.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -89,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./putting-it-all-together.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Putting it all together</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -120,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
@@ -162,7 +161,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./putting-it-all-together.html" class="sidebar-item-text sidebar-link">
+  <a href="./putting-it-all-together.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Putting it all together</span></span></a>
   </div>
 </li>
@@ -217,46 +216,29 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
-  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course materials</a></li>
-  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule</a>
-  <ul class="collapse">
-  <li><a href="#project-organisation" id="toc-project-organisation" class="nav-link" data-scroll-target="#project-organisation">Project Organisation</a></li>
-  <li><a href="#code-style-and-readability" id="toc-code-style-and-readability" class="nav-link" data-scroll-target="#code-style-and-readability">Code style and readability</a></li>
-  <li><a href="#writing-readable-code" id="toc-writing-readable-code" class="nav-link" data-scroll-target="#writing-readable-code">Writing readable code</a></li>
-  <li><a href="#writing-functions" id="toc-writing-functions" class="nav-link" data-scroll-target="#writing-functions">Writing Functions</a></li>
-  <li><a href="#writing-a-reprex-getting-unstuck" id="toc-writing-a-reprex-getting-unstuck" class="nav-link" data-scroll-target="#writing-a-reprex-getting-unstuck">Writing a reprex / getting unstuck</a></li>
-  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together">Putting It All Together</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#the-three-passes" id="toc-the-three-passes" class="nav-link" data-scroll-target="#the-three-passes"><span class="header-section-number">6.1</span> The three passes</a></li>
+  <li><a href="#reviewing-together" id="toc-reviewing-together" class="nav-link" data-scroll-target="#reviewing-together"><span class="header-section-number">6.2</span> Reviewing together</a></li>
+  <li><a href="#round-two-review-each-others-code" id="toc-round-two-review-each-others-code" class="nav-link" data-scroll-target="#round-two-review-each-others-code"><span class="header-section-number">6.3</span> Round two: review each other’s code</a></li>
+  <li><a href="#getting-better-beyond-the-code" id="toc-getting-better-beyond-the-code" class="nav-link" data-scroll-target="#getting-better-beyond-the-code"><span class="header-section-number">6.4</span> Getting better, beyond the code</a></li>
+  <li><a href="#not-the-end" id="toc-not-the-end" class="nav-link" data-scroll-target="#not-the-end"><span class="header-section-number">6.5</span> Not the end</a></li>
   <li>Links</li>
-  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/putting-it-all-together.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">R Best Practices</h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Putting it all together</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Nicholas Tierney </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 17, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -266,105 +248,222 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1 unnumbered">
-<h1 class="unnumbered">Welcome</h1>
-<p>Welcome to R Best Practices! This course covers essential best practices for writing clear, maintainable, and reproducible R code.</p>
-</section>
-<section id="course-materials" class="level1 unnumbered">
-<h1 class="unnumbered">Course materials</h1>
-<p>Materials will be added here as we progress through the course.</p>
-<p><a href="https://r-best-practices.njtierney.com" class="uri">https://r-best-practices.njtierney.com</a></p>
-<p><strong>Prerequisites</strong></p>
+<p>This is the part where you turn everything from this course loose on some real code.</p>
+<p>We have some options! We can review:</p>
+<ol type="1">
+<li>Together, on some code I will share.</li>
+<li>In pairs, on code you brought with you</li>
+</ol>
+<section id="overview" class="level2 unnumbered overview">
+<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
+<p><strong>Duration</strong> 60 minutes</p>
+<p><strong>Questions</strong></p>
 <ul>
-<li>Basic R programming experience</li>
-<li>Familiarity with writing R scripts</li>
-<li>Experience working on data analysis projects</li>
-</ul>
-<p><strong>Learning outcomes</strong></p>
-<ul>
-<li>How to name things effectively</li>
-<li>Using a style guide</li>
-<li>How to refactor your code</li>
-<li>How to review your code and others’</li>
-<li>How to lay out a project so others know how to run your code</li>
-<li>How to make a reproducible example (reprex)</li>
+<li>What do the three passes look like when somebody talks through them?</li>
+<li>Can I review code I have never seen before, in front of other people?</li>
+<li>How do I review someone else’s code without it going badly?</li>
+<li>What do I do next, once the course is over?</li>
 </ul>
 </section>
-<section id="schedule" class="level1">
-<h1>Schedule</h1>
-<section id="project-organisation" class="level2">
-<h2 class="anchored" data-anchor-id="project-organisation">Project Organisation</h2>
+<section id="the-three-passes" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="the-three-passes"><span class="header-section-number">6.1</span> The three passes</h2>
+<p>Everything in this session runs on the process built upon earlier in <a href="./writing-readable-code.html">Writing readable code</a>. Here is a summary:</p>
+<ol type="1">
+<li>The cheap pass:
 <ul>
-<li>Understanding file paths</li>
-<li>Pitfalls of organisation</li>
-<li>Common project structures</li>
-<li>Naming files</li>
-<li>“Good Enough”/Common Sense principles of project organisation</li>
-<li>Always have a README</li>
-<li>RStudio and positron set up</li>
-</ul>
-</section>
-<section id="code-style-and-readability" class="level2">
-<h2 class="anchored" data-anchor-id="code-style-and-readability">Code style and readability</h2>
-<ul>
-<li>Style is like grammar</li>
-<li>Layout, naming, and correctness are three different jobs</li>
-<li>Why we care about consistent names, spaces, and indentation</li>
-<li>Using the {air} formatter</li>
-<li>Using linters</li>
-<li>Bonus: typing skills and keyboard shortcuts</li>
-</ul>
-</section>
-<section id="writing-readable-code" class="level2">
-<h2 class="anchored" data-anchor-id="writing-readable-code">Writing readable code</h2>
-<ul>
-<li>Where we are up to: what the tools fixed, and what they didn’t</li>
-<li>Good vs bad variable names</li>
-<li>De-chunking code</li>
-<li>What to look for: code smells, inputs and outputs, complexity, refactoring</li>
-<li>A process for reviewing code</li>
-<li>Reviewing someone else’s code</li>
-<li>Clean as you go</li>
-</ul>
-</section>
-<section id="writing-functions" class="level2">
-<h2 class="anchored" data-anchor-id="writing-functions">Writing Functions</h2>
-<ul>
-<li>The problem functions solve</li>
-<li>Anatomy of a function</li>
-<li>Good (simple) function design</li>
-<li>Using {fnmate} to speed up creating functions</li>
-<li>How to use a debugger</li>
-</ul>
-</section>
-<section id="writing-a-reprex-getting-unstuck" class="level2">
-<h2 class="anchored" data-anchor-id="writing-a-reprex-getting-unstuck">Writing a reprex / getting unstuck</h2>
-<ul>
-<li>How to share problems</li>
-<li>Using {reprex}</li>
-<li>Practicing reprex</li>
-<li>Practical tips on debugging
-<ul>
-<li>Keep solving vs cleaning up</li>
+<li><code>air format .</code> (or just Ctrl/Cmd + S to save!)</li>
+<li>read it top to bottom marking <code>TODO</code> and <code>NOTE</code></li>
+<li>run it from a clean session</li>
 </ul></li>
+<li>The thinking pass:
+<ul>
+<li>check the names</li>
+<li>work out what each chunk is for,</li>
+<li>ask what it needs</li>
+<li>Ask whether there is a simpler way</li>
+</ul></li>
+<li>The tidy up pass:
+<ul>
+<li>Put like with like</li>
+<li>throw out the dead code</li>
+<li>run the code linter, interpret and explore these</li>
+</ul></li>
+</ol>
+<p>You might not finish - that is OK! Doing <em>some</em> of it is the whole idea.</p>
+</section>
+<section id="reviewing-together" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="reviewing-together"><span class="header-section-number">6.2</span> Reviewing together</h2>
+<p>Open <code>06-bad-style/messy-analysis.R</code> from the course repository at <a href="https://github.com/njtierney/rbp-exercises/blob/main/06-bad-style/messy-analysis.R" class="uri">https://github.com/njtierney/rbp-exercises/blob/main/06-bad-style/messy-analysis.R</a>.</p>
+<p>Somebody can share their screen, and walk us through it, out loud, while the rest of us watch.</p>
+<p>This might feel like a lot! That’s OK. Remember, nobody else read this file before either. And, often the most useful part of this review is hearing where someone slows down, backtracks, and changes their mind.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn: review it out loud">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn: review it out loud
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One person drives, sharing their screen. Everyone else watches and chips in.</p>
+<ol type="1">
+<li><p><strong>The cheap pass.</strong></p>
+<ul>
+<li>Run <code>air format .</code>.</li>
+<li>Then read it top to bottom, out loud, marking anything that makes you pause with <code>TODO</code> or <code>NOTE</code>.</li>
+<li>Fix nothing yet.</li>
+<li>Run it from a clean session.</li>
+</ul></li>
+<li><p><strong>The thinking pass.</strong> Now go back over the marks.</p></li>
+<li><p>Read the names out.</p></li>
+</ol>
+<ul>
+<li>What do they tell you?</li>
+</ul>
+<ol start="2" type="1">
+<li><p>What is each chunk of code for?</p></li>
+<li><p>Does everything it computes get used?</p></li>
+<li><p>Is anything here being done twice?</p></li>
+<li><p><strong>The tidy-up pass.</strong></p>
+<ul>
+<li>Where would you move things</li>
+<li>What would you delete?</li>
+<li>What does the linter tell you?</li>
+</ul></li>
+</ol>
+<p>Then the question underneath all of it:</p>
+<blockquote class="blockquote">
+<p><strong>can you say what this script is for, in a sentence?</strong></p>
+</blockquote>
+</div>
+</div>
+<p>If you are reading this on your own rather than sitting in the session, do it anyway, and say it out loud to an empty room. The talking is what makes you notice you cannot explain something.</p>
+</section>
+<section id="round-two-review-each-others-code" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="round-two-review-each-others-code"><span class="header-section-number">6.3</span> Round two: review each other’s code</h2>
+<p>When you review someone else’s code the questions are the same. What changes is that there is a person who can tell you things the code cannot.</p>
+<ol type="1">
+<li><strong>Ask what they want first.</strong>
+<ul>
+<li><em>what kind of feedback are you looking for?</em> Someone who wants to know whether the statistics are right does not want thirty comments about variable names.</li>
+<li><em>what is this code meant to do?</em> Find the intention before you review the implementation, because half of what looks like a mistake turns out to be a decision you did not have the context for.</li>
+</ul></li>
+<li><strong>Review the code, not the person.</strong>
+<ul>
+<li>“This function is doing three things” is useful. “You always overcomplicate things” is not.</li>
+</ul></li>
+<li><strong>Say what is good, specifically.</strong>
+<ul>
+<li>This is not politeness. If you only ever name problems, people learn what to avoid and never what to aim for.</li>
+</ul></li>
+<li><strong>Run it, don’t just read it.</strong>
+<ul>
+<li>Reading tells you whether code is comprehensible. Running it on something unfamiliar surfaces the assumptions the author did not know they were making.</li>
+</ul></li>
+</ol>
+<p><strong>This will be slow at first, and that is fine.</strong> Reading code you did not write is a skill, and it is slower than writing your own for quite a while. It gets faster. Nobody is quick at this on their first go.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Your Turn: swap code">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Turn: swap code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pair up, and use something of your own. A recent script, or something from other a year ago can be good, too.</p>
+<ol type="1">
+<li>Say what your code is meant to do, and what feedback you actually want.</li>
+<li>Swap. Work the three passes on your partner’s code.</li>
+<li>Give three pieces of feedback. At least one should be something that is working well.</li>
+<li>Swap back and talk about it.</li>
+</ol>
+<!-- If you did not bring anything, say so and I will hand you something to work on. -->
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="When it breaks and you cannot see why">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>When it breaks and you cannot see why
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cut it down. Remove everything not needed to make it fail, one piece at a time, until what’s left is small enough to see through.</p>
+<p>That is a review technique, and it is also exactly how you make a <strong>reprex</strong>. We covered it in <a href="./writing-a-reprex-getting-unstuck.html">Writing a reprex / getting unstuck</a>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="If we can see your code, we can trust it">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>If we can see your code, we can trust it
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Version control is not part of this course. It has its own.</p>
+<p>But the single biggest improvement to reviewability is putting your code somewhere it can be seen, with a history. Review is much easier when the reviewer can see not just what the code is, but how it got that way.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="If you want to see this done at full scale">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>If you want to see this done at full scale
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Open software peer review is the most developed version of this practice, and it is all public. <a href="https://devguide.ropensci.org/softwarereview_reviewer.html">rOpenSci’s reviewer guide</a> sets out what a reviewer is asked to look at, and their <a href="https://devguide.ropensci.org/reviewtemplate.html">review template</a> is the checklist itself. Reviews happen in the open on GitHub and are signed, so you can read hundreds of real ones.</p>
+<p>Two things there are worth stealing for a small analysis project. Reviews are explicitly <strong>non-adversarial</strong>, because the goal is better software rather than a verdict. And reviewers are asked about things a checklist cannot capture, such as whether the argument names read well and autocomplete sensibly.</p>
+<p>That last one should sound familiar from the naming section.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-better-beyond-the-code" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="getting-better-beyond-the-code"><span class="header-section-number">6.4</span> Getting better, beyond the code</h2>
+<p>Everything in this course has been about the code itself. But a lot of getting good at R has nothing to do with typing R.</p>
+<p>I’ve got a lot of thoughts on how to get better, and a lot of this is general advice. You don’t have to follow all of these, but I think some of them will be useful. These are taken off of a blog post I wrote, called: <a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a>).</p>
+<ul>
+<li><p><strong>Find a community of people who use R.</strong> A local useR group, an online community, a Slack or Discord, a reading group at work. You will learn faster with people who are also learning.</p></li>
+<li><p><strong>Read other people’s code.</strong> Pick a package you use and read its source. You will find things you did not know were possible, and you will find things that look wrong to you - both are useful.</p></li>
+<li><p><strong>Practise reading the documentation.</strong> Help files (<code>?function</code>) have a consistent structure, and once you can navigate one quickly you can navigate all of them. This is a skill, and it improves the most you use it. Read the examples.</p></li>
+<li><p><strong>Read books and learning material.</strong> <a href="https://r4ds.hadley.nz/">R for Data Science</a> and <a href="https://adv-r.hadley.nz/">Advanced R</a> are both free online.</p></li>
+<li><p><strong>Offload ideas and tasks somewhere outside your head.</strong> GitHub issues, a notebook, a task list - anything that means an idea does not have to be carried around. We are good at having ideas, less good at holding on to them.</p></li>
+<li><p><strong>Ask yourself how relevant what you are doing right now is to the problem you set out to solve.</strong> I get distracted often. Asking this question is how I redirect. It is remarkable how frequently the honest answer is “not very”.</p></li>
+<li><p><strong>Write about your work publicly.</strong> Knowing that someone might read it forced me to clean up my code and keep a tidy ship, and I have learnt a lot in the process of explaining things to others.</p></li>
+<li><p><strong>Have a strong desire to improve.</strong> I cannot give you this one. But if you are reading this at the end of a course you chose to take, you probably already have it.</p></li>
 </ul>
 </section>
-<section id="putting-it-all-together" class="level2">
-<h2 class="anchored" data-anchor-id="putting-it-all-together">Putting It All Together</h2>
-<ul>
-<li>Take an existing project and provide code review</li>
-<li>Apply code linting, code styling, functions</li>
-<li>Discussion and Q &amp; A</li>
-</ul>
+<section id="not-the-end" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="not-the-end"><span class="header-section-number">6.5</span> Not the end</h2>
+<p>There is more to all of this, and I do not have all the answers.</p>
+<p>I am a decent R programmer. I am also still learning all the time, and I make mistakes a lot. I am not perfect, far from it. But I hope some of this helps you on your own journey of improving at R.</p>
 
 
 </section>
 <section class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
 <ul>
-<li><a href="https://r-best-practices.njtierney.com" class="uri">https://r-best-practices.njtierney.com</a></li>
+<li><a href="./writing-readable-code.html">Writing readable code</a></li>
+<li><a href="https://github.com/njtierney/rbp-exercises/blob/main/06-bad-style/messy-analysis.R" class="uri">https://github.com/njtierney/rbp-exercises/blob/main/06-bad-style/messy-analysis.R</a></li>
+<li><a href="./writing-a-reprex-getting-unstuck.html">Writing a reprex / getting unstuck</a></li>
+<li><a href="https://devguide.ropensci.org/softwarereview_reviewer.html">rOpenSci’s reviewer guide</a></li>
+<li><a href="https://devguide.ropensci.org/reviewtemplate.html">review template</a></li>
+<li><a href="https://www.njtierney.com/posts/2023-10-30-how-to-get-good-with-r/">How to get good with R</a></li>
+<li><a href="https://r4ds.hadley.nz/">R for Data Science</a></li>
+<li><a href="https://adv-r.hadley.nz/">Advanced R</a></li>
 </ul>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -770,10 +869,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./writing-a-reprex-getting-unstuck.html" class="pagination-link" aria-label="Writing a reprex / getting unstuck">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./setup.html" class="pagination-link" aria-label="Setup">
-        <span class="nav-page-text">Setup</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./appendix-designing-functions.html" class="pagination-link" aria-label="Designing functions">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -785,7 +887,7 @@ ul.task-list li input[type="checkbox"] {
     </div>   
     <div class="nav-footer-center">
 <p>Copyright 2026, Nicholas Tierney</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/njtierney/rbestpractices/edit/main/putting-it-all-together.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/njtierney/rbestpractices/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

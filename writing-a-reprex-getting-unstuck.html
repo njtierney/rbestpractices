@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./appendix-designing-functions.html" rel="next">
+<link href="./putting-it-all-together.html" rel="next">
 <link href="./writing-functions.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -194,6 +194,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./putting-it-all-together.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Putting it all together</span></span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -298,9 +304,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Everyone gets stuck. The skill isn’t avoiding it, it’s getting unstuck quickly, and being able to ask for help in a way that actually gets you an answer.</p>
-<p>This section is about the <strong>reprex</strong>, which is short for <strong>repr</strong>oducible <strong>ex</strong>ample. We start with the smallest one there is, use it to share code that works perfectly well, and then turn it on code that doesn’t.</p>
-<p>By learning to build a represx, you will will often solve the problem before you ask anybody else.</p>
+<p>Everyone gets stuck. While avoiding being stuck in the first place is ideal - one of the best skills to learn is to get unstuck quickly, and to be able to ask for help in a way that actually gets you an answer.</p>
+<p>This chapter is about the <strong>reprex</strong>, which is short for <strong>repr</strong>oducible <strong>ex</strong>ample. If you can demonstrate how you are stuck, you often solve the problem in the process of creating that demonstration. Then, if you can’t, you have made it easier for someone else to see how your are stuck. That makes it easier for them to help you.</p>
 <section id="overview" class="level2 unnumbered overview">
 <h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
 <p><strong>Duration</strong> 45 minutes</p>
@@ -316,21 +321,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="what-is-a-reprex" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="what-is-a-reprex"><span class="header-section-number">5.1</span> What is a reprex?</h2>
 <p>A reprex is code, plus the output that code produced, in a form somebody else can run.</p>
-<p>That is the whole idea. Here is one:</p>
+<p>Say we want to know why this is happening - how can this be NA?</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">mean</span>(airquality<span class="sc">$</span>Ozone)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
-<p>Hmmm, how can the mean be NA?</p>
 <p>You can read what I ran, you can see what I got, and you can paste it into your own R session and get the same thing.</p>
-<p>Now think about what happens without that.</p>
-<p>You could send somebody just the code. But then they have to run it to see what you saw, and they have to guess which packages you had loaded.</p>
-<p>You could send a screenshot of your console instead. Now they can see the output, but they can’t run it, and they can’t copy a line out of it to try something.</p>
-<p>You could send both, by hand, every time. And now it’s on you to make sure the code and the output actually match.</p>
-<p>It gets worse with a plot. If the interesting thing is a chart, the code on its own doesn’t show it, and the picture on its own can’t be run.</p>
-<p>So what you want is both, together, and correct. Which is fiddly to do by hand, and is why the package exists.</p>
+<p>There are other ways to share this:</p>
+<ul>
+<li>You could send somebody just the code, <code>mean(airquality$Ozone)</code></li>
+<li>But then they have to run it to see what you saw, and guess which packages you load.</li>
+</ul>
+<p>You could send a screenshot of your console instead:</p>
+<p><img src="figs/reprex-show-copy-mean.png" class="img-fluid"></p>
+<p>Now they can see the output, but they can’t run it, and they can’t copy a line out of it to try something.</p>
+<p>You could send both, by hand, every time - the code, AND the screenshot And now it’s on you to make sure the code and the output actually match.</p>
+<p>It gets worse with a plot. If the interesting thing is a chart, the code on its own doesn’t show it, and the picture on its own can’t be ru</p>
+<p>So what you want is both, together, and correct. It is fiddly to do by hand, and is why the <code>reprex()</code> package exists.</p>
 </section>
 <section id="using-reprex" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="using-reprex"><span class="header-section-number">5.2</span> Using {reprex}</h2>
@@ -397,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>Start as small as it goes.</p>
 <ol type="1">
-<li>Copy these three lines to your clipboard:</li>
+<li>Copy these two lines to your clipboard:</li>
 </ol>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="cn">NA</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-label="2"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -405,7 +414,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Run <code>reprex::reprex()</code>.</li>
 <li>Look at the preview. Then paste what landed on your clipboard into a fresh R script, and check it runs.</li>
 </ol>
-<p>That’s a reprex. Everything else in this chapter is that, on harder code.</p>
+<p>That’s a reprex.</p>
+<p><strong>Now make it a keypress with a shortcut.</strong></p>
+<p>Copying to the clipboard and then typing <code>reprex::reprex()</code> is three separate actions.</p>
+<p>So bind it to a key while you are here. There is a second function, <code>reprex::reprex_selection()</code>, which reprexes whatever is <em>selected</em> in your editor, with no clipboard step at all.</p>
+<p><strong>In RStudio.</strong> Tools → Modify Keyboard Shortcuts (or - Command Pallete, and type “Modify keyboard”, and click “modiy keyboard shortcuts”) then type <code>reprex</code> in the filter box. You get two: <strong>Render reprex</strong>, which opens a little window of options, and <strong>Reprex selection</strong>, which just goes. Click the shortcut column next to <strong>Reprex selection</strong>, press <code>Cmd / Ctrl + Shift + R</code>, and hit Apply.</p>
+<p>That combination is already taken by Insert Section - RStudio noted this. Just overwrite it - or pick another combination for your reprexes.</p>
+<p><strong>In Positron.</strong> Open the command palette with <code>Cmd / Ctrl + Shift + P</code>, run <strong>Open Keyboard Shortcuts (JSON)</strong>, and add this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>  <span class="dt">"key"</span><span class="fu">:</span> <span class="st">"Cmd+Shift+R"</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a>  <span class="dt">"command"</span><span class="fu">:</span> <span class="st">"workbench.action.executeCode.console"</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>  <span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus"</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a>  <span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-label="6"></a>    <span class="dt">"langId"</span><span class="fu">:</span> <span class="st">"r"</span><span class="fu">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-label="7"></a>    <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"reprex::reprex_selection()"</span><span class="fu">,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-label="8"></a>    <span class="dt">"focus"</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-label="9"></a>  <span class="fu">}</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-label="10"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>"Ctrl+Shift+R"</code> on Windows or Linux. This one is lifted straight from <a href="https://positron.posit.co/keyboard-shortcuts.html">Positron’s own documentation</a>, where reprex is the worked example. If you’d rather not bind anything, the palette also has <strong>R: Run RStudio Addin</strong>, which lists reprex alongside every other addin you have installed.</p>
+<p><strong>Then use it.</strong> Select those same two lines in your editor and press your new shortcut. Same reprex, one keypress, and nothing to copy first.</p>
+<p>Everything else in this chapter is that, on harder code.</p>
 </div>
 </div>
 </section>
@@ -414,20 +442,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Almost everything written about reprexes is about asking for help with a bug. That is how I first learned about them, and it left me with the idea that a reprex is a thing you make when something has gone wrong.</p>
 <p>It isn’t. A reprex is just a small, runnable piece of code with its output attached, and there are plenty of reasons to want one of those.</p>
 <p><strong>“Here’s how I’d do it.”</strong> Someone asks how to count the rows in each group. You could describe <code>count()</code>. It’s faster to show them:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a>starwars <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>  <span class="fu">count</span>(species, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-label="6"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-label="7"></a><span class="co">#&gt;   species     n</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-label="9"></a><span class="co">#&gt; 1 Human      35</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-label="10"></a><span class="co">#&gt; 2 Droid       6</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-label="11"></a><span class="co">#&gt; 3 &lt;NA&gt;        4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a>  <span class="fu">count</span>(species, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-label="5"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-label="6"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-label="7"></a><span class="co">#&gt;   species     n</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-label="9"></a><span class="co">#&gt; 1 Human      35</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-label="10"></a><span class="co">#&gt; 2 Droid       6</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-label="11"></a><span class="co">#&gt; 3 &lt;NA&gt;        4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>“Is there a nicer way to write this?”</strong> Nothing is broken. You just suspect there is a neater version, and a reprex is how you ask without making somebody clone your project.</p>
-<p><strong>“Look at this, it’s great.”</strong> I send these constantly. A function I have just found, a bit of syntax I did not know about. Code with its output is how you show somebody something works.</p>
-<p><strong>Notes to yourself.</strong> I keep a file of these. Six months later, the code and its output together tell me what I worked out, and I don’t have to run anything to remember.</p>
+<p><strong>“Look at this, it’s great.”</strong> A function I have just found, a bit of syntax I did not know about. Code with its output is how you show somebody something works. Put it on a github gist.</p>
+<p><strong>Notes to yourself.</strong> I keep these on a github gist. Six months later, the code and its output together tell me what I worked out, and I don’t have to run anything to remember.</p>
 <p>The nice thing about starting here is that there is no pressure. Nothing is wrong, so there is nothing to diagnose. You are only practising the workflow.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Your Turn">
 <div class="callout-header d-flex align-content-center">
@@ -450,45 +478,101 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="cutting-a-problem-down" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="cutting-a-problem-down"><span class="header-section-number">5.4</span> Cutting a problem down</h2>
-<p>Now the harder use, and the one reprexes are famous for.</p>
+<p>The harder skill, which you might have come across, is to cut down reprexes into the smallest unit.</p>
 <p>When you hit an error you cannot solve by tinkering, it is worth spending some time building a small example of the code that breaks.</p>
 <p>This takes practice. But the thing I really like is:</p>
-<p><strong>In the process of reducing the problem to its core, you’ll often solve it yourself.</strong></p>
-<p>It’s the same experience as describing a problem out loud to a colleague and arriving at the answer before they’ve said anything.</p>
+<p><strong>In the process of reducing the problem to its core, you often solve it.</strong></p>
+<p>It is sort of the same experience as describing a problem out loud to a colleague, and then by the time you’ve explained it, you manage to solve it. This is a whole concept called <a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging">“rubber duck debugging”</a> I have a rubby ducky on my desk for this purpose. You take your rubber ducky and explain the problem to then.</p>
 <p>So this isn’t only a way to ask for help. It’s a debugging technique that happens to produce something shareable.</p>
 <p>Let’s tear one down. Say we are summarising the <code>diamonds</code> data:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a>diamonds <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a>  <span class="fu">mutate</span>(<span class="at">price_per_carat =</span> price <span class="sc">/</span> carat) <span class="sc">|&gt;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-label="5"></a>  <span class="fu">group_by</span>(cut) <span class="sc">|&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-label="6"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb9-7"><a href="#cb9-7" aria-label="7"></a>    <span class="at">price_mean =</span> <span class="fu">mean</span>(price_per_carat),</span>
-<span id="cb9-8"><a href="#cb9-8" aria-label="8"></a>    <span class="at">price_sd =</span> <span class="fu">sd</span>(price_per_carat),</span>
-<span id="cb9-9"><a href="#cb9-9" aria-label="9"></a>    <span class="at">mean_color =</span> <span class="fu">mean</span>(color)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-label="10"></a>  )</span>
-<span id="cb9-11"><a href="#cb9-11" aria-label="11"></a><span class="co">#&gt; Warning: There were 5 warnings in `summarise()`.</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-label="12"></a><span class="co">#&gt; The first warning was:</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-label="13"></a><span class="co">#&gt; ℹ In argument: `mean_color = mean(color)`.</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-label="14"></a><span class="co">#&gt; ℹ In group 1: `cut = Fair`.</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-label="15"></a><span class="co">#&gt; Caused by warning in `mean.default()`:</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-label="16"></a><span class="co">#&gt; ! argument is not numeric or logical: returning NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">price_per_carat =</span> price <span class="sc">/</span> carat) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>  <span class="fu">group_by</span>(cut) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a>    <span class="at">price_mean =</span> <span class="fu">mean</span>(price_per_carat),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-label="6"></a>    <span class="at">price_sd =</span> <span class="fu">sd</span>(price_per_carat),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-label="7"></a>    <span class="at">mean_color =</span> <span class="fu">mean</span>(color)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-label="8"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There were 5 warnings in `summarise()`.
+The first warning was:
+ℹ In argument: `mean_color = mean(color)`.
+ℹ In group 1: `cut = Fair`.
+Caused by warning in `mean.default()`:
+! argument is not numeric or logical: returning NA
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 4 remaining warnings.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  cut       price_mean price_sd mean_color
+  &lt;ord&gt;          &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+1 Fair           3767.    1540.         NA
+2 Good           3860.    1830.         NA
+3 Very Good      4014.    2037.         NA
+4 Premium        4223.    2035.         NA
+5 Ideal          3920.    2043.         NA</code></pre>
+</div>
+</div>
 <p>The warning gives us a clue: it is something about <code>mean_color</code>. So try just that:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>diamonds <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">mean_color =</span> <span class="fu">mean</span>(color))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a><span class="co">#&gt; Warning: There was 1 warning in `mutate()`.</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a><span class="co">#&gt; ℹ In argument: `mean_color = mean(color)`.</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-label="5"></a><span class="co">#&gt; Caused by warning in `mean.default()`:</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-label="6"></a><span class="co">#&gt; ! argument is not numeric or logical: returning NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>diamonds <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">mean_color =</span> <span class="fu">mean</span>(color))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `mean_color = mean(color)`.
+Caused by warning in `mean.default()`:
+! argument is not numeric or logical: returning NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 53,940 × 11
+   carat cut       color clarity depth table price     x     y     z mean_color
+   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43         NA
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31         NA
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31         NA
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63         NA
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75         NA
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48         NA
+ 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47         NA
+ 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53         NA
+ 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49         NA
+10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39         NA
+# ℹ 53,930 more rows</code></pre>
+</div>
+</div>
 <p>Same warning, and we’ve dropped <code>group_by()</code> and <code>summarise()</code> entirely. Strip it further:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="fu">mean</span>(diamonds<span class="sc">$</span>color)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a><span class="co">#&gt; Warning in mean.default(diamonds$color): argument is not numeric or</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a><span class="co">#&gt; logical: returning NA</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="fu">mean</span>(diamonds<span class="sc">$</span>color)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in mean.default(diamonds$color): argument is not numeric or logical:
+returning NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
 <p>Still the same. We are now down to one line. So what is in <code>color</code>?</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">head</span>(diamonds<span class="sc">$</span>color)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a><span class="co">#&gt; [1] E E E I J J</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a><span class="co">#&gt; Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="fu">head</span>(diamonds<span class="sc">$</span>color)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] E E E I J J
+Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J</code></pre>
+</div>
+</div>
 <p>Ah. Does it make sense to take the mean of some letters? Of course not.</p>
 <p>Notice what happened. We never needed to ask anyone.</p>
 <p>Each step made the example smaller, and the smaller it got, the more obvious the problem became.</p>
@@ -511,18 +595,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>Here are two more that go wrong. Cut each one down the way we just did, one line at a time, until you can say what the problem is.</p>
 <p><strong>One</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>starwars <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(species)) <span class="sc">|&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>  <span class="fu">summarise</span>(<span class="at">mean_hair =</span> <span class="fu">mean</span>(hair_color))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-label="3"></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-label="4"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(species)) <span class="sc">|&gt;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-label="5"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-label="6"></a>  <span class="fu">summarise</span>(<span class="at">mean_hair =</span> <span class="fu">mean</span>(hair_color))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Two</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-label="3"></a>msleep <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-label="4"></a>  <span class="fu">group_by</span>(vore) <span class="sc">|&gt;</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-label="5"></a>  <span class="fu">summarise</span>(<span class="at">mean_rem =</span> <span class="fu">mean</span>(sleep_rem))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-label="3"></a>msleep <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-label="4"></a>  <span class="fu">group_by</span>(vore) <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-label="5"></a>  <span class="fu">summarise</span>(<span class="at">mean_rem =</span> <span class="fu">mean</span>(sleep_rem))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For each one:</p>
 <ol type="1">
 <li>What is the smallest piece of code that still shows the problem?</li>
@@ -547,72 +631,75 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="the-setup">The setup</h3>
 <p>At the end of <a href="writing-functions.html" class="quarto-xref">Writing functions&nbsp;<span>4</span></a> we had <code>read_educated_population()</code>, which read a tidy spreadsheet.</p>
 <p>Here is where that spreadsheet actually came from. Somebody sent over a folder of CSVs, one per year.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-label="2"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-label="3"></a>education_2014 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/raw_education_2014.csv"</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-label="4"></a>education_2015 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/raw_education_2015.csv"</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-label="5"></a>education_2016 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/raw_education_2016.csv"</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-label="6"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-label="7"></a>education <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(education_2014, education_2015, education_2016)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>(This is run inside the ozed project)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-label="2"></a><span class="fu">library</span>(here)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-label="3"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-label="4"></a>education_2014 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/raw/raw_education_2014.csv"</span>))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-label="5"></a>education_2015 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/raw/raw_education_2015.csv"</span>))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-label="6"></a>education_2016 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/raw/raw_education_2016.csv"</span>))</span>
+<span id="cb25-7"><a href="#cb25-7" aria-label="7"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-label="8"></a>education <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(education_2014, education_2015, education_2016)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>(Note, there are a couple of ways we can run this code in one line)</p>
 <p>That runs without complaint, and gives you 216 rows across the three years.</p>
 <p>Now the summary we came for. What proportion of people are studying, by age group?</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying))</span>
-<span id="cb16-4"><a href="#cb16-4" aria-label="4"></a><span class="co">#&gt; # A tibble: 27 x 2</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-label="5"></a><span class="co">#&gt;    age_group prop_mean</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-label="6"></a><span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt;</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-label="7"></a><span class="co">#&gt;  1 15---19       0.813</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-label="8"></a><span class="co">#&gt;  2 15--19      -15.8</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-label="9"></a><span class="co">#&gt;  3 15-19         0.811</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-label="10"></a><span class="co">#&gt;  4 20---24     -19.5</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-label="11"></a><span class="co">#&gt;  5 20--24      -10.6</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-label="12"></a><span class="co">#&gt;  6 20-24         0.406</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-label="13"></a><span class="co">#&gt;  7 25---29      -9.73</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-label="14"></a><span class="co">#&gt;  8 25--29      -14.0</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-label="15"></a><span class="co">#&gt;  9 25-29         0.212</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-label="16"></a><span class="co">#&gt; 10 30---34     -14.0</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-label="17"></a><span class="co">#&gt; # i 17 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Sit with that for a second, because there is a lot wrong and R said nothing at all.</p>
-<p>There are <strong>27 age groups</strong>. There should be nine. And a <em>proportion</em> has come out as -15.8.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-label="2"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-label="3"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-label="4"></a><span class="co">#&gt; # A tibble: 27 x 2</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-label="5"></a><span class="co">#&gt;    age_group prop_mean</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-label="6"></a><span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-label="7"></a><span class="co">#&gt;  1 15---19       0.813</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-label="8"></a><span class="co">#&gt;  2 15--19      -15.8</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-label="9"></a><span class="co">#&gt;  3 15-19         0.811</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-label="10"></a><span class="co">#&gt;  4 20---24     -19.5</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-label="11"></a><span class="co">#&gt;  5 20--24      -10.6</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-label="12"></a><span class="co">#&gt;  6 20-24         0.406</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-label="13"></a><span class="co">#&gt;  7 25---29      -9.73</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-label="14"></a><span class="co">#&gt;  8 25--29      -14.0</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-label="15"></a><span class="co">#&gt;  9 25-29         0.212</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-label="16"></a><span class="co">#&gt; 10 30---34     -14.0</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-label="17"></a><span class="co">#&gt; # i 17 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>There is a lot wrong here - R said nothing at all.</p>
+<p>There are <strong>27 age groups</strong>. There should be nine. And a <em>proportion</em> has come out as -15.8. No good.</p>
 </section>
 <section id="reducing-it" class="level3">
 <h3 class="anchored" data-anchor-id="reducing-it">Reducing it</h3>
 <p>Two things are wrong here, so find them one at a time, and start with the smaller of the two.</p>
 <p><strong>How many age groups are there really?</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a><span class="fu">n_distinct</span>(education<span class="sc">$</span>age_group)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-label="2"></a><span class="co">#&gt; [1] 27</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-label="3"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-label="4"></a><span class="fu">sort</span>(<span class="fu">unique</span>(education<span class="sc">$</span>age_group))</span>
-<span id="cb17-5"><a href="#cb17-5" aria-label="5"></a><span class="co">#&gt;  [1] "15---19" "15--19"  "15-19"   "20---24" "20--24"  "20-24"   "25---29"</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-label="6"></a><span class="co">#&gt;  [8] "25--29"  "25-29"   "30---34" "30--34"  "30-34"   "35---39" "35--39"</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-label="7"></a><span class="co">#&gt; [15] "35-39"   "40---44" "40--44"  "40-44"   "45---49" "45--49"  "45-49"</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-label="8"></a><span class="co">#&gt; [22] "50---54" "50--54"  "50-54"   "55---74" "55--74"  "55-74"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="fu">n_distinct</span>(education<span class="sc">$</span>age_group)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-label="2"></a><span class="co">#&gt; [1] 27</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-label="3"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-label="4"></a><span class="fu">sort</span>(<span class="fu">unique</span>(education<span class="sc">$</span>age_group))</span>
+<span id="cb27-5"><a href="#cb27-5" aria-label="5"></a><span class="co">#&gt;  [1] "15---19" "15--19"  "15-19"   "20---24" "20--24"  "20-24"   "25---29"</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-label="6"></a><span class="co">#&gt;  [8] "25--29"  "25-29"   "30---34" "30--34"  "30-34"   "35---39" "35--39"</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-label="7"></a><span class="co">#&gt; [15] "35-39"   "40---44" "40--44"  "40-44"   "45---49" "45--49"  "45-49"</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-label="8"></a><span class="co">#&gt; [22] "50---54" "50--54"  "50-54"   "55---74" "55--74"  "55-74"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>There it is. <code>15-19</code> and <code>15--19</code> and <code>15---19</code> are the same age group typed three different ways, and <code>group_by()</code> has no way of knowing that. Nine real groups, spread across 27 spellings.</p>
 <p><strong>Now the other one. Why is a proportion negative?</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="fu">summary</span>(education<span class="sc">$</span>prop_studying)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-label="2"></a><span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-label="3"></a><span class="co">#&gt; -99.00000   0.04563   0.09626  -9.43312   0.20003   0.90308</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-label="1"></a><span class="fu">summary</span>(education<span class="sc">$</span>prop_studying)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-label="2"></a><span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-label="3"></a><span class="co">#&gt; -99.00000   0.04563   0.09626  -9.43312   0.20003   0.90308</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A minimum of -99, in a column that can only sit between 0 and 1.</p>
 <p><code>-99</code> is a missing value code. Somebody, at some point, decided that missing should be written as -99 rather than left blank. <code>read_csv()</code> has no way of knowing that, so it read it as the number minus ninety-nine.</p>
 </section>
 <section id="the-reprex" class="level3">
 <h3 class="anchored" data-anchor-id="the-reprex">The reprex</h3>
 <p>We are now down to two lines of it. Here is the whole thing, self-contained, with no data files and no packages beyond one:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-label="2"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-label="3"></a>age_group <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"15-19"</span>, <span class="st">"15--19"</span>, <span class="st">"15---19"</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-label="4"></a>prop_studying <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.81</span>, <span class="sc">-</span><span class="dv">99</span>, <span class="fl">0.84</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-label="5"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-label="6"></a><span class="fu">tibble</span>(age_group, prop_studying) <span class="sc">|&gt;</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-label="7"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-label="8"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying))</span>
-<span id="cb19-9"><a href="#cb19-9" aria-label="9"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-label="10"></a><span class="co">#&gt;   age_group prop_mean</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-label="11"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-label="12"></a><span class="co">#&gt; 1 15---19        0.84</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-label="13"></a><span class="co">#&gt; 2 15--19       -99</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-label="14"></a><span class="co">#&gt; 3 15-19          0.81</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-label="2"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-label="3"></a>age_group <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"15-19"</span>, <span class="st">"15--19"</span>, <span class="st">"15---19"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-label="4"></a>prop_studying <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.81</span>, <span class="sc">-</span><span class="dv">99</span>, <span class="fl">0.84</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-label="5"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-label="6"></a><span class="fu">tibble</span>(age_group, prop_studying) <span class="sc">|&gt;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-label="7"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-label="8"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying))</span>
+<span id="cb29-9"><a href="#cb29-9" aria-label="9"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-label="10"></a><span class="co">#&gt;   age_group prop_mean</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-label="11"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-label="12"></a><span class="co">#&gt; 1 15---19        0.84</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-label="13"></a><span class="co">#&gt; 2 15--19       -99</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-label="14"></a><span class="co">#&gt; 3 15-19          0.81</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Three rows of made up data, and both bugs are visible at once: one age group has become three, and a proportion is -99.</p>
 <p>Three files and 216 rows, down to four lines somebody can run on their own machine in a second. That is the reduction, done on something real.</p>
 </section>
@@ -620,31 +707,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="fixing-it">Fixing it</h3>
 <p>Both fixes are one line, now that you can see what you are fixing.</p>
 <p>The separators collapse with a regular expression that matches a <em>run</em> of anything that is not a digit:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">str_replace_all</span>(age_group, <span class="st">"[^0-9]+"</span>, <span class="st">"_"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">str_replace_all</span>(age_group, <span class="st">"[^0-9]+"</span>, <span class="st">"_"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!-- NOTE: code practice up to here -->
 <p>And the missing code becomes an actual missing value. <a href="https://naniar.njtierney.com/"><code>{naniar}</code></a> does this, and knowing what I know about that package’s author, I would say it is a reasonable choice:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="fu">library</span>(naniar)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>education <span class="sc">|&gt;</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">prop_studying =</span> <span class="sc">-</span><span class="dv">99</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-label="1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-label="2"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-label="3"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-label="4"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">prop_studying =</span> <span class="sc">-</span><span class="dv">99</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Put the two together, and the summary finally says something sensible:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">str_replace_all</span>(age_group, <span class="st">"[^0-9]+"</span>, <span class="st">"_"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-label="3"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">prop_studying =</span> <span class="sc">-</span><span class="dv">99</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-label="4"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-label="5"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb22-6"><a href="#cb22-6" aria-label="6"></a><span class="co">#&gt; # A tibble: 9 x 2</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-label="7"></a><span class="co">#&gt;   age_group prop_mean</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-label="9"></a><span class="co">#&gt; 1 15_19        0.810</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-label="10"></a><span class="co">#&gt; 2 20_24        0.407</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-label="11"></a><span class="co">#&gt; 3 25_29        0.198</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-label="12"></a><span class="co">#&gt; 4 30_34        0.131</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-label="13"></a><span class="co">#&gt; 5 35_39        0.113</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-label="14"></a><span class="co">#&gt; 6 40_44        0.0898</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-label="15"></a><span class="co">#&gt; 7 45_49        0.0647</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-label="16"></a><span class="co">#&gt; 8 50_54        0.0530</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-label="17"></a><span class="co">#&gt; 9 55_74        0.0189</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a>education <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">str_replace_all</span>(age_group, <span class="st">"[^0-9]+"</span>, <span class="st">"_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-label="3"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">prop_studying =</span> <span class="sc">-</span><span class="dv">99</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-label="4"></a>  <span class="fu">group_by</span>(age_group) <span class="sc">|&gt;</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-label="5"></a>  <span class="fu">summarise</span>(<span class="at">prop_mean =</span> <span class="fu">mean</span>(prop_studying, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb32-6"><a href="#cb32-6" aria-label="6"></a><span class="co">#&gt; # A tibble: 9 x 2</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-label="7"></a><span class="co">#&gt;   age_group prop_mean</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-label="9"></a><span class="co">#&gt; 1 15_19        0.810</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-label="10"></a><span class="co">#&gt; 2 20_24        0.407</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-label="11"></a><span class="co">#&gt; 3 25_29        0.198</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-label="12"></a><span class="co">#&gt; 4 30_34        0.131</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-label="13"></a><span class="co">#&gt; 5 35_39        0.113</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-label="14"></a><span class="co">#&gt; 6 40_44        0.0898</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-label="15"></a><span class="co">#&gt; 7 45_49        0.0647</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-label="16"></a><span class="co">#&gt; 8 50_54        0.0530</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-label="17"></a><span class="co">#&gt; 9 55_74        0.0189</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Nine groups, and every proportion sitting between 0 and 1.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -747,13 +835,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>So here are the ones I see most, in roughly the order you will meet them.</p>
 <section id="could-not-find-function" class="level3">
 <h3 class="anchored" data-anchor-id="could-not-find-function"><code>could not find function</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a><span class="co">#&gt; Error in select(starwars, name, height) : could not find function "select"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-label="1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-label="2"></a><span class="co">#&gt; Error in select(starwars, name, height) : could not find function "select"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is the most common error in R, and it almost always means the same thing:</p>
 <p><strong>You have not run <code>library()</code> yet.</strong></p>
 <p>The function exists. It is sitting on your computer right now. R just has not been told to go and look in that package.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-label="2"></a>starwars <span class="sc">|&gt;</span> <span class="fu">select</span>(name, height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>It usually happens in one of three ways:</p>
 <ol type="1">
 <li>You restarted R, and forgot the <code>library()</code> calls are gone with the session.</li>
@@ -778,17 +866,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="there-is-no-package-called" class="level3">
 <h3 class="anchored" data-anchor-id="there-is-no-package-called"><code>there is no package called</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-label="2"></a><span class="co">#&gt; Error in library(dplyr) : there is no package called 'dplyr'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-label="1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-label="2"></a><span class="co">#&gt; Error in library(dplyr) : there is no package called 'dplyr'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Different error, and it is easy to confuse with the last one.</p>
 <p>That one meant “installed, but not attached”. This one means <strong>not installed</strong>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The way to tell them apart: <code>could not find function</code> complains about a <em>function</em>, and <code>there is no package called</code> complains about a <em>package</em>.</p>
 </section>
 <section id="object-x-not-found" class="level3">
 <h3 class="anchored" data-anchor-id="object-x-not-found"><code>object 'x' not found</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="fu">mean</span>(penguin_data<span class="sc">$</span>body_mass_g)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-label="2"></a><span class="co">#&gt; Error: object 'penguin_data' not found</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-label="1"></a><span class="fu">mean</span>(penguin_data<span class="sc">$</span>body_mass_g)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-label="2"></a><span class="co">#&gt; Error: object 'penguin_data' not found</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>R does not know about a thing by that name. Almost always one of:</p>
 <ul>
 <li>A typo. <code>penguin_data</code> and <code>penguins_data</code> are different names.</li>
@@ -799,8 +887,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="object-of-type-closure-is-not-subsettable" class="level3">
 <h3 class="anchored" data-anchor-id="object-of-type-closure-is-not-subsettable"><code>object of type 'closure' is not subsettable</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-label="1"></a>mean<span class="sc">$</span>x</span>
-<span id="cb28-2"><a href="#cb28-2" aria-label="2"></a><span class="co">#&gt; Error in mean$x : object of type 'closure' is not subsettable</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-label="1"></a>mean<span class="sc">$</span>x</span>
+<span id="cb38-2"><a href="#cb38-2" aria-label="2"></a><span class="co">#&gt; Error in mean$x : object of type 'closure' is not subsettable</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This one is famous for being baffling, to the point that Jenny Bryan named <a href="https://www.youtube.com/watch?v=vgYS-F8opgE">an entire keynote</a> after it.</p>
 <p>Translated: <strong>a closure is a function, and you tried to pull a column out of one.</strong></p>
 <p>Nearly always you have a name collision with a function that already exists. Someone writes <code>df &lt;- data.frame(...)</code>, then restarts R, then runs <code>df$x</code> before the line that makes <code>df</code>. There is a <code>df()</code> function in <code>{stats}</code>, so R finds <em>that</em>, and tells you you cannot subset it.</p>
@@ -808,28 +896,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="operator-is-invalid-for-atomic-vectors" class="level3">
 <h3 class="anchored" data-anchor-id="operator-is-invalid-for-atomic-vectors"><code>$ operator is invalid for atomic vectors</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-label="1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)<span class="sc">$</span>a</span>
-<span id="cb29-2"><a href="#cb29-2" aria-label="2"></a><span class="co">#&gt; Error in c(1, 2, 3)$a : $ operator is invalid for atomic vectors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-label="1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)<span class="sc">$</span>a</span>
+<span id="cb39-2"><a href="#cb39-2" aria-label="2"></a><span class="co">#&gt; Error in c(1, 2, 3)$a : $ operator is invalid for atomic vectors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You used <code>$</code> on something that has no columns. A plain vector has no names to reach for, so there is nothing for <code>$</code> to do.</p>
 <p>Usually this means the thing you have is not the thing you thought you had. Check with <code>class()</code> before you check anything else.</p>
 </section>
 <section id="cannot-open-file-...-no-such-file-or-directory" class="level3">
 <h3 class="anchored" data-anchor-id="cannot-open-file-...-no-such-file-or-directory"><code>cannot open file ... : No such file or directory</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a><span class="fu">read.csv</span>(<span class="st">"data/penguins.csv"</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-label="2"></a><span class="co">#&gt; Error in file(file, "rt") : cannot open file 'data/penguins.csv': No such file or directory</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-label="3"></a><span class="co">#&gt; In addition: Warning message: cannot open file 'data/penguins.csv': No such file or directory</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-label="1"></a><span class="fu">read.csv</span>(<span class="st">"data/penguins.csv"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="co">#&gt; Error in file(file, "rt") : cannot open file 'data/penguins.csv': No such file or directory</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-label="3"></a><span class="co">#&gt; In addition: Warning message: cannot open file 'data/penguins.csv': No such file or directory</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The file is not where you said it was, <em>relative to where R currently is</em>.</p>
 <p>Two questions, in this order:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-label="1"></a><span class="fu">getwd</span>()          <span class="co"># where does R think it is?</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-label="2"></a>fs<span class="sc">::</span><span class="fu">dir_ls</span>()     <span class="co"># what can it actually see from there?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-label="1"></a><span class="fu">getwd</span>()          <span class="co"># where does R think it is?</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-label="2"></a>fs<span class="sc">::</span><span class="fu">dir_ls</span>()     <span class="co"># what can it actually see from there?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Nine times in ten the answer is that your working directory is not the project root, which is the entire argument for projects and <code>here()</code> in <a href="project-organisation.html" class="quarto-xref">Project organisation&nbsp;<span>1</span></a>.</p>
 </section>
 <section id="unexpected-symbol-unexpected-unexpected-end-of-input" class="level3">
 <h3 class="anchored" data-anchor-id="unexpected-symbol-unexpected-unexpected-end-of-input"><code>unexpected symbol</code>, <code>unexpected ')'</code>, <code>unexpected end of input</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-label="2"></a><span class="co">#&gt; Error in parse(text = ...) : &lt;text&gt;:2:0: unexpected end of input</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-label="3"></a><span class="co">#&gt; 1: mean(c(1,2)</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-label="4"></a><span class="co">#&gt;    ^</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-label="1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-label="2"></a><span class="co">#&gt; Error in parse(text = ...) : &lt;text&gt;:2:0: unexpected end of input</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-label="3"></a><span class="co">#&gt; 1: mean(c(1,2)</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-label="4"></a><span class="co">#&gt;    ^</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are the ones where R could not even read your code, let alone run it. A bracket, a quote or a comma is missing.</p>
 <p>The useful trick is that <strong>the caret points at where R gave up, not at where you went wrong</strong>. The mistake is usually a line or two <em>above</em> the mark.</p>
 <p>Two things that make these mostly go away:</p>
@@ -902,6 +990,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="unnumbered anchored" data-anchor-id="">Links</h2>
 <ul>
 <li><a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a></li>
+<li><a href="https://positron.posit.co/keyboard-shortcuts.html">Positron’s own documentation</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging">“rubber duck debugging”</a></li>
 <li><a href="https://naniar.njtierney.com/"><code>{naniar}</code></a></li>
 <li><a href="https://github.com/njtierney/ozed">ozed repo</a></li>
 <li><a href="https://www.youtube.com/watch?v=vgYS-F8opgE">an entire keynote</a></li>
@@ -1319,8 +1409,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./appendix-designing-functions.html" class="pagination-link" aria-label="Designing functions">
-        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Designing functions</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./putting-it-all-together.html" class="pagination-link" aria-label="Putting it all together">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Putting it all together</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

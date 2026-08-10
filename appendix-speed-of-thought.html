@@ -159,6 +159,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Writing a reprex / getting unstuck</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./putting-it-all-together.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Putting it all together</span></span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -379,20 +385,22 @@ ul.task-list li input[type="checkbox"] {
 <p>The reason they are interesting is not the menu. It is that <strong>anything in that menu can be bound to a keyboard shortcut</strong>, which turns a two minute task into a keypress.</p>
 <section id="binding-one-to-a-key" class="level3">
 <h3 class="anchored" data-anchor-id="binding-one-to-a-key">Binding one to a key</h3>
-<p>Tools → Modify Keyboard Shortcuts, then type “addin” into the filter box. You get a list of every addin you have installed. Click the shortcut column, press the keys you want, hit Apply.</p>
+<p>In RStudio: Tools → Modify Keyboard Shortcuts, then type “addin” into the filter box. You get a list of every addin you have installed. Click the shortcut column, press the keys you want, hit Apply.</p>
 <p>That’s the whole setup. It takes about twenty seconds, and I would do it for two addins rather than ten.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Addins are an RStudio feature">
+<p>Positron asks a bit more of you, because there’s no list to click. You write the binding yourself, in <code>keybindings.json</code>. There’s a worked example of that, for reprex, in <a href="./writing-a-reprex-getting-unstuck.html">Writing a reprex / getting unstuck</a>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Addins in Positron">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Addins are an RStudio feature
+<span class="screen-reader-only">Important</span>Addins in Positron
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Positron does not run RStudio addins. If you use both editors, or you are thinking of moving, don’t build a habit on top of one.</p>
-<p>The things worth having usually exist as an ordinary function too. <code>reprex::reprex()</code> works anywhere, and the addin is a convenience on top of it.</p>
+<p>Addins started life as an RStudio feature, and for a while that is all they were. Positron runs them now. Open the command palette and run <strong>R: Run RStudio Addin</strong>, and you get the same list, grouped by the package it came from.</p>
+<p>There is a catch. Positron doesn’t implement every method in the RStudio API, so an addin that reaches for one it hasn’t got will fall over. If you write your own, <code>rstudioapi::hasFun()</code> tells you whether a method is there before you call it.</p>
+<p>Either way, it’s worth knowing the function underneath. <code>reprex::reprex()</code> works anywhere, and the addin is a convenience on top of it.</p>
 </div>
 </div>
 </section>
@@ -421,8 +429,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Open the Addins menu. What is already in there from packages you installed for other reasons?</li>
-<li>Install <code>{fnmate}</code> or <code>{datapasta}</code>, and bind it to a key in Tools → Modify Keyboard Shortcuts.</li>
+<li>Open the Addins menu, or run <strong>R: Run RStudio Addin</strong> from the Positron command palette. What is already in there from packages you installed for other reasons?</li>
+<li>Install <code>{fnmate}</code> or <code>{datapasta}</code>, and bind it to a key. Tools → Modify Keyboard Shortcuts in RStudio, or a line in <code>keybindings.json</code> in Positron.</li>
 <li>Use it once, today, on real work. If you don’t reach for it again this week, unbind it. That is a perfectly good outcome.</li>
 </ol>
 </div>
@@ -455,8 +463,8 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="#sec-addins">a section of their own below</a></li>
 <li><a href="https://rstudio.github.io/cheatsheets/html/rstudio-ide.html#keyboard-shortcuts">RStudio IDE cheat sheet</a></li>
 <li><a href="https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE">customising keyboard shortcuts</a></li>
-<li><a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a></li>
 <li><a href="./writing-a-reprex-getting-unstuck.html">Writing a reprex / getting unstuck</a></li>
+<li><a href="https://reprex.tidyverse.org/"><code>{reprex}</code></a></li>
 <li><a href="https://github.com/milesmcbain/fnmate"><code>{fnmate}</code></a></li>
 <li><a href="https://milesmcbain.micro.blog/">Miles McBain</a></li>
 <li><a href="https://milesmcbain.github.io/datapasta/"><code>{datapasta}</code></a></li>
